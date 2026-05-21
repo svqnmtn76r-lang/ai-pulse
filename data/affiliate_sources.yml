@@ -1,0 +1,227 @@
+# アフィリエイトプログラム検証ソース管理
+#
+# 用途: 月次再検証ジョブ (verify-affiliates.yml) で
+#       各プログラムの最新条件を取得するためのURLマスタ
+#
+# ルール:
+#   - すべての programs エントリには確実性ラベルを必ず付ける
+#   - 公式URLが取得できないものは "tier3_excluded" に降格
+#   - 月次レビューで条件変更を検知したら verification_log に記録
+
+last_full_verification: 2026-05-21
+
+programs:
+
+  perplexity:
+    confidence: green
+    tier: 1
+    status: ready_to_apply
+    official_pages:
+      - https://www.perplexity.ai/hub/legal/perplexity-affiliate-program-terms-of-service
+      - https://docs.perplexity.ai/  # 申請フォーム所在確認用
+    verified_sources:
+      - https://automatetoprofit.com/perplexity-ai-pro-review-2026/
+      - https://www.way2earning.com/2025/10/perplexity-affiliate-program/
+    last_verified: 2026-05-21
+    terms_summary:
+      structure: "$10 flat per paid Pro signup + 10% recurring on subscription"
+      tracking: dub.co
+      country_restrictions: "tier-based, AU=full payout"
+      referral_bonus: "1 month free Pro for referred user"
+    au_acceptance: confirmed
+    notes: "Hiroは既にPerplexity Pro利用中、自己体験ベースの記事作成可能"
+
+  elevenlabs:
+    confidence: green
+    tier: 1
+    status: ready_to_apply
+    official_pages:
+      - https://elevenlabs.io/affiliates
+      - https://elevenlabs.io/affiliate-partner-guide
+    network: PartnerStack
+    last_verified: 2026-05-21
+    terms_summary:
+      structure: "22% recurring 12 months on Starter/Creator/Pro/Scale, 11% on Business"
+      cookie_days: 90
+      payment_min: 5
+      payout_schedule: "1st-15th of month, 90-day clawback window after first payment"
+    au_acceptance: confirmed
+    application_review_days: "1-5 business days"
+    notes: "Hiroは既にElevenCreator契約中、申請時に既存ユーザーであることをアピール可能"
+    restrictions:
+      - "ブランドキーワード広告入札禁止"
+      - "エンタープライズプランは対象外"
+
+  hubspot:
+    confidence: green
+    tier: 1
+    status: ready_to_apply
+    official_pages:
+      - https://www.hubspot.com/partners/affiliates
+    network: Impact
+    last_verified: 2026-05-21
+    terms_summary:
+      structure: "30% recurring 12 months"
+      cookie_days: 180
+      tiers:
+        - "Affiliate (default)"
+        - "Super Affiliate (100-200 signups/month, +bonus)"
+        - "Elite (200+ signups/month, custom commission)"
+      welcome_bonus: "Up to $80 in first 30 days"
+      payment: "PayPal or EFT, via Impact"
+    au_acceptance: confirmed
+    application_review_days: "2-3 business days"
+    notes: "B2B読者層育成が必要、Month 1で申請してMonth 3-4から本格収益化"
+
+  notion:
+    confidence: green_with_caveat
+    tier: 1
+    status: ready_to_apply
+    official_pages:
+      - https://affiliate.notion.so/
+    network: PartnerStack
+    last_verified: 2026-05-21
+    terms_summary:
+      structure_uncertain: "50% commission - 期間条件が情報源で割れている"
+      possible_interpretation_a: "50% of first 12 months recurring payments"
+      possible_interpretation_b: "50% of first payment only"
+      cookie_days: 180
+      payment_min: 50
+      payment_methods: ["PayPal", "Bank Transfer"]
+    au_acceptance: confirmed
+    notes: "申請承認後にPartnerStackダッシュボードで正確な期間条件を確認、結果をCLAUDE.md更新"
+    eligibility: "Net new workspaces upgrading to Plus/Business/AI within 180 days"
+
+  semrush:
+    confidence: green
+    tier: 1
+    status: ready_to_apply
+    official_pages:
+      - https://www.semrush.com/lp/affiliate-program/en/
+    network: Impact
+    last_verified: 2026-05-21
+    terms_summary:
+      structure: "Multi-touch CPA"
+      payouts:
+        new_subscription: "$200 base, $300-$450 at higher tiers"
+        trial_signup: "$10"
+        free_signup: "$0.01"
+      cookie_days: 120
+      attribution: "last-click"
+      tiers: ["Basic", "Silver", "Gold", "Platinum"]
+    au_acceptance: confirmed
+    notes: "Multi-touch構造により、トライアル誘導でも収益化可能。SEO/PPCコンテンツが必要"
+
+  shopify:
+    confidence: green
+    tier: 1
+    status: ready_to_apply_with_prep
+    official_pages:
+      - https://www.shopify.com/affiliates
+    last_verified: 2026-05-21
+    terms_summary:
+      structure: "$25-$150 per merchant signup, Shopify Plus up to $2000"
+      cookie_days: 30
+    au_acceptance: confirmed
+    notes: "エコマース文脈の記事を3本以上書いてから申請推奨"
+    application_prerequisites:
+      - "オンラインビジネス系コンテンツ実績"
+      - "ターゲット明確（merchant志望者向け）"
+
+  jasper:
+    confidence: yellow
+    tier: 1
+    status: needs_official_verification
+    official_pages_to_check:
+      - https://www.jasper.ai/affiliates
+    verified_sources:
+      - "二次情報のみ、公式ページ直接確認未済"
+    last_verified: 2026-05-21
+    pending_verification:
+      - "コミッション率の正確な現行値"
+      - "AU受入の正式確認"
+      - "申請承認後のクローバック条件"
+    au_acceptance: likely_yes_unconfirmed
+
+  kinsta:
+    confidence: green
+    tier: 2
+    status: future_application
+    official_pages:
+      - https://kinsta.com/affiliates/
+    verified_sources:
+      - https://www.shopify.com/au/blog/high-ticket-affiliate-programs
+    last_verified: 2026-05-21
+    terms_summary:
+      structure: "$50-$500 per signup + 10% lifetime recurring"
+    au_acceptance: confirmed
+    application_prerequisites:
+      - "WordPress/Webホスティング系チュートリアル確立"
+      - "月次トラフィック検証"
+      - "四半期1本以上の継続投稿コミット"
+    earliest_application_month: 6
+    notes: "Month 1-5で実績作り、Month 6以降で申請"
+
+  liquidweb:
+    confidence: yellow
+    tier: 2
+    status: needs_official_verification
+    official_pages_to_check:
+      - https://www.liquidweb.com/affiliates/
+    last_verified: 2026-05-21
+    pending_verification:
+      - "$150-$7000レンジの正確な内訳"
+      - "AU受入"
+      - "Cookie期間"
+
+excluded_programs:
+
+  cursor:
+    reason: "公式アフィリプログラム不在、リファラル($20クレジット相互ボーナス)のみ"
+    last_checked: 2026-05-21
+    notes: "記事内では言及可能、ただしアフィリリンクは設定しない"
+
+  anthropic_claude:
+    reason: "公式アフィリプログラム無し"
+    last_checked: 2026-05-21
+
+  openai:
+    reason: "公式アフィリプログラム無し"
+    last_checked: 2026-05-21
+
+  github_copilot:
+    reason: "公式アフィリプログラム無し（GitHub Sponsors はアフィリではない）"
+    last_checked: 2026-05-21
+
+
+verification_schedule:
+  monthly_review:
+    - "全プログラムの official_pages を再フェッチ"
+    - "コミッション率の変更を検知"
+    - "新規プログラム候補の評価（5軸採点制）"
+    - "変更ログを data/monthly_verification_log.md に記録"
+  quarterly_review:
+    - "ティア再判定"
+    - "未検証プログラム（yellow）の公式ソース取得試行"
+    - "除外プログラムの再評価"
+
+
+candidate_pool_to_research:
+  - name: "Brave Search Premium"
+    notes: "Perplexity代替候補"
+  - name: "Murf AI"
+    notes: "ElevenLabs代替候補"
+  - name: "PlayHT"
+    notes: "ElevenLabs代替候補"
+  - name: "ActiveCampaign"
+    notes: "HubSpot代替候補"
+  - name: "Brevo (旧Sendinblue)"
+    notes: "HubSpot代替候補"
+  - name: "Ahrefs"
+    notes: "Semrush代替候補"
+  - name: "BigCommerce"
+    notes: "Shopify代替候補"
+  - name: "Cloudways"
+    notes: "Kinsta代替候補"
+  - name: "SiteGround"
+    notes: "Kinsta代替候補"

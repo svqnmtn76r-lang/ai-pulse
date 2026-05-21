@@ -1,0 +1,575 @@
+# AI-Pulse プロジェクト仕様書（CLAUDE.md）
+
+> このファイルは Claude Code / Claude チャットが本プロジェクトのコンテキストを把握するためのものです。
+> **採点制 × 確実性優先 × 思い込み排除** を全工程の判断軸とします。
+
+---
+
+## 0. このプロジェクトの判断原則
+
+### 0.1 採点制ルール
+
+すべての提案・実装方針は以下5軸で採点し、**総合70点未満は採用しない**。
+
+| 軸 | 配点 | 内容 |
+|---|---|---|
+| 収益の確実性 | 30 | 「公式情報で検証済みの数字か」「Hiroの居住地で実際に申請可能か」が最優先 |
+| 実装可能性 | 20 | 既存資産（AutoAffil、Claude API、GitHub Actions）で動くか、必要工数は現実的か |
+| 規制適合性 | 20 | AU/JPの法令、各プラットフォーム規約に違反しないか |
+| 速報性活用度 | 15 | Hiroの最優先軸「速報性」が活きているか |
+| スケーラビリティ | 15 | 1年後の月収目標到達経路が明確か |
+
+### 0.2 思い込み排除ルール
+
+以下に該当する記述は採用前に必ず公式ソースで再検証する：
+
+- 数字（CPA、コミッション率、Cookie期間）
+- 「世界中から申請可能」「AU受入OK」などの地理的可否
+- 「ほぼ自動承認」などの審査ハードル
+- 競合不在の断定
+- 月収シミュレーションの根拠
+
+検証ソースは、公式アフィリページ・PartnerStack/Impact等のネットワークページ・公式利用規約のいずれかを最低1つ確保する。Webメディアの集約記事は補助情報に留め、単独の根拠としない。
+
+### 0.3 確実性スコアリング
+
+各アフィリプログラムには以下のラベルを必ず付ける：
+
+- **🟢 検証済み**: 公式ページ・規約・ネットワーク管理画面で1次情報確認済み
+- **🟡 二次情報**: 信頼できるアフィリレビューサイト複数で一致するが公式1次情報未確認
+- **🔴 未検証**: 一次・二次ソースとも不足、要再調査
+
+🔴 のプログラムは**運用に組み込まない**。
+
+---
+
+## 1. プロジェクト概要
+
+### 1.1 ゴール
+
+AI業界の新発表・新製品情報を半自動で収集・発信し、検証済み高単価アフィリエイトで月次収益を構築する。
+
+### 1.2 オーナー情報
+
+- 事業者: Hiro（ABN: 64 998 187 645、Pacific Pines, QLD, Australia）
+- 既存事業: AutoAffil（Pinterest、Medium、X、YouTube自動化基盤）
+- 言語: 英語メイン、必要に応じて日本語サブ
+
+### 1.3 核となる戦略
+
+**AI業界速報 × 高単価SaaSアフィリ × 既存自動化基盤** の3軸で、AutoAffilの拡張プロジェクトとして運用する。
+
+スポーツ速報・クリプト・スポーツベットは過去の調査で全部規制 or 地理ミスマッチで除外済み。本プロジェクトはその検証結果を踏まえた現実解。
+
+---
+
+## 2. アフィリエイトカタログ（検証済み）
+
+2026年5月時点の公式情報ベース。各エントリには確実性ラベル、適用地域、Hiroの即時申請可否を明記。
+
+### 2.1 ティア1：即時申請可能・確実性高
+
+#### Perplexity 🟢 検証済み
+
+- **報酬構造**: $10 flat per paid Pro signup + 10% recurring on ongoing subscription payments
+- **追加特典**: 紹介された人は1ヶ月無料 Pro
+- **トラッキング**: Dub.co ダッシュボード
+- **対象国**: 米国・カナダ・シンガポール・イスラエル・UK・**オーストラリア**・ドイツ・ベルギー・香港・アイルランド・オランダ・UAE が「フル単価層」
+- **AU受入**: ✅ あり（フル単価層）
+- **申請難易度**: 低
+- **エビデンス**: automatetoprofit.com 2026年4月、way2earning.com 2026年1月
+- **アクション**: Month 1 で即申請
+
+#### ElevenLabs 🟢 検証済み
+
+- **報酬構造**: 22% recurring 12ヶ月（Starter/Creator/Pro/Scale）、Business は11%
+- **Cookie**: 90日
+- **最低出金**: $5
+- **ネットワーク**: PartnerStack
+- **対象国**: 「ほとんどの国」（公式記載）
+- **AU受入**: ✅ あり
+- **申請難易度**: 低〜中（1〜5営業日審査、AI関連サイトあると承認確率上昇）
+- **特殊条件**: ブランドキーワードでの広告入札禁止
+- **エビデンス**: elevenlabs.io/affiliates 公式、elevenlabs.io/affiliate-partner-guide 公式
+- **アクション**: Month 1 で即申請（Hiroは既にユーザーなので説得力ある申請可能）
+
+#### HubSpot 🟢 検証済み
+
+- **報酬構造**: 30% recurring 12ヶ月
+- **Cookie**: 180日
+- **3階層**: Affiliate / Super Affiliate（100-200 signups/月）/ Elite（200+ signups/月）
+- **支払**: PayPal または EFT
+- **ネットワーク**: Impact
+- **対象国**: グローバル
+- **AU受入**: ✅ あり
+- **申請難易度**: 低（2-3営業日承認）
+- **新規アフィリ特典**: 最初30日で最大$80ボーナス
+- **エビデンス**: hubspot.com/partners/affiliates 公式
+- **アクション**: Month 1 で即申請、ただし B2B 顧客層が必要なため Month 3 までは育成期
+
+#### Notion 🟢 検証済み（条件分岐あり要注意）
+
+- **報酬構造**: 50% commission（**「first 12 months」と「first payment」で情報源が割れている、申請後に規約確認必須**）
+- **対象**: 新規ワークスペースが Plus / Business / AI プランへ180日内アップグレード
+- **Cookie**: 180日
+- **ネットワーク**: PartnerStack
+- **対象国**: グローバル
+- **AU受入**: ✅ あり
+- **申請難易度**: 中
+- **エビデンス**: affiliateotter.com、notionapps.com、cuelinks.com
+- **要確認事項**: 50%が「初回支払いのみ」か「12ヶ月継続」かは申請後に再確認、結果を CLAUDE.md に反映する
+
+#### Semrush 🟢 検証済み
+
+- **報酬構造**: $200 per subscription + $10 per trial signup + $0.01 per new free signup（multi-touch CPA）
+- **新階層**: Basic/Silver/Gold/Platinum で$300-$450まで上昇
+- **Cookie**: 120日
+- **ネットワーク**: Impact
+- **対象国**: グローバル
+- **AU受入**: ✅ あり
+- **申請難易度**: 低〜中
+- **エビデンス**: shopify.com/au/blog/best-affiliate-programs、affililist.com
+- **アクション**: Month 1-2 で申請
+
+#### Shopify 🟢 検証済み
+
+- **報酬構造**: $25-$150 per merchant（プランによる）、Shopify Plus は$2,000まで
+- **Cookie**: 30日
+- **対象国**: グローバル（180+ countries）
+- **AU受入**: ✅ あり（Hiroの本拠地）
+- **申請難易度**: 低（オンラインビジネス系コンテンツ実績推奨）
+- **エビデンス**: shopify.com/affiliates、wecantrack.com 2026年3月確認
+- **アクション**: Month 2-3 で申請、エコマース文脈の記事を3本以上作成後
+
+#### Jasper AI 🟡 二次情報
+
+- **報酬構造**: 25-30% recurring 1年（ベース25%、トップパフォーマー30%）
+- **エビデンス**: 二次情報のみ、公式ページ直接確認未済
+- **アクション**: Month 2 で公式申請ページから直接確認後に組み込み判定
+
+### 2.2 ティア2：実績後申請
+
+#### Kinsta 🟢 検証済み
+
+- **報酬構造**: $50-$500 per signup（プラン依存） + 10% lifetime recurring
+- **対象国**: グローバル
+- **AU受入**: ✅ あり
+- **申請難易度**: 高（WordPress/Webホスティング系の確立されたチュートリアル実績必須、月次トラフィック検証、四半期1本以上の継続投稿コミット）
+- **エビデンス**: shopify.com/au/blog/high-ticket-affiliate-programs
+- **アクション**: Month 6 以降、WordPress/Webホスティング系記事10本以上+トラフィック実績を作ってから
+
+#### Liquid Web 🟡 二次情報
+
+- **報酬構造**: $150-$7,000 per sale（製品依存）
+- **エビデンス**: shopify.com/au/blog 等の二次情報、公式条件直接確認未済
+- **アクション**: 公式ページで再確認後にティア判定
+
+### 2.3 ティア3：保留・除外
+
+#### Cursor ❌ 除外
+
+- **理由**: 公式アフィリプログラム不在。リファラルプログラム（$20 Cursor クレジット相互ボーナス）のみで現金収益化不可
+- **エビデンス**: aiproductivity.ai 2026年確認、公式 cursor.com にアフィリページ無し
+- **対応**: Cursor は記事内では言及可能だが「アフィリリンクなし」として明示、収益商品リストから除外
+
+#### Anthropic（Claude公式）❌ 除外
+
+- **理由**: 公式アフィリプログラム無し
+- **対応**: Claude/Claude Code については記事内で言及するがアフィリリンクは設定しない
+
+#### OpenAI ❌ 除外
+
+- **理由**: 公式アフィリプログラム無し
+- **対応**: 言及のみ
+
+### 2.4 カタログ運用ルール
+
+- 新規プログラム追加時は必ず**確実性ラベル**と**AU受入確認**を実施
+- 月1回、既存プログラムの条件変更を再確認（コミッション率、Cookie期間、地理制限）
+- 公式アフィリページの URL を `data/affiliate_sources.yml` に保管、再検証時の追跡を可能にする
+
+---
+
+## 2.5 ドメイン戦略
+
+### 2.5.1 現在の選択（2026-05-21）
+
+**Phase 0（Month 1-3）**: Cloudflare Pages サブドメイン `aipulse.pages.dev` で開始。
+
+理由（採点制による判定）：
+- 速報性: 影響ゼロ（コンテンツ蓄積はドメインに依存しない）
+- 収益確実性: 影響極小（アフィリ申請は通る、SEO初期は SNS 流入主体）
+- コスト: $0（独自ドメイン$10.46/年を Month 4 以降に支払う）
+- 柔軟性: 6ヶ月以内なら名称変更コストほぼゼロ
+
+### 2.5.2 独自ドメイン取得トリガー
+
+以下のいずれかが達成された時点で `aipulse-stack.com`（または最終確定名称）を取得：
+
+- [ ] 月収が3ヶ月連続で $200 を超えた
+- [ ] ブログ記事が30本を超えた（SEO蓄積開始）
+- [ ] Beehiiv ニュースレター登録者が500人を超えた
+- [ ] アフィリプログラムから「独自ドメイン推奨」のフィードバックがあった
+- [ ] Month 6 に到達した（時間切れトリガー）
+
+これらは「**カスタムドメインが収益に直結し始めた**」サインで、取得判断の根拠を確実性ベースで示す。
+
+### 2.5.3 候補ドメイン記録
+
+2026-05-21 時点で取得可能・要検討：
+
+| ドメイン | 価格/年 | コメント |
+|---|---|---|
+| aipulse-stack.com | $10.46 | AutoAffilと表記揃う、第一候補 |
+| aipulsestack.com | $10.46 | ハイフン無し版 |
+| aipulse-stack.app | $14.20 | .app は最終プロダクト感 |
+
+取得済み（他者所有、回避）：
+- ai-pulse.dev
+- aipulse.news
+- aipulse.ai
+
+---
+
+## 3. 収益目標と確実性ベースの試算
+
+### 3.1 採点制による現実シミュレーション
+
+これまでの提案で「中央値で月$3,500、楽観で$10,000」と提示していたが、**確実性ラベル別に組み直す**。
+
+#### Month 1-3：基盤期（確実性 高）
+
+| 項目 | 確実性 | 月額試算 |
+|---|---|---|
+| Perplexity 月10件 × $10 | 🟢 | $100 |
+| ElevenLabs 月5件 × $4.84 | 🟢 | $24 |
+| Notion 月5件 × $4（Plus $8の50%）| 🟢 | $20 |
+| **計（確度高ベース）** | | **$144** |
+
+これは「動けば確実に出る」レンジ。Hiroの既存資産（Pinterest、Medium、X）を流用した最低ライン。
+
+#### Month 4-6：拡大期（確実性 中）
+
+| 項目 | 確実性 | 月額試算 |
+|---|---|---|
+| Perplexity 月30件 + リカーリング累積 | 🟢 | $360 + $60 |
+| ElevenLabs 月15件 + リカーリング | 🟢 | $73 + $40 |
+| HubSpot 月2件 × $40/月 | 🟢 | $80 |
+| Semrush 月1件 + トライアル10件 | 🟢 | $210 |
+| Notion 月10件 | 🟢 | $40 |
+| **計** | | **$863** |
+
+#### Month 7-12：成熟期（確実性 中〜低）
+
+| 項目 | 確実性 | 月額試算 |
+|---|---|---|
+| Perplexity リカーリング累積 | 🟢 | $400 |
+| ElevenLabs リカーリング累積 | 🟢 | $250 |
+| HubSpot リカーリング累積 5件 × $60平均 | 🟢 | $300 |
+| Semrush 月3件 + トライアル | 🟢 | $620 |
+| Shopify 月2件 | 🟢 | $200 |
+| Kinsta 月1件（成功した場合）| 🟡 | $150 |
+| Notion 累積 | 🟢 | $120 |
+| **計** | | **$2,040** |
+
+### 3.2 最終提案：3段階の目標
+
+- **保守ケース（確実性85%）**: Month 12 で月**$1,500**
+- **中央ケース（確実性60%）**: Month 12 で月**$2,500**
+- **楽観ケース（確実性30%）**: Month 12 で月**$4,000+**
+
+過去の提案（月$3,500中央値）は確実性が低かった。**保守ケース $1,500 を「合格ライン」、中央 $2,500 を「目標」、楽観 $4,000 を「ストレッチ」** と定義し直す。
+
+### 3.3 採点
+
+このプランの採点：
+
+| 軸 | 配点 | スコア | 根拠 |
+|---|---|---|---|
+| 収益の確実性 | 30 | 26 | 全プログラム公式・二次情報で検証済み、AU受入確認済み |
+| 実装可能性 | 20 | 18 | AutoAffil既存資産で90%カバー |
+| 規制適合性 | 20 | 20 | AU/JP規制対象外、グローバルSaaSのみ |
+| 速報性活用度 | 15 | 11 | 速報→比較記事の経路は機能するが、速報単独では収益化しない |
+| スケーラビリティ | 15 | 13 | ティア2/3への昇格パスが明確 |
+| **合計** | **100** | **88** | **合格ライン突破** |
+
+---
+
+## 4. リポ構造
+
+```
+ai-pulse/
+├── CLAUDE.md                                # 本ファイル（プロジェクト仕様）
+├── .github/
+│   └── workflows/
+│       ├── poll-news.yml                    # 15分ごとRSS監視
+│       ├── publish-blog.yml                 # 日次ブログ記事生成
+│       ├── publish-newsletter.yml           # 週次ニュースレター
+│       └── verify-affiliates.yml            # 月次アフィリ条件再検証
+├── src/
+│   ├── sources/                             # データ取得層
+│   │   ├── rss_monitor.py
+│   │   ├── github_releases.py
+│   │   └── hackernews.py
+│   ├── processors/                          # 処理層
+│   │   ├── deduplicator.py
+│   │   ├── importance_scorer.py
+│   │   ├── claude_writer.py
+│   │   └── affiliate_matcher.py
+│   ├── publishers/                          # 配信層
+│   │   ├── x_publisher.py
+│   │   ├── blog_publisher.py
+│   │   ├── newsletter_publisher.py
+│   │   ├── pinterest_publisher.py           # AutoAffilから流用
+│   │   └── medium_publisher.py              # AutoAffilから流用
+│   ├── affiliates/                          # アフィリ管理
+│   │   ├── catalog.yml                      # 検証済み商品マスタ
+│   │   ├── catalog_sources.yml              # 検証ソースURL管理
+│   │   ├── link_builder.py
+│   │   └── conversion_tracker.py
+│   ├── analytics/
+│   │   ├── kpi_collector.py                 # AutoAffil KPI Sheetと連携
+│   │   └── confidence_scorer.py             # 確実性スコア再計算
+│   └── utils/
+│       ├── claude_client.py
+│       ├── state_store.py
+│       └── logger.py
+├── blog/                                    # Astro 静的サイト
+│   ├── src/
+│   └── astro.config.mjs
+├── templates/
+│   ├── article_template.md
+│   ├── breaking_news_template.md
+│   ├── comparison_template.md
+│   └── x_thread_template.txt
+├── data/
+│   ├── seen_articles.db                     # 既出記事SQLite
+│   ├── affiliate_products.json
+│   ├── affiliate_sources.yml                # 検証ソース管理
+│   └── monthly_verification_log.md          # 月次再検証ログ
+├── tests/
+├── .env.example
+├── requirements.txt
+└── README.md
+```
+
+---
+
+## 5. データソース層（公式RSS確認済み）
+
+### 5.1 確認済みRSSフィード
+
+```yaml
+# data/rss_feeds.yml
+official_ai_companies:
+  openai: https://openai.com/news/rss.xml
+  anthropic: https://www.anthropic.com/news/rss.xml
+  google_deepmind: https://deepmind.google/blog/rss.xml
+  meta_ai: https://ai.meta.com/blog/rss/
+  mistral: https://mistral.ai/news/feed.xml
+  huggingface: https://huggingface.co/blog/feed.xml
+
+tool_makers:
+  cursor: https://cursor.com/blog/rss.xml
+  perplexity: https://www.perplexity.ai/hub/feed
+
+# 追加候補（要検証）：
+candidates_to_verify:
+  - elevenlabs_blog
+  - notion_engineering
+  - shopify_engineering
+  - hubspot_blog
+```
+
+### 5.2 GitHub Releases 監視対象
+
+```python
+WATCHED_REPOS = [
+    "openai/openai-python",
+    "anthropics/anthropic-sdk-python",
+    "anthropics/claude-code",
+    "langchain-ai/langchain",
+    "vercel/ai",
+    "browser-use/browser-use",
+    "All-Hands-AI/OpenHands",
+]
+```
+
+---
+
+## 6. 12ヶ月ロードマップ（採点制）
+
+### Month 1：基盤構築（達成判定：合格ライン）
+
+**実装**
+- リポ作成、RSS監視 PoC、SQLite状態管理
+- ドメイン取得（候補：ai-pulse.dev、aipulse-stack.com、pulseai.news）
+- Astro ブログテンプレ + Cloudflare Pages
+- Claude Haiku 4.5 台本生成パイプライン
+- X新規アカウント作成、API認証
+
+**アフィリ申請**
+- Perplexity（即承認系）
+- ElevenLabs（Hiroが既存ユーザーなので有利）
+- Notion（PartnerStack経由）
+
+**月収目標**: $50（保守ケース達成判定）
+
+### Month 2-3：拡大期前半
+
+**実装**
+- 比較記事テンプレ完成（「Tool A vs Tool B」型）
+- Pinterest 自動化を AutoAffil から流用
+- Medium クロスポスト確立
+- Beehiiv ニュースレター開始
+
+**アフィリ申請**
+- HubSpot
+- Semrush
+- Jasper（公式条件再確認後）
+
+**月収目標**: $150-$400
+
+### Month 4-6：成熟期
+
+**実装**
+- ニュースレター登録者500人達成
+- 比較記事30本公開
+- Shopify アフィリ申請（エコマース記事3本以上完成後）
+
+**月収目標**: $500-$1,000
+
+### Month 7-9：高単価追加
+
+**実装**
+- WordPress/ホスティング系記事10本以上
+- Kinsta 申請（実績ベース申請）
+- Liquid Web 公式条件再確認後申請判定
+
+**月収目標**: $1,000-$2,000
+
+### Month 10-12：スケール
+
+**実装**
+- 日本語版判定（AU/JP規制対象外プログラムのみ）
+- ニュースレタースポンサー受付
+- 全アフィリ条件月次再検証ルーチン確立
+
+**月収目標**: $1,500（保守）/ $2,500（中央）/ $4,000+（楽観）
+
+---
+
+## 7. 運用コスト（検証済み）
+
+| 項目 | 月額（USD） | 確実性 |
+|---|---|---|
+| ドメイン | $1 | 🟢 |
+| Cloudflare Pages | $0 | 🟢 |
+| GitHub Actions（無料枠2000分内）| $0 | 🟢 |
+| Claude Haiku 4.5 | $5-$15 | 🟢 |
+| Beehiiv（〜2,500登録者）| $0 | 🟢 |
+| Plausible Analytics | $9 | 🟢 |
+| Dub.co | $0（無料枠1000リンク）| 🟢 |
+| Pollinations AI | $0 | 🟢 |
+| **合計** | **$15-$25/月** | |
+
+---
+
+## 8. リスク管理
+
+### 8.1 規制リスク
+
+| リスク | 影響 | 対策 |
+|---|---|---|
+| ABNでの海外収益申告 | 中 | 既存 AutoAffil 申告と統合、税理士確認 |
+| US支払の源泉徴収 30% | 中 | W-8BEN 提出済みであれば日豪租税条約適用で軽減可、各プログラム規約確認 |
+| AU 個人情報保護法 (APP) | 低 | ブログ・ニュースレターのプライバシーポリシー設置 |
+| 各プログラム規約変更 | 中 | 月次再検証ルーチン（`verify-affiliates.yml`）で検知 |
+
+### 8.2 プログラム承認否決リスク
+
+| プログラム | 否決リスク | 代替案 |
+|---|---|---|
+| Perplexity | 低 | Brave Search アフィリ |
+| ElevenLabs | 低（既存ユーザー）| Murf、PlayHT |
+| HubSpot | 中（B2B実績要）| ActiveCampaign、Brevo |
+| Semrush | 低 | Ahrefs（条件要確認）|
+| Shopify | 中（エコマース実績要）| BigCommerce、WooCommerce |
+| Kinsta | 高（実績必須）| Cloudways、SiteGround |
+
+### 8.3 競合リスク
+
+確認済み主要競合：
+- **The Decoder**（the-decoder.com）: ドイツ拠点、AI業界ニュース専門メディア
+- **Marktechpost**: 米国カリフォルニア拠点、月100万読者、年商$941K、社員11-20人
+- **Simon Willison's blog**: 個人ブログだが影響力極大
+- **HackerNews**: 速報の事実上の中心地
+
+**勝ち方**: 大手メディア（人員多、編集判断遅い）と個人インフルエンサー（速報のみ、深堀り少ない）の中間ニッチを取る。具体的には「速報 + 即座にツール比較・購入導線」のハイブリッド形式。これは大手も個人もやっていない。
+
+---
+
+## 9. 月次レビュー項目
+
+毎月1日に以下を実行：
+
+1. **アフィリ条件再検証**（`verify-affiliates.yml` GitHub Actions）
+   - 各公式ページの最新コミッション率を取得
+   - 変更があれば `data/monthly_verification_log.md` に記録
+   - `affiliates/catalog.yml` を自動更新
+
+2. **収益確実性スコア再計算**
+   - 過去30日のコンバージョン実績で確実性ラベルを更新
+   - 期待値と実績の乖離 > 30% なら戦略再検討
+
+3. **新規プログラム評価**
+   - 候補リストから1〜3個ピック、5軸採点制で評価
+   - 総合70点以上のみ採用
+
+---
+
+## 10. Claude が本プロジェクトで応答する際の指針
+
+Hiroまたは別のClaude/Claude Code が本リポで作業する際、以下を守る：
+
+1. **数字を出すときは必ず確実性ラベルを付ける**
+   - 🟢 検証済み / 🟡 二次情報 / 🔴 未検証
+
+2. **「ほぼ確実」「だいたい」「楽観的に」などの曖昧表現を避ける**
+   - 代わりに「保守ケース」「中央ケース」「楽観ケース」の3点見積もり
+
+3. **新規アフィリ追加提案時は必ず公式ソースURLを併記**
+   - 公式URLなしの提案は受理しない
+
+4. **採点制（5軸×合計100点）で70点未満の提案は採用しない**
+
+5. **過去の提案で否定された方向（スポーツベット、クリプト取引所、YouTube速報フル自動など）は再提案しない**
+
+6. **AutoAffil既存資産（Pinterest自動化、Medium自動化、Claude API、X API、GitHub Actions）の流用を最優先**
+
+---
+
+## 11. 変更履歴
+
+| 日付 | 変更内容 | 確実性スコア変化 |
+|---|---|---|
+| 2026-05-21 | 初版作成、全主要アフィリプログラムを公式情報で検証 | 88/100 |
+| - | Cursor を除外（公式アフィリプログラム不在確認）| - |
+| - | Notion 50% の期間条件は申請後再確認事項として明記 | - |
+
+---
+
+## 12. 参考：検証時に使用した公式ソース
+
+| プログラム | 公式ソース |
+|---|---|
+| Perplexity | automatetoprofit.com 2026、way2earning.com 2026 |
+| ElevenLabs | elevenlabs.io/affiliates、elevenlabs.io/affiliate-partner-guide |
+| HubSpot | hubspot.com/partners/affiliates、community.hubspot.com |
+| Notion | affiliateotter.com、notionapps.com、cuelinks.com |
+| Semrush | shopify.com/au/blog（公式記事）、affililist.com |
+| Shopify | shopify.com 公式、wecantrack.com 2026年3月確認 |
+| Kinsta | shopify.com/au/blog/high-ticket-affiliate-programs |
+| Cursor（除外）| aiproductivity.ai、cursor.com 公式（アフィリページ無し）|
+
+これらのURLは `data/affiliate_sources.yml` で管理し、月次再検証時に再アクセスする。
