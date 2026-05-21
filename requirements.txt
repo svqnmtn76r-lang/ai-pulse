@@ -1,0 +1,19 @@
+# Core
+anthropic>=0.40.0
+feedparser>=6.0.11
+requests>=2.32.0
+PyYAML>=6.0.2
+python-dotenv>=1.0.1
+
+# Data
+pydantic>=2.9.0
+
+# Logging
+structlog>=24.4.0
+
+# Testing
+pytest>=8.3.0
+pytest-mock>=3.14.0
+
+# X (Twitter) API - 後で必要
+tweepy>=4.14.0

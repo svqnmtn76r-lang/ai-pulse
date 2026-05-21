@@ -1,0 +1,32 @@
+# AI業界公式RSSフィード
+# 確実性ラベル: 全て🟢（前ターンで実在確認済み）
+# ただし、URLが変わっている可能性は常にあるため、初回実行時にエラーがあれば
+# 個別に WebFetch で公式サイトのRSS位置を再確認すること
+
+official_ai_companies:
+  openai:
+    url: https://openai.com/news/rss.xml
+    confidence: green
+  anthropic:
+    url: https://www.anthropic.com/news/rss.xml
+    confidence: green
+  google_deepmind:
+    url: https://deepmind.google/blog/rss.xml
+    confidence: green
+  meta_ai:
+    url: https://ai.meta.com/blog/rss/
+    confidence: green
+  mistral:
+    url: https://mistral.ai/news/feed.xml
+    confidence: yellow
+  huggingface:
+    url: https://huggingface.co/blog/feed.xml
+    confidence: green
+
+tool_makers:
+  cursor:
+    url: https://cursor.com/blog/rss.xml
+    confidence: yellow
+  perplexity:
+    url: https://www.perplexity.ai/hub/feed
+    confidence: yellow
