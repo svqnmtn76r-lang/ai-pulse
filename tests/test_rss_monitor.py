@@ -11,9 +11,16 @@ def test_load_feeds_returns_dict():
         assert url.startswith("http")
 
 
-def test_load_feeds_includes_anthropic():
+def test_load_feeds_includes_openai():
     feeds = load_feeds()
-    assert "anthropic" in feeds
+    assert "openai" in feeds
+
+
+def test_load_feeds_returns_only_verified():
+    feeds = load_feeds()
+    # After 2026-05-22 verification: only 3 official RSS feeds exist
+    assert len(feeds) == 3
+    assert set(feeds.keys()) == {"openai", "google_deepmind", "huggingface"}
 
 
 def test_parse_pub_date_handles_missing():

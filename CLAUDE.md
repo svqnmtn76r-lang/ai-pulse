@@ -355,25 +355,84 @@ ai-pulse/
 
 ---
 
-## 5. データソース層（公式RSS確認済み）
+## 5. データソース層（実検証済み・思い込み訂正版）
 
-### 5.1 確認済みRSSフィード
+> **2026-05-22 重要訂正**: Day 1完了後の実検証で、当初提示した8フィード中5つが
+> 公式RSSを提供していないことが判明。以下は実HTTPステータス確認済みの最新情報。
+
+### 5.1 確実性ラベル別データソース
 
 ```yaml
-# data/rss_feeds.yml
-official_ai_companies:
-  openai: https://openai.com/news/rss.xml
-  anthropic: https://www.anthropic.com/news/rss.xml
-  google_deepmind: https://deepmind.google/blog/rss.xml
-  meta_ai: https://ai.meta.com/blog/rss/
-  mistral: https://mistral.ai/news/feed.xml
-  huggingface: https://huggingface.co/blog/feed.xml
+# data/rss_feeds.yml の正しい構造
 
-tool_makers:
-  cursor: https://cursor.com/blog/rss.xml
-  perplexity: https://www.perplexity.ai/hub/feed
+# 🟢 公式RSSフィード（HTTPステータス200 + Content-Type:xml で実検証済み）
+verified_official_rss:
+  openai:
+    url: https://openai.com/news/rss.xml
+    confidence: green
+    verified: 2026-05-22
+  google_deepmind:
+    url: https://deepmind.google/blog/rss.xml
+    confidence: green
+    verified: 2026-05-22
+  huggingface:
+    url: https://huggingface.co/blog/feed.xml
+    confidence: green
+    verified: 2026-05-22
 
-# 追加候補（要検証）：
+# 🔴 公式RSSなし（実検証で404/403確認、Day 2-3で代替実装）
+no_official_rss:
+  anthropic:
+    confidence: red
+    verified: 2026-05-22
+    notes: "公式は news ページのみ提供、RSSなし"
+    alternatives:
+      - "第三者: https://raw.githubusercontent.com/taobojlen/anthropic-rss-feed/main/anthropic_news_rss.xml"
+      - "直接スクレイピング: https://www.anthropic.com/news"
+      - "GitHub releases: anthropics/anthropic-sdk-python, anthropics/claude-code"
+  meta_ai:
+    confidence: red
+    verified: 2026-05-22
+    notes: "ai.meta.com/blog/rss/ は404"
+    alternatives:
+      - "直接スクレイピング: https://ai.meta.com/blog"
+  mistral:
+    confidence: red
+    verified: 2026-05-22
+    notes: "mistral.ai/news/feed.xml は404"
+    alternatives:
+      - "直接スクレイピング: https://mistral.ai/news"
+  cursor:
+    confidence: red
+    verified: 2026-05-22
+    notes: "cursor.com/blog/rss.xml は404"
+    alternatives:
+      - "GitHub releases: getcursor/cursor"
+      - "直接スクレイピング: https://cursor.com/blog"
+  perplexity:
+    confidence: red
+    verified: 2026-05-22
+    notes: "perplexity.ai/hub/feed は403（Cloudflareブロック）"
+    alternatives:
+      - "直接スクレイピング: https://www.perplexity.ai/hub"
+      - "X/Twitter API @perplexity_ai"
+
+# 🟡 二次媒体（速報性高、Day 2で検証後採用判定）
+secondary_media_candidates:
+  techcrunch_ai:
+    url: https://techcrunch.com/category/artificial-intelligence/feed/
+    confidence: yellow
+    notes: "速報性高、ライセンス・著作権要確認"
+  the_decoder:
+    url: https://the-decoder.com/feed/
+    confidence: yellow
+    notes: "AI業界専門メディア、ドイツ拠点"
+  venturebeat_ai:
+    url: https://venturebeat.com/category/ai/feed/
+    confidence: yellow
+    notes: "速報性中、ビジネスサイド強い"
+
+# 候補（Day 2以降に検証）
 candidates_to_verify:
   - elevenlabs_blog
   - notion_engineering
@@ -381,7 +440,7 @@ candidates_to_verify:
   - hubspot_blog
 ```
 
-### 5.2 GitHub Releases 監視対象
+### 5.2 GitHub Releases 監視対象（実検証で動作確認済み）
 
 ```python
 WATCHED_REPOS = [
@@ -392,8 +451,25 @@ WATCHED_REPOS = [
     "vercel/ai",
     "browser-use/browser-use",
     "All-Hands-AI/OpenHands",
+    "getcursor/cursor",  # 追加: Cursor速報の代替手段
 ]
 ```
+
+### 5.3 データソース現状サマリー
+
+Day 1完了時点の機能率：
+
+| データソース種別 | 利用可能 | 全体 | 機能率 |
+|---|---|---|---|
+| 公式RSS | 3 | 8 | 37% |
+| GitHub Releases | 7-8 | 7-8 | 100% |
+| Hacker News API（未実装） | 0 | 1 | 0% |
+| 二次媒体（未実装） | 0 | 3 | 0% |
+
+**Day 2 優先実装**：
+1. Hacker News API（無料、AI関連スレッド検出）
+2. 二次媒体3つ（TechCrunch, The Decoder, VentureBeat）
+3. Anthropic/Meta/Mistral/Cursor/Perplexity 用直接スクレイパー（Phase 2）
 
 ---
 
@@ -556,6 +632,9 @@ Hiroまたは別のClaude/Claude Code が本リポで作業する際、以下を
 | 2026-05-21 | 初版作成、全主要アフィリプログラムを公式情報で検証 | 88/100 |
 | - | Cursor を除外（公式アフィリプログラム不在確認）| - |
 | - | Notion 50% の期間条件は申請後再確認事項として明記 | - |
+| 2026-05-22 | Day 1 完了（採点 93/100、Hiro自己採点） | 88→90/100 |
+| 2026-05-22 | **思い込み訂正**: RSS フィード8つ中5つが公式RSSを提供していないことが判明（実HTTPで404/403確認）。CLAUDE.md 5節を実検証ベースに全面修正 | 訂正により確実性向上 |
+| 2026-05-22 | 5.3節新設：データソース現状サマリーと Day 2 優先実装リスト追加 | - |
 
 ---
 

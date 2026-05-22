@@ -1,32 +1,215 @@
-# AI業界公式RSSフィード
-# 確実性ラベル: 全て🟢（前ターンで実在確認済み）
-# ただし、URLが変わっている可能性は常にあるため、初回実行時にエラーがあれば
-# 個別に WebFetch で公式サイトのRSS位置を再確認すること
+# AI-Pulse データソース設定
+#
+# このファイルは src/sources/rss_monitor.py が読み込む。
+# 2026-05-22 にHTTPステータス+Content-Typeで実検証済み。
+#
+# 構造:
+#   verified_official_rss: 動作確認済み公式RSS（confidence: green）
+#   no_official_rss: 公式RSS提供なし、代替手段リスト保持
+#   secondary_media_candidates: 二次媒体（Day 2で本格検証）
+#
+# 更新ルール:
+#   - 新規追加時は必ず curl で HTTPステータスと Content-Type を確認
+#   - 確認結果（YYYY-MM-DD）を verified フィールドに記録
+#   - 月次再検証ジョブ verify-affiliates.yml で自動再確認
 
-official_ai_companies:
+last_full_verification: 2026-05-22
+
+
+# =====================================================
+# 🟢 動作確認済み公式RSS（Day 1 で実装、Day 2 でも継続使用）
+# =====================================================
+
+verified_official_rss:
+
   openai:
     url: https://openai.com/news/rss.xml
     confidence: green
-  anthropic:
-    url: https://www.anthropic.com/news/rss.xml
-    confidence: green
+    verified: 2026-05-22
+    content_type: text/xml
+    last_status: 200
+    notes: "590KB、安定して取得可能"
+
   google_deepmind:
     url: https://deepmind.google/blog/rss.xml
     confidence: green
-  meta_ai:
-    url: https://ai.meta.com/blog/rss/
-    confidence: green
-  mistral:
-    url: https://mistral.ai/news/feed.xml
-    confidence: yellow
+    verified: 2026-05-22
+    content_type: text/xml
+    last_status: 200
+    notes: "81KB、安定して取得可能"
+
   huggingface:
     url: https://huggingface.co/blog/feed.xml
     confidence: green
+    verified: 2026-05-22
+    content_type: application/rss+xml
+    last_status: 200
+    notes: "229KB、安定して取得可能、AI/ML研究系記事豊富"
 
-tool_makers:
+
+# =====================================================
+# 🔴 公式RSS提供なし（直接スクレイピング or 代替手段が必要）
+# =====================================================
+# これらは rss_monitor.py の対象外。
+# Day 2-3 で個別スクレイパーを実装するか、代替ソースで補う。
+
+no_official_rss:
+
+  anthropic:
+    confidence: red
+    verified: 2026-05-22
+    last_status: 404
+    attempted_url: https://www.anthropic.com/news/rss.xml
+    alternatives:
+      - type: third_party_rss
+        url: https://raw.githubusercontent.com/taobojlen/anthropic-rss-feed/main/anthropic_news_rss.xml
+        risk: "第三者依存、停止リスクあり"
+      - type: scrape
+        url: https://www.anthropic.com/news
+        risk: "ToS確認必要"
+      - type: github_releases
+        repos:
+          - anthropics/anthropic-sdk-python
+          - anthropics/claude-code
+
+  meta_ai:
+    confidence: red
+    verified: 2026-05-22
+    last_status: 404
+    attempted_url: https://ai.meta.com/blog/rss/
+    alternatives:
+      - type: scrape
+        url: https://ai.meta.com/blog
+        risk: "Meta系はBot対策強い、要検証"
+
+  mistral:
+    confidence: red
+    verified: 2026-05-22
+    last_status: 404
+    attempted_url: https://mistral.ai/news/feed.xml
+    alternatives:
+      - type: scrape
+        url: https://mistral.ai/news
+
   cursor:
-    url: https://cursor.com/blog/rss.xml
-    confidence: yellow
+    confidence: red
+    verified: 2026-05-22
+    last_status: 404
+    attempted_url: https://cursor.com/blog/rss.xml
+    alternatives:
+      - type: github_releases
+        repos:
+          - getcursor/cursor
+        notes: "速報性最も高い、優先実装推奨"
+      - type: scrape
+        url: https://cursor.com/blog
+
   perplexity:
-    url: https://www.perplexity.ai/hub/feed
+    confidence: red
+    verified: 2026-05-22
+    last_status: 403
+    attempted_url: https://www.perplexity.ai/hub/feed
+    alternatives:
+      - type: scrape
+        url: https://www.perplexity.ai/hub
+        risk: "Cloudflareブロック中、Botヘッダ対策必要"
+      - type: twitter_api
+        handle: "@perplexity_ai"
+        risk: "X API無料枠制限あり"
+
+
+# =====================================================
+# 🟡 二次媒体（Day 2 で実検証後に採用判定）
+# =====================================================
+# 速報性は高いが、著作権・引用ルールに注意。
+# 引用は記事ファクトのみ、長文転載は不可。
+
+secondary_media_candidates:
+
+  techcrunch_ai:
+    url: https://techcrunch.com/category/artificial-intelligence/feed/
     confidence: yellow
+    verified: pending
+    notes: "AI関連で速報性高、要HTTPステータス確認"
+    licensing_note: "記事タイトル+概要のみ引用、全文転載不可"
+
+  the_decoder:
+    url: https://the-decoder.com/feed/
+    confidence: yellow
+    verified: pending
+    notes: "ドイツ拠点、AI業界専門メディア、独自分析多い"
+
+  venturebeat_ai:
+    url: https://venturebeat.com/category/ai/feed/
+    confidence: yellow
+    verified: pending
+    notes: "ビジネスサイドのAI報道強い"
+
+
+# =====================================================
+# 🟢 GitHub Releases（公式RSSに頼らない、最確実なソース）
+# =====================================================
+# src/sources/github_releases.py が処理。
+# 認証付きAPIで5,000req/h制限。
+
+github_releases:
+  watched_repos:
+    - openai/openai-python
+    - anthropics/anthropic-sdk-python
+    - anthropics/claude-code
+    - langchain-ai/langchain
+    - vercel/ai
+    - browser-use/browser-use
+    - All-Hands-AI/OpenHands
+    - getcursor/cursor
+
+
+# =====================================================
+# 候補プール（Day 3 以降に評価）
+# =====================================================
+
+candidates_to_research:
+  - name: hacker_news
+    type: api
+    url: https://hacker-news.firebaseio.com/v0/topstories.json
+    confidence: green
+    notes: "完全無料、AI関連スレッドをキーワード検出可能、速報性極高"
+    priority: high
+
+  - name: product_hunt
+    type: api
+    notes: "新AI製品発表、CPA高単価製品の発掘源"
+    priority: medium
+
+  - name: elevenlabs_blog
+    type: scrape_or_rss
+    priority: medium
+    notes: "アフィリ商品の自社ブログ、製品アップデート追跡用"
+
+  - name: notion_engineering
+    type: scrape_or_rss
+    priority: low
+
+  - name: shopify_engineering
+    type: scrape_or_rss
+    priority: low
+
+  - name: hubspot_blog
+    type: scrape_or_rss
+    priority: low
+
+
+# =====================================================
+# 検証履歴
+# =====================================================
+
+verification_log:
+  - date: 2026-05-22
+    method: "curl + Content-Type 確認 + XML-like パターンマッチ"
+    summary: |
+      8フィード中3つが200+XML、5つが404/403。
+      Anthropic、Meta AI、Mistral、Cursor、Perplexity は公式RSS提供なしと確定。
+      初版CLAUDE.mdの誤情報を訂正。
+    affected_files:
+      - CLAUDE.md (5節全面改訂、変更履歴に記録)
+      - data/rss_feeds.yml (新構造で作り直し)
