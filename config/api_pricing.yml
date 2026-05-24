@@ -1,0 +1,30 @@
+# API Pricing Configuration (as of 2026-05-23)
+# Source: https://www.anthropic.com/pricing
+# Last verified: 2026-05-23
+
+models:
+  claude-haiku-4-5-20251001:
+    display_name: "Claude Haiku 4.5"
+    input_price_per_mtok: 0.80    # USD per million input tokens
+    output_price_per_mtok: 4.00   # USD per million output tokens
+    notes: "Day 2 primary model for cost optimization"
+
+  claude-sonnet-4-6-20250514:
+    display_name: "Claude Sonnet 4.6"
+    input_price_per_mtok: 3.00
+    output_price_per_mtok: 15.00
+    notes: "Fallback for high-quality generation if Haiku insufficient"
+
+  claude-opus-4-7-20250805:
+    display_name: "Claude Opus 4.7"
+    input_price_per_mtok: 15.00
+    output_price_per_mtok: 75.00
+    notes: "Reserved for critical tasks"
+
+# Cost budgets (informational)
+daily_budget_usd: 3.0
+monthly_budget_usd: 90.0
+
+# Token limits per request (to prevent runaway costs)
+max_input_tokens_per_call: 4096
+max_output_tokens_per_call: 2048

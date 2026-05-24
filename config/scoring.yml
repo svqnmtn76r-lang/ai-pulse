@@ -1,0 +1,62 @@
+# Article Importance Scoring Configuration
+# Used by src/processors/importance_scorer.py
+
+# Minimum score for adoption (articles below this are skipped)
+# Day 2.5: Set to 0 for functional testing of the full pipeline
+adoption_threshold: 0
+
+# Rule-based filters (Stage 1 - no API call)
+rule_filters:
+  min_title_length: 10
+  duplicate_days: 30  # Check for duplicates within last N days
+  skip_formats:
+    - "interview"
+    - "podcast"
+    - "招待"
+
+# Claude scoring thresholds (Stage 2)
+claude_scoring:
+  # Score ranges for category priority
+  score_ranges:
+    major_release: 90      # GPT-5, Claude Opus level
+    significant_update: 70  # Price change, major feature
+    research: 50           # Papers, technical content
+    normal: 30             # Regular blog posts
+    minor: 0               # Personnel, notices
+
+# Categories and their weights
+categories:
+  model_release:
+    weight: 100
+    keywords:
+      - "release"
+      - "launch"
+      - "introduce"
+      - "announce"
+  feature_update:
+    weight: 70
+    keywords:
+      - "feature"
+      - "update"
+      - "improvement"
+  pricing:
+    weight: 60
+    keywords:
+      - "price"
+      - "cost"
+      - "pricing"
+      - "plan"
+  research:
+    weight: 50
+    keywords:
+      - "paper"
+      - "research"
+      - "study"
+  tool:
+    weight: 40
+    keywords:
+      - "tool"
+      - "framework"
+      - "library"
+  other:
+    weight: 20

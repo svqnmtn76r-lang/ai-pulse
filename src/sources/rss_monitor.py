@@ -84,6 +84,11 @@ def poll_all_sources(window_hours: int = 24):
     return new_articles
 
 
+def articles_from_rss(window_hours: int = 24):
+    """Fetch articles from RSS feeds (Day 2 pipeline interface)."""
+    return poll_all_sources(window_hours=window_hours)
+
+
 if __name__ == "__main__":
     articles = poll_all_sources(window_hours=24)
     print(json.dumps(articles, indent=2, ensure_ascii=False))
