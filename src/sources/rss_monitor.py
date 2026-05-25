@@ -15,18 +15,26 @@ log = structlog.get_logger()
 
 
 def load_feeds(config_path: Path = Path("data/rss_feeds.yml")) -> dict:
-    """Load verified_official_rss feeds from data/rss_feeds.yml.
+    """Load verified_official_rss and secondary_media_candidates from data/rss_feeds.yml.
 
-    no_official_rss feeds are not included (require scrapers in Phase 2).
+    Day 2.7: secondary_media_candidates with confidence=green are now included.
     """
     with open(config_path) as f:
         data = yaml.safe_load(f)
 
     feeds = {}
+    # verified_official_rss
     verified = data.get("verified_official_rss", {})
     for name, info in verified.items():
         if isinstance(info, dict) and "url" in info:
             feeds[name] = info["url"]
+
+    # secondary_media_candidates (confidence: green only)
+    secondary = data.get("secondary_media_candidates", {})
+    for name, info in secondary.items():
+        if isinstance(info, dict) and info.get("confidence") == "green" and "url" in info:
+            feeds[name] = info["url"]
+
     return feeds
 
 

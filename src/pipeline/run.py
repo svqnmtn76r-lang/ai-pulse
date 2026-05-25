@@ -11,6 +11,7 @@ load_dotenv(".env")
 from src.sources.rss_monitor import articles_from_rss
 from src.sources.github_releases import articles_from_github
 from src.sources.hackernews import stories_from_hackernews
+from src.sources.scrapers import articles_from_scrapers
 from src.processors.importance_scorer import batch_score_articles
 from src.processors.affiliate_matcher import enrich_article_with_products
 from src.processors.claude_writer import write_article, create_slug
@@ -73,6 +74,15 @@ def run_pipeline(verbose: bool = True) -> dict:
         articles.extend(hn_articles)
     except Exception as e:
         print(f"  Hacker News error: {e}")
+        summary["errors"] += 1
+
+    try:
+        scraped_articles = articles_from_scrapers()
+        if verbose:
+            print(f"  Scrapers: {len(scraped_articles)} articles")
+        articles.extend(scraped_articles)
+    except Exception as e:
+        print(f"  Scrapers error: {e}")
         summary["errors"] += 1
 
     summary["total_fetched"] = len(articles)

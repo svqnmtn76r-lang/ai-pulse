@@ -128,22 +128,28 @@ secondary_media_candidates:
 
   techcrunch_ai:
     url: https://techcrunch.com/category/artificial-intelligence/feed/
-    confidence: yellow
-    verified: pending
-    notes: "AI関連で速報性高、要HTTPステータス確認"
+    confidence: green
+    verified: 2026-05-25
+    content_type: application/rss+xml
+    last_status: 200
+    notes: "AI関連で速報性高。19KB、安定。"
     licensing_note: "記事タイトル+概要のみ引用、全文転載不可"
 
   the_decoder:
     url: https://the-decoder.com/feed/
-    confidence: yellow
-    verified: pending
-    notes: "ドイツ拠点、AI業界専門メディア、独自分析多い"
+    confidence: green
+    verified: 2026-05-25
+    content_type: application/rss+xml
+    last_status: 200
+    notes: "ドイツ拠点、AI業界専門メディア。21KB、安定。"
 
   venturebeat_ai:
     url: https://venturebeat.com/category/ai/feed/
-    confidence: yellow
-    verified: pending
-    notes: "ビジネスサイドのAI報道強い"
+    confidence: green
+    verified: 2026-05-25
+    content_type: text/xml
+    last_status: 200
+    notes: "ビジネスサイドのAI報道強い。121KB、安定。"
 
 
 # =====================================================
