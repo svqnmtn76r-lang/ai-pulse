@@ -9,20 +9,13 @@ HN_API_BASE = "https://hacker-news.firebaseio.com/v0"
 HN_ITEM_URL = f"{HN_API_BASE}/item/{{id}}.json"
 HN_TOP_STORIES_URL = f"{HN_API_BASE}/topstories.json"
 
-# AI-related keywords for filtering
-AI_KEYWORDS = [
-    "ai",
-    "llm",
-    "gpt",
-    "claude",
-    "gemini",
-    "openai",
-    "anthropic",
-    "machine learning",
-    "neural",
-    "transformer",
-    "deep learning",
-    "language model",
+# Strict AI-related keywords for filtering
+# Only specific tools and techniques, not generic "AI" or "machine learning"
+RELEVANT_KEYWORDS_STRICT = [
+    "openai", "anthropic", "claude", "gpt", "gemini", "llama",
+    "mistral", "perplexity", "elevenlabs", "notion", "huggingface",
+    "ai model", "llm", "model release", "api pricing", "agentic",
+    "fine-tuning", "rag", "embedding", "transformer", "diffusion"
 ]
 
 # HN rate limit: gentle (no official limit, but be respectful)
@@ -31,12 +24,16 @@ MAX_STORIES_TO_FETCH = 50  # Process top 50 stories
 
 
 def is_ai_related(title: str, text: Optional[str] = None) -> bool:
-    """Check if story is AI-related based on keywords."""
-    content = (title + " " + (text or "")).lower()
+    """Check if story is AI-related based on strict keywords.
 
-    # Match at least one keyword
-    for keyword in AI_KEYWORDS:
-        if keyword in content:
+    Uses only title (HN summaries are often unavailable).
+    Requires specific AI tool/technique mentions, not generic "ai" or "machine learning".
+    """
+    title_lower = title.lower()
+
+    # Match at least one strict keyword from title only
+    for keyword in RELEVANT_KEYWORDS_STRICT:
+        if keyword in title_lower:
             return True
 
     return False

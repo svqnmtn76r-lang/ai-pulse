@@ -15,6 +15,7 @@ from src.processors.importance_scorer import batch_score_articles
 from src.processors.affiliate_matcher import enrich_article_with_products
 from src.processors.claude_writer import write_article, create_slug
 from src.utils.state_store import SeenArticleStore
+from src.analytics.cost_report import init_db
 
 OUTPUT_DIR = Path("output/articles")
 
@@ -24,6 +25,9 @@ def run_pipeline(verbose: bool = True) -> dict:
     Full pipeline: fetch -> score -> match -> write articles.
     Returns summary of execution.
     """
+    # Initialize API cost tracking DB
+    init_db()
+
     if verbose:
         print("=" * 60)
         print(f"Starting pipeline at {datetime.utcnow().isoformat()}")
@@ -80,17 +84,21 @@ def run_pipeline(verbose: bool = True) -> dict:
         print("\n[2/4] Scoring articles for importance...")
 
     scored = batch_score_articles(articles, seen_store)
-    summary["after_scoring"] = len(scored)
+
+    # Apply score threshold filter (minimum 40 to exclude off-topic and low quality)
+    SCORE_THRESHOLD = 40
+    adopted = [a for a in scored if a.get("importance_score", 0) >= SCORE_THRESHOLD]
+    summary["after_scoring"] = len(adopted)
 
     if verbose:
-        print(f"  After filtering: {summary['after_scoring']} articles (60+ score)")
+        print(f"  Total scored: {len(scored)}, Adopted (score >= {SCORE_THRESHOLD}): {summary['after_scoring']}")
 
     # Step 3: Match to products and enrich
     if verbose:
         print("\n[3/4] Matching articles to affiliate products...")
 
     enriched = []
-    for article in scored:
+    for article in adopted:
         enriched_article = enrich_article_with_products(article)
         enriched.append(enriched_article)
 

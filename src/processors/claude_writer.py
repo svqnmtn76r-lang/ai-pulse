@@ -187,6 +187,10 @@ def write_article_file(
     body_content = body_content.replace("{PRODUCTS_SECTION}", products_text)
 
     # Build frontmatter
+    # Use products_matched (catalog matched products) from affiliate_matcher
+    matched = article.get("products_matched", [])
+    products = [m["product_id"] for m in matched] if matched else []
+
     frontmatter = {
         "title": article.get("title", ""),
         "date": timestamp,
@@ -194,7 +198,7 @@ def write_article_file(
         "source_name": article.get("source", ""),
         "importance_score": article.get("importance_score", 0),
         "category": article.get("category", ""),
-        "products": article.get("products_mentioned", []),
+        "products": products,
         "word_count": len(body_content.split()),
         "generated_at": datetime.utcnow().isoformat() + "Z",
         "generated_by": f"claude-haiku-4-5-{timestamp}",

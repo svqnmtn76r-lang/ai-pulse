@@ -71,10 +71,12 @@ def calculate_match_score(
     return min(score, 100)
 
 
-def match_products(article: dict, min_score: int = 30) -> list:
+def match_products(article: dict, min_score: int = 15) -> list:
     """
     Match article to affiliate products.
     Returns list of matched products (max 3, score >= min_score), sorted by score.
+
+    min_score=15: title(10pt) + summary(5pt) = minimum viable match
     """
     title = article.get("title", "")
     summary = article.get("summary", "")
@@ -115,12 +117,15 @@ def match_products(article: dict, min_score: int = 30) -> list:
 
 
 def enrich_article_with_products(article: dict) -> dict:
-    """Add matched products to article dict."""
+    """Add matched products to article dict.
+
+    重要: products_mentioned は scorer の出力（記事内言及製品名）を保持。
+    本関数は products_matched (catalog マッチ結果) のみを追加し、
+    products_mentioned には触れない。
+    """
     matches = match_products(article)
-    product_ids = [m["product_id"] for m in matches]
 
     return {
         **article,
         "products_matched": matches,
-        "products_mentioned": product_ids,
     }
