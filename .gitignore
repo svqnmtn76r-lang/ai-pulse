@@ -5,3 +5,4 @@ __pycache__/
 .venv/
 .DS_Store
 data/seen_articles.db
+data/api_calls.db
