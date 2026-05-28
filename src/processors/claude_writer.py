@@ -1,5 +1,6 @@
 """Generate blog articles using Claude."""
 
+import os
 import anthropic
 import re
 from datetime import datetime
@@ -45,7 +46,7 @@ def generate_article_content(
     matched_products: list,
 ) -> str:
     """Generate article body using Claude."""
-    client = anthropic.Anthropic()
+    client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY", "").strip())
 
     title = article.get("title", "Untitled")
     summary = article.get("summary", "")

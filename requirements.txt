@@ -17,3 +17,6 @@ pytest-mock>=3.14.0
 
 # X (Twitter) API - 後で必要
 tweepy>=4.14.0
+
+# Web scraping (Day 2.7 Anthropic scraper)
+beautifulsoup4>=4.12.3

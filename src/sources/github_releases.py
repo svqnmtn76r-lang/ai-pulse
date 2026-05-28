@@ -17,7 +17,7 @@ WATCHED_REPOS = [
 
 
 def fetch_recent_releases(hours_back: int = 48):
-    token = os.environ.get("GH_TOKEN")
+    token = os.environ.get("GH_TOKEN", "").strip()
     headers = {"Accept": "application/vnd.github+json"}
     if token:
         headers["Authorization"] = f"Bearer {token}"

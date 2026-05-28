@@ -1,5 +1,6 @@
 """Score and filter articles by importance."""
 
+import os
 import json
 import sqlite3
 from datetime import datetime, timedelta
@@ -86,7 +87,7 @@ def stage2_claude_scoring(article: dict, retry: bool = True) -> dict:
     Use Claude Haiku to score article importance.
     Returns dict with importance_score, category, products_mentioned.
     """
-    client = anthropic.Anthropic()
+    client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY", "").strip())
 
     title = article.get("title", "")
     summary = article.get("summary", "")
