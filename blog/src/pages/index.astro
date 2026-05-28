@@ -109,9 +109,9 @@ const sortedArticles = articles
         <p>No articles yet. Check back soon!</p>
       ) : (
         sortedArticles.map((article) => (
-          <article key={article.slug}>
+          <article key={article.id}>
             <h2>
-              <a href={`/articles/${article.slug}`}>
+              <a href={`/articles/${article.id}`}>
                 {article.data.title}
               </a>
             </h2>
@@ -122,7 +122,7 @@ const sortedArticles = articles
               )}
             </div>
             <p>
-              <a href={`/articles/${article.slug}`}>Read more →</a>
+              <a href={`/articles/${article.id}`}>Read more →</a>
             </p>
           </article>
         ))
