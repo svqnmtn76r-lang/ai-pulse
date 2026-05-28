@@ -202,7 +202,7 @@ def write_article_file(
         "products": products,
         "word_count": len(body_content.split()),
         "generated_at": datetime.utcnow().isoformat() + "Z",
-        "generated_by": f"claude-haiku-4-5-{timestamp}",
+        "generated_by": "claude-haiku-4-5-20251001",
         "template_type": template_type,
     }
 
