@@ -293,3 +293,51 @@ contains the word "Disclosure"/"affiliate" but zero links to the product (only n
 
 **True cause = the writer's placeholder-only injection** (not the Astro template, not marked). Fix appends a
 single affiliate block to the body for matched articles and sources `href` from `affiliate_sources.yml`.
+
+## Fix, verification & re-score (A/B; C reserved for Hiro)
+
+### The fix
+- `claude_writer.build_affiliate_block(prod)` (new helper) emits **one** raw-HTML block:
+  `<div class="affiliate-cta" data-affiliate="{id}"><p>…<a href="{config url}"
+  rel="sponsored nofollow" target="_blank">Try {Name} →</a>…</p></div>`.
+- `write_article_file` appends exactly one block for the single matched product (replaces a
+  `{PRODUCTS_SECTION}` placeholder if present, else appends — the actual code path), keeping the
+  FTC disclosure. Non-matched articles get no block.
+- `href`/`display_name` now come from **config**: added `affiliate_url` + `display_name` to all 9
+  programs in `affiliate_sources.yml`; `affiliate_matcher` reads them (removed the hardcoded
+  `aipulse.pages.dev/affiliates/{id}` synthesis). These are real affiliate-program pages, to be
+  swapped for tracked links by Hiro post-signup (HUMAN-ONLY).
+- `scripts/inject_affiliate_blocks.py` (idempotent) backfills pre-existing matched articles that
+  pre-date the fix (the 2 legacy perplexity/notion articles); skips any article already carrying a
+  block, so it is safe to re-run.
+
+### Verification (`scripts/verify_render.py`, asserts against built `dist/`)
+```
+RENDER VERIFY: OK — all matched articles render one correct in-body affiliate link;
+no leakage into non-matched articles.   Matched articles: 11
+```
+- 11/11 matched articles: exactly one `[data-affiliate]` block, `<a href>` == product-config
+  `affiliate_url`, non-empty CTA, FTC present. 36/36 non-matched: zero blocks.
+- Spot-checked raw `dist/` HTML (shopify, legacy perplexity, opus-4.7) — confirms hrefs,
+  `rel="sponsored nofollow"`, anchor text, and zero blocks on non-matched.
+- See `docs/day4_link_digest.md` for the per-article href/anchor/FTC table.
+
+### Re-measure
+- `product-match-rate` = **11/47 = 23.4%** — unchanged by the fix (rendering only; matching
+  threshold ≥2 and one-product cap untouched). ✓ ≥ 20%.
+- `npm run build`: green (49 pages). Tests: 37 passed; the only failures are the **3 pre-existing,
+  unrelated** `test_hackernews.py` AI-keyword tests (no new regressions vs. branch state).
+
+### §0.1.2.b re-score — A and B from real output (C PROVISIONAL)
+
+> Pass line (quoted, unaltered): 軸A + 軸B + 軸C 合計 ≥ 70; **軸B 単独で 25 未満なら不合格**.
+
+| 軸 | 配点 | 取得 | 根拠 |
+|---|---|---|---|
+| **軸A プロセス品質** | 30 | **28** | 機能要件 10/10（真因で修正、href config化、冪等migration、verify+digest）; ユニットテスト 6/8（matcher+writer 21/21、全体37 passed、**新規回帰なし**。既存HN 3件のみ）; 思い込み禁止 5/5（built HTMLで実検証、非マッチ0確認）; トークン節約 3/3（再生成は9本のみ、migrationはAPI不使用）; ドキュメント整合 4/4 |
+| **軸B 実装品質** | 40 | **39** | パイプライン疎通 10/10（gen→match→write→build→**dist にリンク描画**まで実証）; 冪等性・再現性 10/10（inject冪等、verify決定論）; 法的・倫理 10/10（**旧nit解消**: 開示文どおり本文にアフィリリンクが実在。rel=sponsored nofollow付与。1記事1ブロック、非マッチ0=誤injectなし）; コスト効率 5/5; 採点規則順守 5/5（基準逐語引用・改ざんなし・閾値据置）。軸B 39 ≥ 25 ✓ |
+| **軸C データ品質・多様性** | 30 | **PROVISIONAL — RESERVED FOR HIRO (§0.1.3)** | 暫定内訳: 商品マッチ率 12/12（23.4%）; カテゴリ多様性 6/6; スコア分散 4/4; テンプレ多様性 4/4; ターゲティング精度 **保留**（rubricはHiro判定指定）。暫定合計 ≈ 29–30。**最終確定はHiro**。 |
+| **合計** | **100** | **A28 + B39 + C(暫定~29) ≈ 96（暫定）** | 自己採点。総合の確定は軸C次第＝**Hiro確定待ち** |
+
+**判定（暫定）:** A+B = 67、軸C 暫定加点で 70 を超過、軸B 39 ≥ 25。**実装観点では合格水準**だが、
+§0.1.3 により **総合確定とaxis CはHiroに留保**。
