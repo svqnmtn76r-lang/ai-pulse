@@ -124,9 +124,9 @@ def match_products(article: dict, min_hits: int = MATCH_MIN_HITS) -> list:
     score, _title_hits, product_id = candidates[0]
 
     product = programs.get(product_id, {})
-    affiliate_url = None
-    if product.get("status") == "ready_to_apply":
-        affiliate_url = f"https://aipulse.pages.dev/affiliates/{product_id}"
+    # Affiliate URL comes from the product config (never hardcoded / placeholder /
+    # homepage). Hiro replaces these with real tracked links after signup.
+    affiliate_url = product.get("affiliate_url")
 
     keywords = get_product_keywords(product_id)
     text = (title + " " + summary).lower()

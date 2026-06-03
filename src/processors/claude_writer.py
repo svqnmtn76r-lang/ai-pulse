@@ -167,6 +167,28 @@ Respond with ONLY the article body (no frontmatter, no boilerplate, no markdown 
         return f"[Article generation failed: {str(e)}]"
 
 
+def build_affiliate_block(prod: dict) -> str:
+    """Return the single in-body affiliate HTML block for a matched product.
+
+    Raw HTML so it carries a stable selector (data-affiliate) and the
+    rel="sponsored nofollow" / target="_blank" attributes for compliance/SEO.
+    href comes from the product config (affiliate_url); returns "" if absent.
+    Shared by the writer and scripts/inject_affiliate_blocks.py (idempotent).
+    """
+    url = (prod.get("affiliate_url") or "").strip()
+    if not url:
+        return ""
+    pid = prod.get("product_id", "")
+    name = prod.get("name") or pid
+    return (
+        f'\n\n<div class="affiliate-cta" data-affiliate="{pid}">\n'
+        f'<p><strong>Recommended:</strong> '
+        f'<a href="{url}" rel="sponsored nofollow" target="_blank">'
+        f'Try {name} →</a> — the {name} pick from this article.</p>\n'
+        f'</div>\n'
+    )
+
+
 def create_slug(title: str) -> str:
     """Create URL-safe slug from title."""
     # Basic transliteration for non-ASCII
@@ -205,20 +227,24 @@ def write_article_file(
             filename = f"{base}-{counter}.md"
             filepath = OUTPUT_DIR / filename
 
-    # Build products section
-    products_text = ""
+    # Build the single in-body affiliate block (Day 4 finalize fix).
+    # One block per matched article, for the single matched product; href comes
+    # from the product config (affiliate_sources.yml -> affiliate_url).
+    affiliate_block = ""
     has_affiliate_products = False
     if matched_products:
-        products_text = "### Relevant tools\n\n"
-        for prod in matched_products:
-            url = prod.get("affiliate_url", "#")
-            products_text += f"- **{prod['name']}** ([affiliate link]({url}))\n"
-        has_affiliate_products = True
-    else:
-        products_text = ""
+        affiliate_block = build_affiliate_block(matched_products[0])  # one-product cap
+        has_affiliate_products = bool(affiliate_block)
 
-    # Replace placeholder in body
-    body_content = body_content.replace("{PRODUCTS_SECTION}", products_text)
+    # Inject exactly one block: replace the {PRODUCTS_SECTION} placeholder if the
+    # body has one, otherwise append it. The writer prompt tells Claude to OMIT the
+    # placeholder, so in practice we append -- this is the render-bug fix. Any stray
+    # placeholders are stripped so the block is never duplicated.
+    if "{PRODUCTS_SECTION}" in body_content:
+        body_content = body_content.replace("{PRODUCTS_SECTION}", affiliate_block, 1)
+        body_content = body_content.replace("{PRODUCTS_SECTION}", "")
+    elif affiliate_block:
+        body_content = body_content.rstrip() + affiliate_block
 
     # Build frontmatter
     # Use products_matched (catalog matched products) from affiliate_matcher

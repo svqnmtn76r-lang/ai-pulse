@@ -62,4 +62,8 @@ The systematic dependency updates provide confidence that the integration stays 
 ## Learn more
 
 Teams using LangChain's Perplexity integration should review the release notes for the specific behavior changes associated with `use_responses_api`. Test the new flag in non-production environments to determine whether it improves response consistency, reduces latency, or better serves your application's architectural needs. Consider updating to 1.3.0 especially if your dependency audit tools flag the older versions of urllib3 or idna.
+<div class="affiliate-cta" data-affiliate="perplexity">
+<p><strong>Recommended:</strong> <a href="https://www.perplexity.ai/pro" rel="sponsored nofollow" target="_blank">Try Perplexity →</a> — the Perplexity pick from this article.</p>
+</div>
+
 *Disclosure: This article contains affiliate links. As an affiliate, we earn from qualifying purchases at no extra cost to you.*
