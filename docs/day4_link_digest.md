@@ -4,12 +4,11 @@ Rendered from `blog/dist/` by `scripts/verify_render.py`. One row per matched ar
 `href` is read from the **built HTML**; expected value is the product's `affiliate_url`
 in `data/affiliate_sources.yml`.
 
-Matched articles: **11**
+Matched articles: **10**
 
 | Article | Product | Rendered href | Anchor text | FTC |
 |---|---|---|---|---|
 | 2026-05-28-langchain-ailangchain-langchain-perplexity130 | perplexity | https://www.perplexity.ai/pro | Try Perplexity → | Y |
-| 2026-05-28-show-hn-open-source-workspace-maildocsspreadsheetd | notion | https://affiliate.notion.so/ | Try Notion → | Y |
 | 2026-06-03-elevenlabs-deep-dive-the-state-of-ai-voice-and-tex | elevenlabs | https://elevenlabs.io/affiliates | Try ElevenLabs → | Y |
 | 2026-06-03-hubspot-deep-dive-a-complete-look-at-the-crm-and-m | hubspot | https://www.hubspot.com/partners/affiliates | Try HubSpot → | Y |
 | 2026-06-03-jasper-deep-dive-is-this-ai-writing-tool-worth-it- | jasper | https://www.jasper.ai/affiliates | Try Jasper → | Y |
