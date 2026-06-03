@@ -432,3 +432,37 @@ FTC); **37/37 non-matched** (incl. the de-matched one) render zero. Build green 
 | **合計** | **100** | **A28 + B39 + C(暫定~29) ≈ 96（暫定）** | 自己採点。総合確定は軸C＝**Hiro確定待ち** |
 
 **判定（暫定）:** A+B = 67、軸B 39 ≥ 25。実装観点では合格水準。**総合確定と axis C は §0.1.3 によりHiroに留保。**
+
+## Finalization (tightening cycle) — ready for Hiro (STOPPED before merge & final-C)
+
+### Status
+- Phases 0–3 of the tightening committed on `day4-matchrate`; working tree clean.
+- `.gitignore` covers `.env`, `.env.bak`, `*.bak`; **no secret / `.bak` / `.env` tracked or staged**.
+- No new deps this cycle (matcher + reconciler use stdlib + existing `PyYAML`/`bs4`); all recorded.
+- Build green (49 pages); render verify OK (10/10 matched, 37 non-matched zero);
+  **match-rate 10/47 = 21.3% (≥20%)**.
+
+### What changed this cycle
+- Matcher weakness: summed keyword occurrences, so a lone generic keyword repeated (`workspace×4`)
+  cleared the ≥2 floor → spurious **notion** match on an open-source Notion *competitor*.
+- New rule (strict tightening): `brand_hits ≥ 2 OR ≥ 2 distinct non-brand keywords`. Brand tokens from
+  config `display_name` + `id` (+ `liquidweb` variants). Locked by unit tests.
+- Regression: matched set 11 → 10, the **single** delta being the workspace→notion article dropping
+  (0 added, 0 reassigned). Its stale block stripped, `products: []`, disclosure flipped.
+
+### Two OPEN HUMAN GATES (do NOT proceed without Hiro)
+1. **Final axis-C scoring / total finalization** — §0.1.3 reserves it for Hiro. Self-score A=28, B=39,
+   C provisional ~29 (total provisional ~96). Dropping the false match should, if anything, *raise* C
+   (targeting precision), but the call is Hiro's.
+2. **Merge** of `day4-matchrate`. Also still open: Dub/Perplexity signup + swapping the config
+   `affiliate_url`s for real **tracked** links post-signup.
+
+### Ready-to-run merge command (for Hiro — NOT run by the agent)
+```
+git checkout main && git merge --no-ff day4-matchrate
+```
+
+### Reviewer quick-path
+- `docs/day4_link_digest.md` — the 10 rendered affiliate links (href/anchor/FTC).
+- `PYTHONPATH=. python scripts/verify_render.py` — re-assert render rules against a fresh `blog/dist/`.
+- `PYTHONPATH=. python scripts/match_report.py` — re-confirm 10/47 = 21.3%.
