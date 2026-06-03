@@ -133,6 +133,37 @@ Each matches **exactly one** product. Rate after Phase 2: **5/41 = 12.2%**.
 exactly one product. Full matcher+writer unit suites green (21/21).
 
 ---
-<!-- Phases 3–5 appended below as they complete. -->
+## Phase 3 — Affiliate RSS sources (supporting)
+
+**What changed**
+- Added `scripts/verify_feeds.py` (Appendix A + alternate-URL retries). `feedparser` and
+  `requests` were already in `requirements.txt`.
+- Wired **only the passing feeds** into `data/rss_feeds.yml` under a new `affiliate_blog_rss`
+  section, and taught `rss_monitor.load_feeds` to ingest that section.
+  - **Schema adaptation:** the mission said "RSS sources in `affiliate_sources.yml`", but the
+    real ingestion path reads `data/rss_feeds.yml` via `rss_monitor`. Adding feeds to
+    `affiliate_sources.yml` would do nothing, so they were added where they actually flow into
+    the matcher. (Hard rule: the real schema wins.)
+
+**Feed verification results (`scripts/verify_feeds.py`):**
+
+| feed | result | detail |
+|---|---|---|
+| hubspot | **[OK]** | 200, entries=50 → added |
+| semrush | **[OK]** | 200, entries=20 → added |
+| shopify | [FAIL] | 404 (and `.atom`/`/feed` alternates 404 / 0 entries) → skipped |
+| notion | [FAIL] | 404 (`.so` alternate 404) → skipped |
+| perplexity | [FAIL] | 403 (Cloudflare, no public RSS) → skipped |
+| elevenlabs | [FAIL] | 404 (no public RSS) → skipped |
+
+**Ingest smoke test** (real items run through the matcher): hubspot_blog **15/15** sample items
+matched a product, semrush_blog **7/15** — each with exactly one product. These feeds carry
+product vocabulary, so they raise match-rate when the pipeline ingests them.
+
+**GATE 3: PASS** — every added feed printed `[OK]`; no `[FAIL]`/`[ERR]` feed was added.
+
+---
+<!-- Phases 4–5 appended below as they complete. -->
+
 
 

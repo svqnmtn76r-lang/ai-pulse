@@ -35,6 +35,13 @@ def load_feeds(config_path: Path = Path("data/rss_feeds.yml")) -> dict:
         if isinstance(info, dict) and info.get("confidence") == "green" and "url" in info:
             feeds[name] = info["url"]
 
+    # affiliate_blog_rss (Day 4): affiliate-product blogs validated by
+    # scripts/verify_feeds.py. These carry product keywords, lifting match-rate.
+    affiliate = data.get("affiliate_blog_rss", {})
+    for name, info in affiliate.items():
+        if isinstance(info, dict) and info.get("confidence") == "green" and "url" in info:
+            feeds[name] = info["url"]
+
     return feeds
 
 

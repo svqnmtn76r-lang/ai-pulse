@@ -153,6 +153,30 @@ secondary_media_candidates:
 
 
 # =====================================================
+# 🟢 アフィリ自社ブログRSS（Day 4 で scripts/verify_feeds.py により検証）
+# =====================================================
+# affiliate product のキーワードを多く含むため、商品マッチ率を直接押し上げる。
+# [OK] を出したフィードのみ追加（HTTP 200 + entries>0 + not bozo）。
+# 不合格: shopify(404), notion(404), perplexity(403), elevenlabs(404) はスキップ。
+
+affiliate_blog_rss:
+
+  hubspot_blog:
+    url: https://blog.hubspot.com/marketing/rss.xml
+    confidence: green
+    verified: 2026-06-03
+    last_status: 200
+    notes: "verify_feeds.py [OK] entries=50。CRM/marketing automation 文脈で hubspot にマッチ。"
+
+  semrush_blog:
+    url: https://www.semrush.com/blog/feed/
+    confidence: green
+    verified: 2026-06-03
+    last_status: 200
+    notes: "verify_feeds.py [OK] entries=20。SEO/keyword research 文脈で semrush にマッチ。"
+
+
+# =====================================================
 # 🟢 GitHub Releases（公式RSSに頼らない、最確実なソース）
 # =====================================================
 # src/sources/github_releases.py が処理。
