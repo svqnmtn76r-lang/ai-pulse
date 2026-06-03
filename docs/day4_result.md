@@ -365,3 +365,25 @@ git checkout main && git merge --no-ff day4-matchrate
 - `docs/day4_link_digest.md` — eyeball the 11 rendered affiliate links (href/anchor/FTC).
 - `python scripts/verify_render.py` — re-assert render rules against a fresh `blog/dist/`.
 - `python scripts/match_report.py` — re-confirm 11/47 = 23.4%.
+
+---
+
+# Day 4 Matcher Tightening — drop spurious single-keyword match
+
+## Phase 0 — Rule location + brand-token source
+
+**Matcher weakness (root cause):** `src/processors/affiliate_matcher.py` →
+`match_products` scores each product with `calculate_match_score` → `count_keyword_hits`,
+which **sums occurrences** of all trigger keywords (`sum(text.count(kw))`). A single generic
+keyword repeated N times therefore reaches the ≥2 floor on its own. The
+`2026-05-28-show-hn-open-source-workspace-…` article matched **notion** purely on `workspace×4`,
+even though it's about an open-source **Notion competitor** (the brand `notion` appears 0 times).
+
+**Brand-token source:** each of the 9 programs has a `display_name` (added last cycle) plus its
+config `id`. Brand tokens = lowercased `display_name` + `id`; for `liquidweb` that yields both
+`liquid web` and `liquidweb`. The perplexity legacy article has `perplexity×22` → brand-driven,
+so it must survive.
+
+**New rule (strict tightening — can only remove matches):**
+`qualifies = brand_hits >= 2 OR distinct_nonbrand_keywords >= 2` across title+body, where
+`distinct_nonbrand_keywords` counts *distinct* non-brand keywords present (repeats = 1).
