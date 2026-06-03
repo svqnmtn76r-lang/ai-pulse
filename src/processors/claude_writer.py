@@ -20,22 +20,41 @@ def ensure_output_dir():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
+# Day 4: route a matched affiliate product to a product-centric template so the
+# article matches that product by construction. Products with a clear head-to-head
+# rival go to `comparison`; the rest get a single-tool `deep_dive`. This split
+# guarantees both new templates actually appear (template diversity, C-axis).
+COMPARISON_PRODUCTS = {"perplexity", "semrush", "notion", "shopify", "kinsta"}
+DEEP_DIVE_PRODUCTS = {"elevenlabs", "hubspot", "jasper", "liquidweb"}
+
+
 def select_template_type(article: dict) -> str:
-    """Select template type based on article category and importance."""
+    """Select template type based on matched product, category, and importance.
+
+    Day 4 routing: if an affiliate product matched, the topic IS an affiliate
+    product category, so route it to a product-centric template
+    (`comparison` or `deep_dive`) instead of the generic templates.
+    """
+    # 1) Product-centric routing (highest priority)
+    matched = article.get("products_matched", [])
+    if matched:
+        pid = matched[0].get("product_id", "")
+        return "deep_dive" if pid in DEEP_DIVE_PRODUCTS else "comparison"
+
     category = article.get("category", "industry_news")
     score = article.get("importance_score", 40)
     products = article.get("products_mentioned", [])
 
-    # Breaking news for high-score releases
-    if score >= 80 and category in ["model_release", "pricing_change"]:
+    # 2) Breaking news for high-score releases
+    if score >= 80 and category in ["model_release", "pricing_change", "pricing"]:
         return "breaking"
-    # Comparison if 2+ products mentioned
-    elif category == "tool_launch" and products and len(products) >= 2:
+    # 3) Comparison if 2+ products mentioned (tool launches)
+    elif category in ["tool_launch", "tool"] and products and len(products) >= 2:
         return "comparison"
-    # Explainer for research and SDK releases
-    elif category in ["research_paper", "sdk_release", "tutorial"]:
+    # 4) Explainer for research and SDK releases
+    elif category in ["research_paper", "research", "sdk_release", "tutorial"]:
         return "explainer"
-    # Default to breaking
+    # 5) Default to breaking
     else:
         return "breaking"
 
@@ -72,6 +91,7 @@ def generate_article_content(
         "breaking": "breaking_news.md",
         "comparison": "comparison.md",
         "explainer": "explainer.md",
+        "deep_dive": "deep_dive.md",
     }
     template_file = TEMPLATES_DIR / template_names.get(template_type, "breaking_news.md")
     with open(template_file) as f:
@@ -85,17 +105,30 @@ def generate_article_content(
         "breaking": {"max_tokens": 1024, "word_range": "200-400"},
         "comparison": {"max_tokens": 2048, "word_range": "400-800"},
         "explainer": {"max_tokens": 3072, "word_range": "600-1200"},
+        "deep_dive": {"max_tokens": 3072, "word_range": "600-1200"},
     }
     config = template_config.get(template_type, template_config["breaking"])
     max_tokens = config["max_tokens"]
     word_range = config["word_range"]
+
+    # Day 4: for product-centric templates, tell Claude which affiliate product to
+    # center the article on, so the body mentions it by name several times (the
+    # matcher needs >= 2 keyword hits across title + body to attach the product).
+    featured_line = ""
+    if matched_products and template_type in ("comparison", "deep_dive"):
+        featured = matched_products[0]
+        featured_name = featured.get("name") or featured.get("product_id", "")
+        featured_line = (
+            f"\nFeatured product: {featured_name}. Center the article on {featured_name}, "
+            f"and mention it by name naturally several times throughout the body."
+        )
 
     prompt = f"""You are a technical AI journalist. Write a {template_type}-style article based on this information:
 
 Title: {title}
 Source: {source_name}
 Original URL: {source_url}
-Summary: {summary}
+Summary: {summary}{featured_line}
 
 Template structure to follow:
 {template[:500]}...

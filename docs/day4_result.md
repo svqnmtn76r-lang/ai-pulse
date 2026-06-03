@@ -104,5 +104,35 @@ text (which Phase 2/4 produces):
 silently skipped.
 
 ---
-<!-- Phases 2–5 appended below as they complete. -->
+## Phase 2 — Template diversification (comparison / deep_dive)
+
+**What changed**
+- Added `templates/deep_dive.md` (single-tool, product-centric structure). `comparison.md`
+  already existed and is reused.
+- `claude_writer.select_template_type` now does **product-centric routing**: if an affiliate
+  product matched, the topic *is* an affiliate product category, so it routes to `comparison`
+  (perplexity, semrush, notion, shopify, kinsta — natural "X vs Y" pairs) or `deep_dive`
+  (elevenlabs, hubspot, jasper, liquidweb). Also fixed the two pre-existing failing template
+  tests by recognising both category spellings (`tool`/`tool_launch`, `research`/`research_paper`).
+- `claude_writer` wires `deep_dive` into `template_names` + `template_config`, and the writer
+  prompt now names the **featured product** for product-centric templates so the body mentions
+  it several times (needed for the ≥2-hit match).
+- Added `scripts/generate_product_articles.py`: 9 real comparison-pair / deep-dive seeds. The
+  **real matcher** decides the product (≥2-hit rule, one product per article) and the **real
+  claude_writer** generates the body via the routed template — no hardcoded matches.
+
+**Test generation (3 articles, both templates):**
+```
+2026-06-03-perplexity-vs-chatgpt-…    product=perplexity  template=comparison  (30 hits)
+2026-06-03-semrush-vs-ahrefs-…        product=semrush     template=comparison  (60 hits)
+2026-06-03-elevenlabs-deep-dive-…     product=elevenlabs  template=deep_dive   (38 hits)
+```
+Each matches **exactly one** product. Rate after Phase 2: **5/41 = 12.2%**.
+
+**GATE 2: PASS** — `npm run build` succeeds (43 pages, 0 errors); each new test article matches
+exactly one product. Full matcher+writer unit suites green (21/21).
+
+---
+<!-- Phases 3–5 appended below as they complete. -->
+
 
