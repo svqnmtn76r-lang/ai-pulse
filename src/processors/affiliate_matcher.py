@@ -75,10 +75,10 @@ def calculate_match_score(
     article_title: str,
     article_summary: str,
 ) -> int:
-    """Match score = number of keyword hits across title + summary/body.
+    """Raw keyword-occurrence count across title + summary/body.
 
-    A hit is one occurrence of a trigger keyword. Score is the raw hit count;
-    callers compare it against MATCH_MIN_HITS (>= 2 to qualify).
+    Kept for reference/tests. The qualifying decision now lives in
+    `score_product` (brand>=2 OR >=2 distinct non-brand keywords).
     """
     keywords = get_product_keywords(product_id)
     if not keywords:
@@ -88,13 +88,54 @@ def calculate_match_score(
     return count_keyword_hits(keywords, text)
 
 
-def match_products(article: dict, min_hits: int = MATCH_MIN_HITS) -> list:
+def brand_tokens_for(product_id: str, product: dict) -> list:
+    """Brand token(s) for a product: lowercased display_name + id.
+
+    For liquidweb both spellings ('liquid web', 'liquidweb') are brand tokens.
+    """
+    tokens = set()
+    dn = str(product.get("display_name", "")).strip().lower()
+    if dn:
+        tokens.add(dn)
+    if product_id:
+        tokens.add(product_id.lower())
+    if product_id == "liquidweb":
+        tokens.update({"liquid web", "liquidweb"})
+    return [t for t in tokens if t]
+
+
+def score_product(text_lower: str, product_id: str, keywords: list, product: dict):
+    """Tightened match rule (Day 4 matcher tightening).
+
+    A product qualifies iff:
+        brand_hits >= 2  OR  distinct_nonbrand_keywords >= 2
+    across the (already-lowercased) text, where:
+      - brand_hits = occurrences of the brand token(s);
+      - distinct_nonbrand_keywords = count of DISTINCT non-brand trigger keywords
+        present (repeated occurrences of one keyword count as ONE).
+
+    This is strictly a tightening of the old "total occurrences >= 2" rule: a lone
+    repeated generic keyword (e.g. workspace x4) no longer qualifies.
+
+    Returns (qualifies, score, brand_hits, distinct_nonbrand). The score (for the
+    one-product cap) prefers brand-driven matches, then keyword diversity.
+    """
+    brands = brand_tokens_for(product_id, product)
+    brand_hits = sum(text_lower.count(b) for b in brands)
+    nonbrand = {kw.lower() for kw in keywords} - set(brands)
+    distinct_nonbrand = sum(1 for kw in nonbrand if kw in text_lower)
+    qualifies = (brand_hits >= 2) or (distinct_nonbrand >= 2)
+    score = brand_hits * 10 + distinct_nonbrand
+    return qualifies, score, brand_hits, distinct_nonbrand
+
+
+def match_products(article: dict) -> list:
     """
     Match article to affiliate products.
 
     Guardrails (Day 4):
-    - a product qualifies only with >= min_hits (default 2) keyword hits across
-      title + summary/body;
+    - a product qualifies only under `score_product`'s rule
+      (brand_hits >= 2 OR >= 2 distinct non-brand keywords) across title+body;
     - at most ONE product is returned (the single highest-scoring one).
 
     Returns a list of 0 or 1 product dicts (list kept for caller compatibility).
@@ -103,25 +144,27 @@ def match_products(article: dict, min_hits: int = MATCH_MIN_HITS) -> list:
     # Use summary if present; fall back to body (so the same logic works whether
     # matching happens pre-generation on the summary or post-hoc on the body).
     summary = article.get("summary", "") or article.get("body", "")
-    title_lower = title.lower()
+    text_lower = (title + " " + summary).lower()
 
     catalog = load_affiliate_catalog()
     programs = catalog.get("programs", {})
 
     candidates = []
     for product_id in eligible_products():
-        score = calculate_match_score(product_id, title, summary)
-        if score >= min_hits:
-            keywords = get_product_keywords(product_id)
-            title_hits = count_keyword_hits(keywords, title_lower)
-            candidates.append((score, title_hits, product_id))
+        product = programs.get(product_id, {})
+        keywords = get_product_keywords(product_id)
+        qualifies, score, brand_hits, distinct_nb = score_product(
+            text_lower, product_id, keywords, product
+        )
+        if qualifies:
+            candidates.append((score, brand_hits, distinct_nb, product_id))
 
     if not candidates:
         return []
 
-    # Highest hit count wins; title hits then id break ties deterministically.
-    candidates.sort(key=lambda c: (c[0], c[1], c[2]), reverse=True)
-    score, _title_hits, product_id = candidates[0]
+    # Highest score wins; brand_hits then distinct then id break ties deterministically.
+    candidates.sort(key=lambda c: (c[0], c[1], c[2], c[3]), reverse=True)
+    score, _brand_hits, _distinct_nb, product_id = candidates[0]
 
     product = programs.get(product_id, {})
     # Affiliate URL comes from the product config (never hardcoded / placeholder /

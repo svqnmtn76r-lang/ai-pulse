@@ -59,7 +59,8 @@ class TestMatchScoring:
 
 
 class TestProductMatching:
-    """Test full matching pipeline with Day 4 guardrails."""
+    """Test full matching pipeline with the tightened Day 4 rule:
+    brand_hits >= 2 OR >= 2 distinct non-brand keywords."""
 
     def test_match_single_product(self):
         """Should return a list (0 or 1 product)."""
@@ -67,7 +68,7 @@ class TestProductMatching:
             "title": "OpenAI GPT-5 Release",
             "summary": "OpenAI announces GPT-5 with advanced reasoning.",
         }
-        matches = match_products(article, min_hits=0)
+        matches = match_products(article)
         assert isinstance(matches, list)
 
     def test_at_most_one_product(self):
@@ -76,25 +77,44 @@ class TestProductMatching:
             "title": "Perplexity ElevenLabs Notion Semrush HubSpot integration",
             "summary": "All major AI tools integrate with each other.",
         }
-        matches = match_products(article, min_hits=0)
+        matches = match_products(article)
         assert len(matches) <= 1
 
-    def test_min_hits_threshold(self):
-        """Should respect the minimum-hit threshold."""
+    def test_brand_repeated_matches(self):
+        """Brand token repeated >= 2 times qualifies (perplexity x22 case)."""
         article = {
-            "title": "Tech news",
-            "summary": "Random unrelated content",
+            "title": "Perplexity vs ChatGPT",
+            "summary": "perplexity " * 22,
         }
-        matches = match_products(article, min_hits=100)
-        assert len(matches) == 0
+        matches = match_products(article)
+        assert matches and matches[0]["product_id"] == "perplexity"
 
-    def test_two_hit_quality_floor(self):
-        """A single incidental mention (1 hit) must NOT match at the >=2 floor."""
+    def test_single_generic_keyword_repeated_does_not_match(self):
+        """A lone generic keyword repeated N times must NOT match (workspace x4)."""
+        article = {
+            "title": "Show HN: an open-source workspace",
+            "summary": "workspace workspace workspace workspace for teams",
+        }
+        # 'notion' brand appears 0 times; only ONE distinct non-brand keyword
+        # ('workspace') -> fails brand>=2 and distinct>=2.
+        matches = match_products(article)
+        assert all(m["product_id"] != "notion" for m in matches)
+
+    def test_two_distinct_keywords_match(self):
+        """Two distinct non-brand keywords qualify even without the brand."""
+        article = {
+            "title": "Building a team wiki and project management hub",
+            "summary": "A knowledge base wiki with project management workflows.",
+        }
+        matches = match_products(article)
+        assert matches and matches[0]["product_id"] == "notion"
+
+    def test_single_incidental_brand_mention_does_not_match(self):
+        """One brand mention + no second distinct keyword must NOT match."""
         article = {
             "title": "A note about productivity",
             "summary": "We briefly used notion once during the project.",
         }
-        # default min_hits = MATCH_MIN_HITS (2); 'notion' appears once -> no match
         matches = match_products(article)
         assert all(m["product_id"] != "notion" for m in matches)
 
@@ -104,7 +124,7 @@ class TestProductMatching:
             "title": "Perplexity announcement",
             "summary": "Perplexity released new perplexity features.",
         }
-        matches = match_products(article, min_hits=2)
+        matches = match_products(article)
         if matches:
             match = matches[0]
             assert "product_id" in match
