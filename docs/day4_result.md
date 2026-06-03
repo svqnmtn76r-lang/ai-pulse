@@ -387,3 +387,48 @@ so it must survive.
 **New rule (strict tightening — can only remove matches):**
 `qualifies = brand_hits >= 2 OR distinct_nonbrand_keywords >= 2` across title+body, where
 `distinct_nonbrand_keywords` counts *distinct* non-brand keywords present (repeats = 1).
+
+## Phase 1–3 — tightening, render reconcile, re-score (A/B; C reserved)
+
+### Why this is strictly a *tightening*
+Old rule: total keyword occurrences ≥ 2 → one repeated generic keyword could match.
+New rule: `brand_hits ≥ 2 OR distinct_nonbrand_keywords ≥ 2`. Both disjuncts are *subsets* of
+"≥2 occurrences" (brand repeats are occurrences; distinct keywords ≤ occurrences), so the rule can
+only **remove** matches, never add. Verified empirically: matched set went 11 → 10 with the **single**
+expected delta.
+
+### The dropped article (regression evidence)
+`2026-05-28-show-hn-open-source-workspace-maildocsspreadsheet…` — a Show HN about an open-source
+**Notion competitor**. It only matched notion via `workspace×4` (one distinct non-brand keyword;
+brand `notion` appears 0× in the editorial body). Under the new rule: brand 0 (<2) and distinct
+non-brand = 1 (<2) → no match. The perplexity legacy (`perplexity×22`, brand-driven) survives.
+
+Matched set diff vs prior branch state: **−1 (only the workspace→notion article); 0 added, 0 reassigned.**
+Resulting matched set = 9 generated product articles + perplexity legacy = **10**.
+
+### Render reconcile
+`inject_affiliate_blocks.py` is now an idempotent reconciler. The de-matched article had its block
+stripped, `products: []`, and disclosure flipped to "does not contain affiliate links" (no false
+affiliate claim). `verify_render.py`: **10/10 matched** render one correct block (config href, CTA,
+FTC); **37/37 non-matched** (incl. the de-matched one) render zero. Build green (49 pages). Reconciler
+2nd run = no-op (idempotent).
+
+### Re-measure
+- `product-match-rate` = **10/47 = 21.3%** (≥20%), via `match_report.py` → real matcher (strips the
+  injected CTA so it measures editorial content).
+- Tests: **39 passed**; only the 3 pre-existing, unrelated `test_hackernews.py` failures remain
+  (no new regressions). Matcher suite 12/12 (locks: brand-repeat passes, single-generic-repeat fails,
+  two-distinct passes).
+
+### §0.1.2.b re-score — A and B from real output (C PROVISIONAL)
+
+> Pass line (quoted, unaltered): 軸A + 軸B + 軸C 合計 ≥ 70; **軸B 単独で 25 未満なら不合格**.
+
+| 軸 | 配点 | 取得 | 根拠 |
+|---|---|---|---|
+| **軸A プロセス品質** | 30 | **28** | 機能要件 10/10（規則を仕様どおり実装、tightening-only を実証、delta=1、テストでlock）; ユニットテスト 6/8（matcher 12/12、全体39 passed、**新規回帰なし**、既存HN 3件のみ）; 思い込み禁止 5/5（delta=1検証、editorial照合で循環自己マッチ回避、強制なし）; トークン節約 3/3（Claude再生成なし、matcher+reconcilerはAPI不使用）; ドキュメント整合 4/4 |
+| **軸B 実装品質** | 40 | **39** | パイプライン疎通 10/10（matcher→reconcile→build→dist 検証）; 冪等性・再現性 10/10（reconciler 2回目no-op、report決定論・matcher直結）; 法的・倫理 10/10（de-match記事の開示文を「リンクなし」に修正＝虚偽開示の解消。マッチ記事は正リンク+開示維持。1記事1ブロック、非マッチ0）; コスト効率 5/5; 採点規則順守 5/5（**緩和なしのtightening**、閾値・cap誠実、基準逐語引用、scorer無改ざん） |
+| **軸C データ品質・多様性** | 30 | **PROVISIONAL — RESERVED FOR HIRO (§0.1.3)** | 暫定内訳: 商品マッチ率 12/12（21.3% ≥20%）; カテゴリ多様性 6/6; スコア分散 4/4; テンプレ多様性 4/4; ターゲティング精度 **保留**（spurious match除去で精度はむしろ**向上**するはず — Notion競合をNotionと誤マッチしていた1件を解消 — だが最終判定はHiro）。暫定合計 ≈ 29–30。 |
+| **合計** | **100** | **A28 + B39 + C(暫定~29) ≈ 96（暫定）** | 自己採点。総合確定は軸C＝**Hiro確定待ち** |
+
+**判定（暫定）:** A+B = 67、軸B 39 ≥ 25。実装観点では合格水準。**総合確定と axis C は §0.1.3 によりHiroに留保。**
