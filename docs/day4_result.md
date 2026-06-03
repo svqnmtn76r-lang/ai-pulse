@@ -341,3 +341,27 @@ no leakage into non-matched articles.   Matched articles: 11
 
 **判定（暫定）:** A+B = 67、軸C 暫定加点で 70 を超過、軸B 39 ≥ 25。**実装観点では合格水準**だが、
 §0.1.3 により **総合確定とaxis CはHiroに留保**。
+
+## Finalization — ready for Hiro (STOPPED before merge & final-C scoring)
+
+### Status
+- All Day-4-finalize phases (0–3) committed on `day4-matchrate`; working tree clean.
+- `.gitignore` covers `.env`, `.env.bak`, `*.bak`; **no secret or `.bak`/`.env` tracked or staged**.
+- Deps: `beautifulsoup4`, `feedparser`, `requests`, `PyYAML` all in `requirements.txt`; no new Node deps.
+- Build green (49 pages); render verify OK (11/11); match-rate 23.4% (≥20%).
+
+### Two OPEN HUMAN GATES (do NOT proceed without Hiro)
+1. **Final axis-C scoring** (ターゲティング精度 / total finalization) — §0.1.3 reserves third-party
+   judgement for Hiro. Self-score gives A=28, B=39, C provisional ~29 (total provisional ~96).
+2. **Merge** of `day4-matchrate` — left for Hiro. Also still open from before: Dub/Perplexity affiliate
+   signup (HUMAN-ONLY), and replacing the config `affiliate_url`s with real **tracked** links post-signup.
+
+### Ready-to-run merge command (for Hiro — NOT run by the agent)
+```
+git checkout main && git merge --no-ff day4-matchrate
+```
+
+### Reviewer quick-path
+- `docs/day4_link_digest.md` — eyeball the 11 rendered affiliate links (href/anchor/FTC).
+- `python scripts/verify_render.py` — re-assert render rules against a fresh `blog/dist/`.
+- `python scripts/match_report.py` — re-confirm 11/47 = 23.4%.
