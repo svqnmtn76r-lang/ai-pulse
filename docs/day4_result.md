@@ -54,4 +54,55 @@ was written; the repo now has 38 articles). **Baseline = 5.3%.**
 **GATE 0: PASS** — baseline printed, schema + matcher understood.
 
 ---
-<!-- Phases 1–5 appended below as they complete. -->
+## Phase 1 — Keyword expansion + matcher guardrails
+
+**What changed**
+- Backed up config to `data/affiliate_sources.yml.bak` (gitignored).
+- Merged Appendix B `trigger_keywords` into all 9 programs (kept existing, deduped).
+  Appendix key `liquid_web` adapted to the real key `liquidweb`. HubSpot's Appendix
+  keywords were all already present, so two specific extras (`sales crm`,
+  `contact management`) were added instead. Keyword counts now:
+  perplexity 14 · elevenlabs 20 · hubspot 15 · notion 15 · semrush 16 · shopify 15 ·
+  jasper 12 · kinsta 10 · liquidweb 10.
+- `src/processors/affiliate_matcher.py` guardrails:
+  - score is now the **keyword hit count**; a product qualifies only at
+    `>= MATCH_MIN_HITS (2)` hits across title + summary/body;
+  - returns **at most ONE** product (highest hit count, deterministic tie-break) —
+    the old code returned up to 3, violating the one-product cap;
+  - candidate set widened from `TIER_1_PRODUCTS` to **all 9** programs with keywords
+    (so kinsta/liquidweb are now matchable, matching the expanded routing).
+- Updated `tests/test_affiliate_matcher.py` to the new contract (hit-count scoring,
+  ≥2 floor, one-product cap). **10/10 matcher tests pass.**
+
+**Numbers (`scripts/match_report.py` over the 38 existing articles)**
+
+| | match-rate |
+|---|---|
+| Baseline (Phase 0) | 2/38 = 5.3% |
+| After keyword expansion | 2/38 = 5.3% |
+
+**Honest finding — keyword expansion is necessary but flat on this corpus.**
+The 38 existing articles are almost entirely Anthropic/Claude/LLM news; only **3**
+contain even a *single* product keyword (perplexity/notion/hubspot, all 1 hit each).
+With the quality threshold held at ≥2 (a hard rule — not loosened), no amount of
+keyword expansion can match content that doesn't discuss SEO/CRM/ecommerce/hosting
+tools. The real lever for *this* repo is **(c) product-centric templates** (Phase 2)
+that generate articles which match by construction, plus **(a)** an affiliate blog
+feed (Phase 3) that brings product-relevant content into the pipeline.
+
+The expansion + guardrails are verified correct on representative product-centric
+text (which Phase 2/4 produces):
+```
+"Semrush vs Ahrefs ... SEO ..."          -> semrush (1 product, 11 hits)
+"Kinsta review: managed WordPress ..."   -> kinsta  (1 product,  9 hits)
+"Perplexity vs Notion vs Semrush ..."    -> semrush (1 product — cap honoured)
+```
+
+**GATE 1:** matcher runs clean ✓, ≤1 product/article ✓. Numeric `> baseline` is
+**deferred to Phase 2/4** because the current corpus is product-sparse; not reverted
+(no logic error — `ON FAIL` targets logic errors, which none exist). Documented, not
+silently skipped.
+
+---
+<!-- Phases 2–5 appended below as they complete. -->
+

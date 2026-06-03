@@ -34,6 +34,10 @@ programs:
     - citation
     - web search ai
     - chatgpt alternative
+    - research assistant
+    - ai chatbot
+    - cited answers
+    - sonar
     competes_with:
     - chatgpt
     - you.com
@@ -84,6 +88,9 @@ programs:
     - voiceover
     - speech model
     - audio ai
+    - text-to-speech
+    - voice generator
+    - dubbing
     competes_with:
     - murf
     - playht
@@ -130,6 +137,8 @@ programs:
     - lead nurturing
     - inbound marketing
     - marketing crm
+    - sales crm
+    - contact management
     competes_with:
     - salesforce
     - pipedrive
@@ -175,6 +184,9 @@ programs:
     - second brain
     - personal knowledge
     - team docs
+    - note-taking
+    - wiki
+    - project management
     competes_with:
     - obsidian
     - roam research
@@ -224,6 +236,9 @@ programs:
     - search engine optimization
     - ppc research
     - content gap
+    - seo
+    - backlink
+    - serp
     competes_with:
     - ahrefs
     - moz
@@ -263,6 +278,9 @@ programs:
     - merchant
     - online shop
     - ecommerce business
+    - ecommerce
+    - e-commerce
+    - sell online
     competes_with:
     - woocommerce
     - bigcommerce
@@ -298,6 +316,9 @@ programs:
     - blog post generator
     - ai content marketing
     - content automation
+    - ai writer
+    - ai copywriting
+    - blog writing
     competes_with:
     - copy.ai
     - writesonic
@@ -336,6 +357,8 @@ programs:
     - fast wordpress
     - wordpress performance
     - managed hosting
+    - web hosting
+    - cloud hosting
     competes_with:
     - wp engine
     - cloudways
@@ -367,6 +390,9 @@ programs:
     - high traffic hosting
     - cloud sites
     - ecommerce hosting
+    - liquidweb
+    - vps hosting
+    - managed hosting
     competes_with:
     - rackspace
     - digitalocean
