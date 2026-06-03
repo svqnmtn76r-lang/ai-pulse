@@ -267,3 +267,29 @@ Day 4 mission PASS line: **A+B+C ≥ 70 AND B ≥ 25.**
 
 
 
+
+---
+
+# Day 4 Finalize — In-body affiliate link render fix
+
+## Link-render bug — root cause
+
+**Symptom (verified in built HTML):** matched `comparison`/`deep_dive` articles render the FTC
+disclosure but **no in-body affiliate `<a>` link**. e.g. `dist/articles/2026-06-03-shopify-vs-woocommerce-…/index.html`
+contains the word "Disclosure"/"affiliate" but zero links to the product (only nav `/` and `/about`).
+
+**Root cause (file + line + mechanism):**
+- `src/processors/claude_writer.py` → `write_article_file()` (~line 188) injects the affiliate block
+  **only** via `body_content.replace("{PRODUCTS_SECTION}", products_text)`. But the writer prompt
+  (`generate_article_content`, ~line 109) explicitly instructs Claude: *"DO NOT include the
+  PRODUCTS_SECTION placeholder"*. So the placeholder is absent, `replace()` is a no-op, and
+  `products_text` (the affiliate link block) is **silently dropped** — it never reaches the markdown body.
+- The Astro detail page `blog/src/pages/articles/[...slug].astro` renders **only the markdown body**
+  (`marked.parse(markdown)` → `<div set:html={html}>`). Frontmatter `products` is not rendered. So if the
+  link isn't in the body markdown, it can never appear in `dist/`.
+- Secondary: the affiliate `href` was synthesized in code (`affiliate_matcher.py:129`,
+  `https://aipulse.pages.dev/affiliates/{id}`) and `None` for tier-2 products → would render `#`. Must be
+  config-driven per the hard rules.
+
+**True cause = the writer's placeholder-only injection** (not the Astro template, not marked). Fix appends a
+single affiliate block to the body for matched articles and sources `href` from `affiliate_sources.yml`.
