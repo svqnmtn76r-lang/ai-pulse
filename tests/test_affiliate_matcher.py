@@ -25,16 +25,17 @@ class TestProductKeywords:
 
 
 class TestMatchScoring:
-    """Test match score calculation."""
+    """Test match score calculation (Day 4: score = keyword hit count)."""
 
     def test_exact_keyword_match(self):
-        """Should score high for exact keyword matches."""
+        """Should count keyword hits across title + summary."""
         score = calculate_match_score(
             "perplexity",
             "Perplexity AI Launch",
             "Perplexity released a new feature for search."
         )
-        assert score >= 20  # May have 2 keyword hits for 20 points
+        # 'perplexity' appears twice -> at least 2 hits
+        assert score >= 2
 
     def test_no_match(self):
         """Should score zero when no keywords match."""
@@ -46,53 +47,84 @@ class TestMatchScoring:
         assert score == 0
 
     def test_multiple_keyword_matches(self):
-        """Should score higher with multiple keyword matches."""
+        """Should count higher with multiple keyword hits."""
         score = calculate_match_score(
             "elevenlabs",
             "Voice synthesis with ElevenLabs TTS",
-            "Using text-to-speech voice API for audio generation."
+            "Using text-to-speech voice cloning for audio generation."
         )
-        assert score >= 50
+        # elevenlabs, voice synthesis, tts, text-to-speech, voice cloning,
+        # audio generation -> well above the 2-hit floor
+        assert score >= 4
 
 
 class TestProductMatching:
-    """Test full matching pipeline."""
+    """Test full matching pipeline with the tightened Day 4 rule:
+    brand_hits >= 2 OR >= 2 distinct non-brand keywords."""
 
     def test_match_single_product(self):
-        """Should match relevant article to product."""
+        """Should return a list (0 or 1 product)."""
         article = {
             "title": "OpenAI GPT-5 Release",
             "summary": "OpenAI announces GPT-5 with advanced reasoning.",
         }
-        matches = match_products(article, min_score=0)
-        # May or may not match depending on keywords
+        matches = match_products(article)
         assert isinstance(matches, list)
 
-    def test_max_three_products(self):
-        """Should return at most 3 products."""
+    def test_at_most_one_product(self):
+        """One-product-per-article cap: never return 2+ products."""
         article = {
             "title": "Perplexity ElevenLabs Notion Semrush HubSpot integration",
             "summary": "All major AI tools integrate with each other.",
         }
-        matches = match_products(article, min_score=0)
-        assert len(matches) <= 3
+        matches = match_products(article)
+        assert len(matches) <= 1
 
-    def test_min_score_threshold(self):
-        """Should respect minimum score threshold."""
+    def test_brand_repeated_matches(self):
+        """Brand token repeated >= 2 times qualifies (perplexity x22 case)."""
         article = {
-            "title": "Tech news",
-            "summary": "Random unrelated content",
+            "title": "Perplexity vs ChatGPT",
+            "summary": "perplexity " * 22,
         }
-        matches = match_products(article, min_score=100)
-        assert len(matches) == 0
+        matches = match_products(article)
+        assert matches and matches[0]["product_id"] == "perplexity"
+
+    def test_single_generic_keyword_repeated_does_not_match(self):
+        """A lone generic keyword repeated N times must NOT match (workspace x4)."""
+        article = {
+            "title": "Show HN: an open-source workspace",
+            "summary": "workspace workspace workspace workspace for teams",
+        }
+        # 'notion' brand appears 0 times; only ONE distinct non-brand keyword
+        # ('workspace') -> fails brand>=2 and distinct>=2.
+        matches = match_products(article)
+        assert all(m["product_id"] != "notion" for m in matches)
+
+    def test_two_distinct_keywords_match(self):
+        """Two distinct non-brand keywords qualify even without the brand."""
+        article = {
+            "title": "Building a team wiki and project management hub",
+            "summary": "A knowledge base wiki with project management workflows.",
+        }
+        matches = match_products(article)
+        assert matches and matches[0]["product_id"] == "notion"
+
+    def test_single_incidental_brand_mention_does_not_match(self):
+        """One brand mention + no second distinct keyword must NOT match."""
+        article = {
+            "title": "A note about productivity",
+            "summary": "We briefly used notion once during the project.",
+        }
+        matches = match_products(article)
+        assert all(m["product_id"] != "notion" for m in matches)
 
     def test_match_contains_required_fields(self):
         """Each match should have required fields."""
         article = {
             "title": "Perplexity announcement",
-            "summary": "Perplexity released new features.",
+            "summary": "Perplexity released new perplexity features.",
         }
-        matches = match_products(article, min_score=0)
+        matches = match_products(article)
         if matches:
             match = matches[0]
             assert "product_id" in match

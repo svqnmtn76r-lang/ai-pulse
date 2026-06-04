@@ -4,8 +4,7 @@ date: '2026-05-28'
 generated_at: '2026-05-28T06:27:11.293681Z'
 generated_by: claude-haiku-4-5-2026-05-28
 importance_score: 60
-products:
-- notion
+products: []
 source_name: hackernews
 source_url: https://tinycld.org/
 template_type: breaking
@@ -32,4 +31,5 @@ The announcement reflects broader momentum in the open-source productivity space
 The project's success will likely depend on developer adoption velocity and ecosystem maturity. Community feedback captured in the initial 32 comments will be instrumental in identifying feature gaps and infrastructure requirements. Watch for announcements regarding self-hosting documentation, mobile app expansion, and integration capabilities with existing productivity tools. The technical community's reception will signal whether this represents a meaningful alternative or a niche offering for privacy-conscious organizations.
 
 For the latest details and source code, visit the original project at tinycld.org.
-*Disclosure: This article contains affiliate links. As an affiliate, we earn from qualifying purchases at no extra cost to you.*
+
+*This article does not contain affiliate links.*

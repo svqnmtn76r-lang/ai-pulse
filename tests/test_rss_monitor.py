@@ -16,11 +16,15 @@ def test_load_feeds_includes_openai():
     assert "openai" in feeds
 
 
-def test_load_feeds_returns_only_verified():
+def test_load_feeds_includes_verified_and_affiliate():
     feeds = load_feeds()
-    # After 2026-05-22 verification: only 3 official RSS feeds exist
-    assert len(feeds) == 3
-    assert set(feeds.keys()) == {"openai", "google_deepmind", "huggingface"}
+    # The 3 verified official RSS feeds are always present.
+    assert {"openai", "google_deepmind", "huggingface"}.issubset(feeds.keys())
+    # Day 4: validated affiliate-blog feeds are ingested too (lift match-rate).
+    assert {"hubspot_blog", "semrush_blog"}.issubset(feeds.keys())
+    # Red / no-RSS sources are never loaded.
+    assert "anthropic" not in feeds
+    assert "perplexity" not in feeds
 
 
 def test_parse_pub_date_handles_missing():
