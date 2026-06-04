@@ -32,6 +32,9 @@ interface Props {
 
 const { data, markdown } = Astro.props;
 const html = await marked.parse(markdown);
+
+// Absolute canonical URL (Astro.site is set in astro.config.mjs).
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <html lang="en">
@@ -40,6 +43,7 @@ const html = await marked.parse(markdown);
     <meta name="viewport" content="width=device-width" />
     <title>{data.title} - AI-Pulse</title>
     <meta name="description" content={data.title} />
+    <link rel="canonical" href={canonicalURL} />
     <style is:global>
       * {
         margin: 0;

@@ -4,7 +4,7 @@ Rendered from `blog/dist/` by `scripts/verify_render.py`. One row per matched ar
 `href` is read from the **built HTML**; expected value is the product's `affiliate_url`
 in `data/affiliate_sources.yml`.
 
-Matched articles: **10**
+Matched articles: **11**
 
 | Article | Product | Rendered href | Anchor text | FTC |
 |---|---|---|---|---|
@@ -18,3 +18,4 @@ Matched articles: **10**
 | 2026-06-03-perplexity-vs-chatgpt-which-ai-search-answer-engin | perplexity | https://www.perplexity.ai/pro | Try Perplexity → | Y |
 | 2026-06-03-semrush-vs-ahrefs-the-better-seo-tool-for-keyword- | semrush | https://www.semrush.com | Try Semrush → | Y |
 | 2026-06-03-shopify-vs-woocommerce-best-ecommerce-platform-to- | shopify | https://www.shopify.com | Try Shopify → | Y |
+| 2026-06-04-perplexity-vs-google-ai-overviews-which-answers-be | perplexity | https://www.perplexity.ai/pro | Try Perplexity → | Y |

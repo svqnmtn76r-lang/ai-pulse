@@ -1,0 +1,150 @@
+---
+import { getCollection } from 'astro:content';
+
+// All commercial articles (frontmatter `products` non-empty), newest first.
+const articles = await getCollection('articles');
+const commercialArticles = articles
+  .filter((a) => Array.isArray(a.data.products) && a.data.products.length > 0)
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Reviews & Comparisons - AI-Pulse</title>
+    <meta name="description" content="Hands-on reviews and head-to-head comparisons of AI tools and SaaS products." />
+    <link rel="canonical" href={canonicalURL} />
+    <style is:global>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: #f9f9f9;
+      }
+      header {
+        background: white;
+        border-bottom: 1px solid #eee;
+        padding: 2rem;
+        margin-bottom: 2rem;
+      }
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+      .subtitle {
+        color: #666;
+        font-size: 1.1rem;
+      }
+      main {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 2rem 2rem;
+      }
+      article {
+        background: white;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      article h2 {
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+      }
+      article a {
+        color: #0066cc;
+        text-decoration: none;
+      }
+      article a:hover {
+        text-decoration: underline;
+      }
+      .meta {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+      }
+      .product-badge {
+        display: inline-block;
+        background: #e6f0ff;
+        color: #0066cc;
+        padding: 0.2rem 0.6rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        margin-right: 0.5rem;
+        text-transform: capitalize;
+      }
+      footer {
+        text-align: center;
+        color: #999;
+        padding: 2rem;
+        border-top: 1px solid #eee;
+        margin-top: 2rem;
+      }
+      nav {
+        margin-top: 1rem;
+      }
+      nav a {
+        margin-right: 1.5rem;
+        color: #0066cc;
+        text-decoration: none;
+      }
+      nav a:hover {
+        text-decoration: underline;
+      }
+      .intro {
+        color: #666;
+        margin-bottom: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Reviews &amp; Comparisons</h1>
+      <p class="subtitle">Hands-on reviews and head-to-head comparisons of AI tools and SaaS products</p>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/reviews">Reviews</a>
+        <a href="/about">About</a>
+      </nav>
+    </header>
+    <main>
+      <p class="intro">
+        Articles that include an affiliate recommendation are clearly marked with an
+        FTC disclosure. See our <a href="/about">disclosure policy</a>.
+      </p>
+      {commercialArticles.length === 0 ? (
+        <p>No reviews yet. Check back soon!</p>
+      ) : (
+        commercialArticles.map((article) => (
+          <article key={article.id}>
+            <h2>
+              <a href={`/articles/${article.id}`}>
+                {article.data.title}
+              </a>
+            </h2>
+            <div class="meta">
+              <time>{new Date(article.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+              {article.data.products.map((p) => (
+                <span class="product-badge">{p}</span>
+              ))}
+            </div>
+            <p>
+              <a href={`/articles/${article.id}`}>Read review →</a>
+            </p>
+          </article>
+        ))
+      )}
+    </main>
+    <footer>
+      <p>&copy; 2026 AI-Pulse. <a href="/about">About &amp; Disclosure</a></p>
+    </footer>
+  </body>
+</html>

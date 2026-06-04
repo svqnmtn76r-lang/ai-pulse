@@ -63,8 +63,17 @@ def generate_article_content(
     article: dict,
     template_type: str,
     matched_products: list,
+    factual_source: bool = True,
 ) -> str:
-    """Generate article body using Claude."""
+    """Generate article body using Claude.
+
+    factual_source=True (default, news path): the article summarizes a real cited
+    source, so the prompt may add context the summary omitted.
+    factual_source=False (product-topic cadence path): there is no source to
+    ground specifics, so the prompt forbids inventing prices/benchmarks/dates/
+    feature claims and keeps comparisons general, fair, and clearly opinion where
+    subjective (honors CLAUDE.md "no fabricated claims").
+    """
     client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY", "").strip())
 
     title = article.get("title", "Untitled")
@@ -123,6 +132,23 @@ def generate_article_content(
             f"and mention it by name naturally several times throughout the body."
         )
 
+    if factual_source:
+        source_guidelines = (
+            "- Do NOT quote the summary directly; paraphrase and add context\n"
+            "- Include facts, figures, and context the summary didn't provide"
+        )
+    else:
+        source_guidelines = (
+            "- Do NOT invent specific prices, plan costs, benchmark numbers, user\n"
+            "  counts, release dates, or precise feature claims you cannot verify.\n"
+            "  Where a real number is unknown, describe it qualitatively or point\n"
+            "  readers to the official pricing/docs page instead of stating a figure.\n"
+            "- Keep the comparison general, fair, and balanced; mark subjective\n"
+            "  judgements clearly as opinion (e.g. \"in our view\").\n"
+            "- For any comparison table, use qualitative cells (e.g. \"usage-based\",\n"
+            "  \"strong\", \"limited\") rather than invented exact prices or scores"
+        )
+
     prompt = f"""You are a technical AI journalist. Write a {template_type}-style article based on this information:
 
 Title: {title}
@@ -136,8 +162,7 @@ Template structure to follow:
 Guidelines:
 - Write in clear, concise technical English
 - Keep total length {word_range} words
-- Do NOT quote the summary directly; paraphrase and add context
-- Include facts, figures, and context the summary didn't provide
+{source_guidelines}
 - End with a "What happens next" or "Learn more" section
 - DO NOT include the PRODUCTS_SECTION placeholder - it will be added separately
 

@@ -1,0 +1,50 @@
+# Rotating product-article topics for the daily pipeline cadence.
+#
+# Each entry generates ONE commercial article (comparison or deep_dive). The
+# affiliate `product` MUST be named in the piece so the brand>=1 matcher attaches
+# it; the article then carries the product-page affiliate_url (from
+# data/affiliate_sources.yml) and the FTC disclosure.
+#
+# Keep topics FRESH — do not duplicate the 10 already generated. When the list
+# runs low the pipeline logs "rotation exhausted — add topics" and generates
+# nothing (no error, no repeat). Hiro tunes the rate + extends this catalogue.
+#
+# Fields: type (comparison|deep_dive), product (must match a programs.<id> in
+# data/affiliate_sources.yml), title.
+
+- type: comparison
+  product: perplexity
+  title: "Perplexity vs Google AI Overviews: which answers better in 2026"
+- type: comparison
+  product: notion
+  title: "Notion vs Coda: which all-in-one workspace fits your team"
+- type: comparison
+  product: semrush
+  title: "Semrush vs Moz: which SEO suite is worth it in 2026"
+- type: comparison
+  product: shopify
+  title: "Shopify vs BigCommerce: best platform for a new store"
+- type: comparison
+  product: jasper
+  title: "Jasper vs Copy.ai: which AI writer for marketing teams"
+- type: comparison
+  product: elevenlabs
+  title: "ElevenLabs vs Murf: best AI voice generator for creators"
+- type: comparison
+  product: hubspot
+  title: "HubSpot vs Mailchimp: which for inbound and email"
+- type: comparison
+  product: kinsta
+  title: "Kinsta vs WP Engine: managed WordPress hosting compared"
+- type: comparison
+  product: liquidweb
+  title: "Liquid Web vs Cloudways: managed hosting for growing sites"
+- type: deep_dive
+  product: perplexity
+  title: "Perplexity Pro in 2026: a hands-on deep dive"
+- type: deep_dive
+  product: notion
+  title: "Notion as a second brain: a practical deep dive"
+- type: deep_dive
+  product: semrush
+  title: "Semrush for content SEO: a deep dive"
