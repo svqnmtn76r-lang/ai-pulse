@@ -88,6 +88,19 @@ def main():
         soup = BeautifulSoup(html, "html.parser")
         blocks = soup.select("[data-affiliate]")
 
+        # False-disclosure guard (DoD #5), checked for EVERY article in BOTH
+        # directions: the "contains affiliate links" disclosure must be present
+        # iff exactly one affiliate block is rendered. This is the check that
+        # would have caught the odysseus artifact (products set + "contains"
+        # disclosure but zero in-body block). The "does not contain affiliate
+        # links" wording does NOT contain the substring "contains affiliate
+        # links" (it reads "contain", no 's'), so the marker is unambiguous.
+        n_blocks = len(blocks)
+        has_contains_disclosure = "contains affiliate links" in html.lower()
+        if has_contains_disclosure != (n_blocks == 1):
+            errors.append(f"{article_id}: disclosure/block mismatch "
+                          f"(contains-disclosure={has_contains_disclosure}, blocks={n_blocks})")
+
         if product_id is None:
             if blocks:
                 errors.append(f"{article_id}: affiliate block leaked into a NON-matched article "
