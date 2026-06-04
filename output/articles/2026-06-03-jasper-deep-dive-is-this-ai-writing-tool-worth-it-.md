@@ -53,8 +53,9 @@ Content teams should approach Jasper as a trial-and-measurement exercise. Most p
 
 The AI writing market is crowded and evolving rapidly. Jasper's moat is in its marketing-specific design and enterprise adoption. But as large language models improve and competitors refine their offerings, differentiation will increasingly depend on how well each platform understands your specific content challenges.
 
+
 <div class="affiliate-cta" data-affiliate="jasper">
-<p><strong>Recommended:</strong> <a href="https://www.jasper.ai/affiliates" rel="sponsored nofollow" target="_blank">Try Jasper →</a> — the Jasper pick from this article.</p>
+<p><strong>Recommended:</strong> <a href="https://www.jasper.ai" rel="sponsored nofollow" target="_blank">Try Jasper →</a> — the Jasper pick from this article.</p>
 </div>
 
 *Disclosure: This article contains affiliate links. As an affiliate, we earn from qualifying purchases at no extra cost to you.*

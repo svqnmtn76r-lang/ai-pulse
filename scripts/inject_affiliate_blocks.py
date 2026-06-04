@@ -104,10 +104,18 @@ def main():
         block_pids = re.findall(r'data-affiliate="([^"]+)"', text)
 
         if matched_pid:
-            if block_pids == [matched_pid] and front_products == [matched_pid]:
+            prod = products.get(matched_pid)
+            expected_url = (prod.get("affiliate_url") or "").strip() if prod else ""
+            existing_block = next(iter(CTA_BLOCK.findall(text)), "")
+            existing_href_m = re.search(r'href="([^"]+)"', existing_block)
+            existing_href = existing_href_m.group(1) if existing_href_m else ""
+            # Idempotent ONLY when product id, frontmatter, AND the rendered href
+            # all already agree with config. A config-only URL change must still
+            # repair the stale href, so href is part of the equality check.
+            if (block_pids == [matched_pid] and front_products == [matched_pid]
+                    and existing_href == expected_url and expected_url):
                 ok_matched += 1
                 continue
-            prod = products.get(matched_pid)
             block = build_affiliate_block(prod) if prod else ""
             if not block:
                 missing_cfg.append((md.name, matched_pid))

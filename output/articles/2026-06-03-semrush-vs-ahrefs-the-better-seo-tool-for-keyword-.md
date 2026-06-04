@@ -57,8 +57,9 @@ Many enterprise teams maintain subscriptions to both platforms, using Semrush fo
 
 Evaluate your team's primary pain points before committing. Request extended trials from both platforms—both offer 14+ day free access—and test each with your actual website and competitor set to determine which interface and data presentation resonates with your workflow.
 
+
 <div class="affiliate-cta" data-affiliate="semrush">
-<p><strong>Recommended:</strong> <a href="https://www.semrush.com/lp/affiliate-program/en/" rel="sponsored nofollow" target="_blank">Try Semrush →</a> — the Semrush pick from this article.</p>
+<p><strong>Recommended:</strong> <a href="https://www.semrush.com" rel="sponsored nofollow" target="_blank">Try Semrush →</a> — the Semrush pick from this article.</p>
 </div>
 
 *Disclosure: This article contains affiliate links. As an affiliate, we earn from qualifying purchases at no extra cost to you.*

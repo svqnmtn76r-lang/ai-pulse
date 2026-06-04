@@ -47,8 +47,9 @@ For B2B teams evaluating their first real CRM or planning to consolidate multipl
 
 The key evaluation question: does your team struggle with lead visibility, marketing-sales alignment, or manual data entry across email and CRM tools? If yes, HubSpot's unified approach typically pays for itself within months. If your sales cycle is extremely complex, your tech stack is already locked into specific enterprise systems, or you need deep customization, you may want to explore alternatives.
 
+
 <div class="affiliate-cta" data-affiliate="hubspot">
-<p><strong>Recommended:</strong> <a href="https://www.hubspot.com/partners/affiliates" rel="sponsored nofollow" target="_blank">Try HubSpot →</a> — the HubSpot pick from this article.</p>
+<p><strong>Recommended:</strong> <a href="https://www.hubspot.com" rel="sponsored nofollow" target="_blank">Try HubSpot →</a> — the HubSpot pick from this article.</p>
 </div>
 
 *Disclosure: This article contains affiliate links. As an affiliate, we earn from qualifying purchases at no extra cost to you.*

@@ -53,8 +53,9 @@ For organizations currently relying on human voice talent or dated TTS systems, 
 
 Learn more at elevenlabs.io or explore the platform's API documentation for integration possibilities specific to your workflow.
 
+
 <div class="affiliate-cta" data-affiliate="elevenlabs">
-<p><strong>Recommended:</strong> <a href="https://elevenlabs.io/affiliates" rel="sponsored nofollow" target="_blank">Try ElevenLabs →</a> — the ElevenLabs pick from this article.</p>
+<p><strong>Recommended:</strong> <a href="https://elevenlabs.io" rel="sponsored nofollow" target="_blank">Try ElevenLabs →</a> — the ElevenLabs pick from this article.</p>
 </div>
 
 *Disclosure: This article contains affiliate links. As an affiliate, we earn from qualifying purchases at no extra cost to you.*

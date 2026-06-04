@@ -74,8 +74,9 @@ Most growing WordPress sites find the break-even point occurs within 6-12 months
 
 **Learn more:** Review Kinsta's technical documentation and performance benchmarks, then compare against your current hosting's actual costs including downtime impact and security incidents.
 
+
 <div class="affiliate-cta" data-affiliate="kinsta">
-<p><strong>Recommended:</strong> <a href="https://kinsta.com/affiliates/" rel="sponsored nofollow" target="_blank">Try Kinsta →</a> — the Kinsta pick from this article.</p>
+<p><strong>Recommended:</strong> <a href="https://kinsta.com" rel="sponsored nofollow" target="_blank">Try Kinsta →</a> — the Kinsta pick from this article.</p>
 </div>
 
 *Disclosure: This article contains affiliate links. As an affiliate, we earn from qualifying purchases at no extra cost to you.*

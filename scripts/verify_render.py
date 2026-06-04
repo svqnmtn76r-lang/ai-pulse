@@ -18,6 +18,7 @@ Usage: python scripts/verify_render.py        # assumes a fresh blog/dist
 Exit 0 = OK, 1 = FAIL.
 """
 
+import re
 import sys
 from pathlib import Path
 
@@ -31,6 +32,16 @@ DIST_DIR = REPO / "blog" / "dist" / "articles"
 DIGEST = REPO / "docs" / "day4_link_digest.md"
 
 FTC_MARKERS = ("affiliate", "commission", "disclosure")
+
+# A rendered affiliate href must point at a product page, never at an
+# affiliate-program / recruitment page. Same guard as
+# scripts/verify_affiliate_urls.py (Day 4 DoD #2), enforced here on the BUILT
+# HTML so the fix can't regress through the render path. Case-insensitive.
+FORBIDDEN_RE = re.compile(
+    r"/affiliates\b|/affiliate\b|/partners/affiliate|affiliate-program|"
+    r"affiliate\.|/referral-program|/become-an-affiliate",
+    re.IGNORECASE,
+)
 
 
 def load_product_urls() -> dict:
@@ -97,6 +108,9 @@ def main():
             errors.append(f"{article_id}: no affiliate_url in config for '{product_id}'")
         if href != expected:
             errors.append(f"{article_id}: href != config url ({href!r} vs {expected!r})")
+        if href and FORBIDDEN_RE.search(href):
+            errors.append(f"{article_id}: rendered href points at an affiliate-signup "
+                          f"page, not a product page ({href!r})")
         if not anchor:
             errors.append(f"{article_id}: affiliate link has no anchor text")
         if not ftc:

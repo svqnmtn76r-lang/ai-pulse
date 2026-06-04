@@ -52,8 +52,9 @@ Obsidian, by contrast, prioritizes individual workflows. While you can share vau
 
 The optimal choice depends on whether your primary need is collaborative team workspace functionality (Notion) or personal knowledge management with data autonomy (Obsidian). Many users employ both: Notion for shared team information and Obsidian for personal research and thinking. Evaluate your specific requirements around collaboration, privacy, and integration needs before committing to either platform.
 
+
 <div class="affiliate-cta" data-affiliate="notion">
-<p><strong>Recommended:</strong> <a href="https://affiliate.notion.so/" rel="sponsored nofollow" target="_blank">Try Notion →</a> — the Notion pick from this article.</p>
+<p><strong>Recommended:</strong> <a href="https://www.notion.com" rel="sponsored nofollow" target="_blank">Try Notion →</a> — the Notion pick from this article.</p>
 </div>
 
 *Disclosure: This article contains affiliate links. As an affiliate, we earn from qualifying purchases at no extra cost to you.*
