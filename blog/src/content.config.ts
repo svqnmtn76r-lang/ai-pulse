@@ -9,7 +9,9 @@ const articles = defineCollection({
     category: z.string().optional(),
     importance_score: z.number().optional(),
     products: z.array(z.string()).optional(),
-    source_url: z.string().url().optional(),
+    // A valid URL, OR empty string (original editorial like product comparisons
+    // have no external source), OR absent.
+    source_url: z.string().url().or(z.literal('')).optional(),
     source_name: z.string().optional(),
     template_type: z.string().optional(),
     word_count: z.number().optional(),
