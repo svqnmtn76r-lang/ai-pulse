@@ -105,17 +105,22 @@ def brand_tokens_for(product_id: str, product: dict) -> list:
 
 
 def score_product(text_lower: str, product_id: str, keywords: list, product: dict):
-    """Tightened match rule (Day 4 matcher tightening).
+    """Tightened match rule with brand floor (Day 4 + cleanup).
 
     A product qualifies iff:
-        brand_hits >= 2  OR  distinct_nonbrand_keywords >= 2
+        brand_hits >= 1  AND  (brand_hits >= 2  OR  distinct_nonbrand_keywords >= 2)
     across the (already-lowercased) text, where:
       - brand_hits = occurrences of the brand token(s);
       - distinct_nonbrand_keywords = count of DISTINCT non-brand trigger keywords
         present (repeated occurrences of one keyword count as ONE).
 
-    This is strictly a tightening of the old "total occurrences >= 2" rule: a lone
-    repeated generic keyword (e.g. workspace x4) no longer qualifies.
+    Two layers of tightening:
+      1. (Day 4) a lone repeated generic keyword (e.g. workspace x4) no longer
+         qualifies -- the second clause requires brand>=2 or >=2 DISTINCT generics.
+      2. (cleanup) the BRAND FLOOR: the product must be NAMED at least once
+         (brand_hits >= 1). This drops competitor-mismatches -- e.g. an article
+         about Obsidian (a Notion competitor) that hits 5 generic PKM keywords but
+         never says "Notion" no longer matches notion.
 
     Returns (qualifies, score, brand_hits, distinct_nonbrand). The score (for the
     one-product cap) prefers brand-driven matches, then keyword diversity.
@@ -124,7 +129,7 @@ def score_product(text_lower: str, product_id: str, keywords: list, product: dic
     brand_hits = sum(text_lower.count(b) for b in brands)
     nonbrand = {kw.lower() for kw in keywords} - set(brands)
     distinct_nonbrand = sum(1 for kw in nonbrand if kw in text_lower)
-    qualifies = (brand_hits >= 2) or (distinct_nonbrand >= 2)
+    qualifies = (brand_hits >= 1) and ((brand_hits >= 2) or (distinct_nonbrand >= 2))
     score = brand_hits * 10 + distinct_nonbrand
     return qualifies, score, brand_hits, distinct_nonbrand
 
