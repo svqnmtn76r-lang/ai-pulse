@@ -59,8 +59,9 @@ class TestMatchScoring:
 
 
 class TestProductMatching:
-    """Test full matching pipeline with the tightened Day 4 rule:
-    brand_hits >= 2 OR >= 2 distinct non-brand keywords."""
+    """Test full matching pipeline with the tightened rule + brand floor:
+    brand_hits >= 1 AND (brand_hits >= 2 OR >= 2 distinct non-brand keywords).
+    The brand floor means a product must be NAMED at least once to match."""
 
     def test_match_single_product(self):
         """Should return a list (0 or 1 product)."""
@@ -100,11 +101,27 @@ class TestProductMatching:
         matches = match_products(article)
         assert all(m["product_id"] != "notion" for m in matches)
 
-    def test_two_distinct_keywords_match(self):
-        """Two distinct non-brand keywords qualify even without the brand."""
+    def test_generic_keywords_without_brand_does_not_match(self):
+        """Brand floor: >= 2 distinct generic keywords but brand_hits == 0 must
+        NOT match -- the product is never named (the karpathy/Obsidian case:
+        knowledge base + wiki + workspace, but no "Notion")."""
         article = {
-            "title": "Building a team wiki and project management hub",
-            "summary": "A knowledge base wiki with project management workflows.",
+            "title": "Karpathy LLM wiki pattern integrated into Obsidian",
+            "summary": "A self-hosted knowledge base and personal wiki workspace "
+                       "for note-taking, built on Obsidian.",
+        }
+        # 'notion' brand appears 0 times; several distinct non-brand keywords hit,
+        # so the OLD rule would have matched. The brand floor drops it.
+        matches = match_products(article)
+        assert all(m["product_id"] != "notion" for m in matches)
+
+    def test_brand_named_plus_distinct_keyword_matches(self):
+        """Brand named once + >= 2 distinct non-brand keywords qualifies (brand
+        floor satisfied, second clause via keyword diversity)."""
+        article = {
+            "title": "Notion vs Obsidian for your team",
+            "summary": "Notion is a knowledge base and wiki workspace for "
+                       "note-taking and project docs.",
         }
         matches = match_products(article)
         assert matches and matches[0]["product_id"] == "notion"

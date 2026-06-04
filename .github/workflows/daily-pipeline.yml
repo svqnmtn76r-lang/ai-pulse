@@ -27,6 +27,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           python3 -m src.pipeline.run
+          # Self-repair: reconcile in-body affiliate blocks for ALL existing
+          # articles against the CURRENT matcher + config (affiliate_sources.yml).
+          # Idempotent + href-aware, so config/URL changes (e.g. future real
+          # tracked links) propagate to already-published articles, and stale
+          # matches (false disclosures) are repaired. PYTHONPATH=. so the script
+          # can import the src package when run by path.
+          PYTHONPATH=. python3 scripts/inject_affiliate_blocks.py output/articles
           python3 scripts/sync_articles_to_blog.py
 
       - name: Setup Node.js
