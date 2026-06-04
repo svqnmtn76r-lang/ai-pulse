@@ -354,7 +354,7 @@ AI業界の新発表・新製品情報を半自動で収集・発信し、検証
 
 ### 2.5.1 現在の選択（2026-05-21）
 
-**Phase 0（Month 1-3）**: Cloudflare Pages サブドメイン `aipulse.pages.dev` で開始。
+**Phase 0（Month 1-3）**: Cloudflare Pages サブドメイン `ai-pulse-b35.pages.dev` で開始。
 
 理由（採点制による判定）：
 - 速報性: 影響ゼロ（コンテンツ蓄積はドメインに依存しない）

@@ -11,6 +11,8 @@ const isCommercial = (a) => Array.isArray(a.data.products) && a.data.products.le
 const sortedArticles = [...articles].sort(byDateDesc).slice(0, 10);
 const commercialArticles = articles.filter(isCommercial).sort(byDateDesc);
 const featuredReviews = commercialArticles.slice(0, 6);
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <html lang="en">
@@ -19,6 +21,7 @@ const featuredReviews = commercialArticles.slice(0, 6);
     <meta name="viewport" content="width=device-width" />
     <title>AI-Pulse: AI Industry News & Analysis</title>
     <meta name="description" content="Real-time AI industry updates, tool comparisons, and affiliate recommendations." />
+    <link rel="canonical" href={canonicalURL} />
     <style is:global>
       * {
         margin: 0;
