@@ -49,7 +49,7 @@ programs:
   elevenlabs:
     confidence: green
     display_name: ElevenLabs
-    affiliate_url: https://elevenlabs.io/affiliates
+    affiliate_url: https://elevenlabs.io
     tier: 1
     status: ready_to_apply
     official_pages:
@@ -104,7 +104,7 @@ programs:
   hubspot:
     confidence: green
     display_name: HubSpot
-    affiliate_url: https://www.hubspot.com/partners/affiliates
+    affiliate_url: https://www.hubspot.com
     tier: 1
     status: ready_to_apply
     official_pages:
@@ -154,7 +154,7 @@ programs:
   notion:
     confidence: green_with_caveat
     display_name: Notion
-    affiliate_url: https://affiliate.notion.so/
+    affiliate_url: https://www.notion.com
     tier: 1
     status: ready_to_apply
     official_pages:
@@ -205,7 +205,7 @@ programs:
   semrush:
     confidence: green
     display_name: Semrush
-    affiliate_url: https://www.semrush.com/lp/affiliate-program/en/
+    affiliate_url: https://www.semrush.com
     tier: 1
     status: ready_to_apply
     official_pages:
@@ -258,7 +258,7 @@ programs:
   shopify:
     confidence: green
     display_name: Shopify
-    affiliate_url: https://www.shopify.com/affiliates
+    affiliate_url: https://www.shopify.com
     tier: 1
     status: ready_to_apply_with_prep
     official_pages:
@@ -302,7 +302,7 @@ programs:
   jasper:
     confidence: yellow
     display_name: Jasper
-    affiliate_url: https://www.jasper.ai/affiliates
+    affiliate_url: https://www.jasper.ai
     tier: 1
     status: needs_official_verification
     official_pages_to_check:
@@ -342,7 +342,7 @@ programs:
   kinsta:
     confidence: green
     display_name: Kinsta
-    affiliate_url: https://kinsta.com/affiliates/
+    affiliate_url: https://kinsta.com
     tier: 2
     status: future_application
     official_pages:
@@ -384,7 +384,7 @@ programs:
   liquidweb:
     confidence: yellow
     display_name: Liquid Web
-    affiliate_url: https://www.liquidweb.com/affiliates/
+    affiliate_url: https://www.liquidweb.com
     tier: 2
     status: needs_official_verification
     official_pages_to_check:
