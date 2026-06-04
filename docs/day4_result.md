@@ -588,3 +588,126 @@ git checkout main && git merge --no-ff day4-matchrate
 - `PYTHONPATH=. python scripts/verify_affiliate_urls.py` — guard + live HTTP on all 9 config URLs.
 - `cd blog && npm run build` then `PYTHONPATH=. python scripts/verify_render.py` — re-assert render rules.
 - `PYTHONPATH=. python scripts/match_report.py` — re-confirm 10/47 = 21.3%.
+
+---
+
+# Post-merge Cleanup cycle (2026-06-04) — brand floor, backfill repair, pipeline self-repair
+
+> Branch `cleanup-brand-floor` off `main`. Addresses three defects that surfaced after the
+> day4 merge brought the daily bot's articles onto main, plus the `api_calls.db` conflict
+> nuisance. All numbers from real output via the matcher's own logic — no reimplementation.
+
+## Defects fixed
+
+1. **Competitor-mismatch still possible.** The day4 "≥2 distinct keywords" path still matched
+   articles that never name the product. Proven: bot article `2026-06-01-karpathy-llm-wiki-…-obsidian`
+   (about **Obsidian**, a Notion competitor) matched **notion** with `brand_hits=0` on 5 generic PKM
+   keywords (`knowledge base, note-taking, personal knowledge, wiki, workspace`) — never says "Notion."
+2. **Live false FTC disclosure.** Bot article `2026-06-01-odysseus-self-hosted-ai-workspace` had
+   `products: [notion]` + "This article contains affiliate links" but **no block/link** — a frozen
+   pre-merge artifact the bot won't fix (it skips existing files).
+3. **Bot never reconciles existing articles.** `daily-pipeline.yml` injected blocks only at generation
+   time and skipped existing files, so config/URL changes never propagated to published articles.
+
+## Phase 1 — Matcher brand floor
+
+`score_product` qualifying rule (in `src/processors/affiliate_matcher.py`):
+
+```python
+# before:  qualifies = (brand_hits >= 2) or (distinct_nonbrand >= 2)
+# after:   qualifies = (brand_hits >= 1) and ((brand_hits >= 2) or (distinct_nonbrand >= 2))
+```
+
+A product must be **named at least once** to match. This is a strict **tightening** (can only remove
+matches). Re-running the matcher over all articles drops **exactly karpathy**; the **10 day4 matches
+are untouched** (their `brand_hits` are 15–26). Verified delta: `DROPPED=[karpathy], ADDED=[], CHANGED=[]`.
+Matcher unit tests updated: the old "2 generics, no brand → match" case is now a **no-match** case
+(brand floor), plus a positive "brand named + ≥2 distinct → match" case. `test_affiliate_matcher.py`:
+13/13 green; full suite 40 passed (only the 3 pre-existing `test_hackernews.py` failures remain,
+untouched this cycle).
+
+## Phase 2 — Backfill repair + false-disclosure guard
+
+- Ran the href-aware reconciler (now using the brand-floor matcher) over `output/articles`:
+  `stripped=1` (**odysseus** de-matched → `products: []`, "does not contain" disclosure, zero block),
+  `added=0` (**karpathy** stays a non-match — no block added), `ok_matched=10`. Idempotent (2nd run no-op).
+- `verify_render.py` gains the **false-disclosure guard** (DoD #5), asserted for **every** article in
+  **both directions**: `"contains affiliate links"` disclosure present **iff** exactly one rendered
+  block. (The "does not contain affiliate links" wording does not contain the substring — it's
+  "contain", no 's' — so the marker is unambiguous; `about.astro` is a site page, out of the
+  article-scoped loop.)
+- Whole built site (141 article pages): **10 contains-disclosure == 10 blocks == 10 total blocks,
+  0 violations.** odysseus: 0 blocks, "does not contain." Build green (143 pages). Digest refreshed
+  (10 product-page links, 0 forbidden patterns, no karpathy/odysseus).
+
+## Phase 3 — Pipeline self-repair
+
+`daily-pipeline.yml` now runs the reconciler **every run**, placed after `python3 -m src.pipeline.run`
+and before `python3 scripts/sync_articles_to_blog.py`:
+
+```
+PYTHONPATH=. python3 scripts/inject_affiliate_blocks.py output/articles
+```
+
+(`PYTHONPATH=.` because the by-path script imports the `src` package.) Now the bot self-heals
+**already-published** articles: stale matches / false disclosures are repaired, and future
+config/URL changes (e.g. real tracked links) propagate to existing files — not just new ones at
+generation. Reconciler is idempotent (clean run = no diff; verified).
+
+## Phase 4 — `api_calls.db` (investigated, then untracked safely)
+
+**Investigation:** the pipeline only **writes** the DB (`init_db` + `log_api_call` from
+`importance_scorer`/`claude_writer`). The readers (`get_daily_summary`/`print_cost_report`) are called
+**nowhere** in the pipeline or `daily-pipeline.yml` (only `cost_report.py`'s manual `__main__`), and
+there is **no budget gate**. ⇒ **No functional cross-run dependency.** It was also **already listed in
+`.gitignore`** but stayed tracked (committed before the ignore rule), which is what produced the
+recurring binary merge conflict.
+
+**Action (Phase 4 step 2):** `git rm --cached data/api_calls.db` (working file kept). Integrity confirmed
+**before** untracking: `PRAGMA integrity_check = ok`, no FK violations, **364 rows / $0.64972**, span
+2026-05-25 → 2026-06-03. The workflow's `git add data/` no longer re-stages it (gitignored + untracked,
+confirmed via `git check-ignore`). This ends the merge-conflict nuisance and the need for hand-merges.
+
+**Tradeoff (disclosed):** CI cost-logging is now **ephemeral per run** (a fresh CI checkout has no DB →
+`init_db` makes an empty one → not committed). The full 364-row history is preserved in **git history**
+up to the untrack commit. **Proposal (HUMAN-ONLY, not implemented — storage redesign is out of scope):**
+if durable, merge-friendly cost history is wanted, switch `log_api_call` to append a line to an
+**append-only JSONL/CSV** (`data/api_calls.jsonl`) that git merges line-wise without binary conflicts,
+or write to an external store. Left for Hiro.
+
+## Final state
+
+- **Matched set:** the same 10 (9 day4 product articles + `langchain…perplexity130` legacy). Nothing
+  else matched; odysseus and karpathy are non-matches.
+- **Match-rate: 10/141 = 7.1%.** The *count* (10) is unchanged from the day4 cycle; the **percentage
+  dropped only because the denominator grew** from 47 → 141 when the merge brought in the bot's
+  ~94 mostly-non-commercial articles (SDK releases, Anthropic news). Per DoD #8 this is expected and
+  **not a regression** (the brand floor removed exactly 1 spurious match, not any legitimate one).
+- Tests: 40 passed (3 pre-existing HN failures only). No new deps (`requirements.txt` unchanged).
+  No secrets staged; `.env`/`.bak` gitignored; `api_calls.db` untracked.
+
+## Commits on `cleanup-brand-floor` (one per phase)
+- `fix(cleanup): require brand_hits>=1 (drops competitor-mismatch karpathy->notion)`
+- `fix(cleanup): backfill repair (strip odysseus false disclosure) + false-disclosure guard`
+- `ci(cleanup): reconcile existing articles each pipeline run (self-repair + url propagation)`
+- `chore(cleanup): stop tracking api_calls.db`
+
+## Open HUMAN gates (NOT done)
+1. **Merge + push** of `cleanup-brand-floor` (below). Stopped here per instruction.
+2. Dub/Perplexity signup; swapping config `affiliate_url`s for real **tracked** referral links.
+3. The durable cost-history (JSONL) redesign proposal above.
+
+### Ready-to-run commands (for Hiro — NOT run by the agent)
+```
+git checkout main && git merge --no-ff cleanup-brand-floor
+git push origin main
+```
+With `api_calls.db` now untracked, the recurring binary conflict on push is gone. If `origin/main`
+has new bot commits, integrate them with a **merge** (no rebase/force); if any **non-trivial** conflict
+appears, **STOP** rather than hand-merge.
+
+### Reviewer quick-path (cleanup cycle)
+- `PYTHONPATH=. python -m pytest tests/test_affiliate_matcher.py -q` — brand-floor rule + tests.
+- `PYTHONPATH=. python scripts/inject_affiliate_blocks.py output/articles` — reconcile (idempotent; expect all-zeros on a clean tree).
+- `cd blog && npm run build` then `PYTHONPATH=. python scripts/verify_render.py` — render + false-disclosure guard (10/10, 0 violations).
+- `PYTHONPATH=. python scripts/match_report.py` — 10/141 = 7.1% (10 matched unchanged).
