@@ -58,7 +58,7 @@ Both platforms offer free trials. The best choice depends on your timeline, budg
 Visit the official pricing and features pages for both platforms to compare current offerings and speak with support teams about your specific use case.
 
 <div class="affiliate-cta" data-affiliate="shopify">
-<p><strong>Recommended:</strong> <a href="https://www.shopify.com" rel="sponsored nofollow" target="_blank">Try Shopify →</a> — the Shopify pick from this article.</p>
+<p><strong>Recommended:</strong> <a href="https://shopify.pxf.io/1GRvJ9" rel="sponsored nofollow" target="_blank">Try Shopify →</a> — the Shopify pick from this article.</p>
 </div>
 
 *Disclosure: This article contains affiliate links. As an affiliate, we earn from qualifying purchases at no extra cost to you.*

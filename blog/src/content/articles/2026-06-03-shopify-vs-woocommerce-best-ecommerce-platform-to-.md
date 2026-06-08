@@ -55,7 +55,7 @@ The choice between Shopify and WooCommerce ultimately reflects your priorities. 
 
 
 <div class="affiliate-cta" data-affiliate="shopify">
-<p><strong>Recommended:</strong> <a href="https://www.shopify.com" rel="sponsored nofollow" target="_blank">Try Shopify →</a> — the Shopify pick from this article.</p>
+<p><strong>Recommended:</strong> <a href="https://shopify.pxf.io/1GRvJ9" rel="sponsored nofollow" target="_blank">Try Shopify →</a> — the Shopify pick from this article.</p>
 </div>
 
 *Disclosure: This article contains affiliate links. As an affiliate, we earn from qualifying purchases at no extra cost to you.*
