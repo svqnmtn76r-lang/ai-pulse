@@ -49,7 +49,7 @@ programs:
   elevenlabs:
     confidence: green
     display_name: ElevenLabs
-    affiliate_url: https://elevenlabs.io
+    affiliate_url: https://try.elevenlabs.io/lls9tf5hbp3e
     tier: 1
     status: ready_to_apply
     official_pages:
@@ -258,7 +258,7 @@ programs:
   shopify:
     confidence: green
     display_name: Shopify
-    affiliate_url: https://www.shopify.com
+    affiliate_url: https://shopify.pxf.io/1GRvJ9
     tier: 1
     status: ready_to_apply_with_prep
     official_pages:
@@ -342,7 +342,7 @@ programs:
   kinsta:
     confidence: green
     display_name: Kinsta
-    affiliate_url: https://kinsta.com
+    affiliate_url: https://kinsta.com/?kaid=OHVLIYLXQQNA
     tier: 2
     status: future_application
     official_pages:
