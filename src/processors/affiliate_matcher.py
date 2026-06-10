@@ -88,10 +88,24 @@ def calculate_match_score(
     return count_keyword_hits(keywords, text)
 
 
-def brand_tokens_for(product_id: str, product: dict) -> list:
-    """Brand token(s) for a product: lowercased display_name + id.
+# Unambiguous brand spelling variants. These are alternative ways the SAME brand
+# is written in the wild (a space, a digit-prefix, etc.). They are added to the
+# brand-token set so the brand floor still fires when an article names the product
+# in a variant form. Each alias must be unmistakably the brand and nothing else
+# (no generic words) so it CANNOT introduce a false positive -- it only ever
+# matches text that already names the product. Phase 1 (Phase 0 justified no
+# threshold loosening; this is recall-only, false-positive-proof).
+BRAND_ALIASES = {
+    "elevenlabs": {"eleven labs", "11labs"},
+    "liquidweb": {"liquid web", "liquidweb"},
+}
 
-    For liquidweb both spellings ('liquid web', 'liquidweb') are brand tokens.
+
+def brand_tokens_for(product_id: str, product: dict) -> list:
+    """Brand token(s) for a product: lowercased display_name + id + known aliases.
+
+    Aliases (BRAND_ALIASES) cover unambiguous alternate spellings of the same
+    brand (e.g. liquidweb: 'liquid web'/'liquidweb'; elevenlabs: 'eleven labs').
     """
     tokens = set()
     dn = str(product.get("display_name", "")).strip().lower()
@@ -99,8 +113,7 @@ def brand_tokens_for(product_id: str, product: dict) -> list:
         tokens.add(dn)
     if product_id:
         tokens.add(product_id.lower())
-    if product_id == "liquidweb":
-        tokens.update({"liquid web", "liquidweb"})
+    tokens.update(BRAND_ALIASES.get(product_id, set()))
     return [t for t in tokens if t]
 
 

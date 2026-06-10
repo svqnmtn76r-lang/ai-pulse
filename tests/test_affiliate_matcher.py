@@ -135,6 +135,28 @@ class TestProductMatching:
         matches = match_products(article)
         assert all(m["product_id"] != "notion" for m in matches)
 
+    def test_brand_spelling_variant_qualifies(self):
+        """Phase 1: an unambiguous brand spelling variant satisfies the brand
+        floor. 'Eleven Labs' (a space) / '11Labs' name ElevenLabs just as much as
+        'ElevenLabs' does, so an article using a variant + a second signal matches."""
+        for variant in ("Eleven Labs", "11Labs"):
+            article = {
+                "title": f"{variant} ships new model",
+                "summary": f"{variant} is the leading ai voice and text to speech tool.",
+            }
+            matches = match_products(article)
+            assert matches and matches[0]["product_id"] == "elevenlabs", variant
+
+    def test_brand_variant_is_not_a_false_positive_source(self):
+        """The alias must never fire on text that does not name the brand."""
+        article = {
+            "title": "Eleven startups raise funding for research labs in cloud",
+            "summary": "A roundup of eleven research labs building developer tools.",
+        }
+        # 'eleven labs' substring does NOT appear; 'eleven' and 'labs' are separate.
+        matches = match_products(article)
+        assert all(m["product_id"] != "elevenlabs" for m in matches)
+
     def test_match_contains_required_fields(self):
         """Each match should have required fields."""
         article = {
