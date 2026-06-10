@@ -1,0 +1,32 @@
+# Curated competitor / category map for the self-replenishing buyer-intent topic
+# pool (see src/pipeline/topic_pool.py).
+#
+# HUMAN-ONLY (Hiro): verify/extend the competitors + use_cases — you know the real
+# rivals. Accuracy here = relevance of every auto-generated topic.
+#
+# RULE: list ONLY products that have a REAL tracked affiliate_url in
+# data/affiliate_sources.yml (currently ElevenLabs, Shopify, Kinsta). The
+# generator emits COMMERCIAL topics only for products in this file, so commercial
+# articles always carry a real tracked link — never a fake/homepage affiliate
+# block. Add a product here only once it has a tracked link.
+#
+# Fields per product:
+#   category    : the buyer-intent category phrase ("best <category> for <use_case>")
+#   competitors : real head-to-head rivals ("<product> vs <competitor>")
+#   use_cases   : audiences/scenarios ("best <category> for <use_case>")
+
+products:
+  elevenlabs:
+    category: AI voice generator
+    competitors: [Murf, Play.ht, Descript, Resemble AI, WellSaid Labs, Speechify, LOVO]
+    use_cases: [creators, audiobooks, YouTube videos, podcasts, e-learning, game developers]
+
+  shopify:
+    category: ecommerce platform
+    competitors: [Wix, BigCommerce, Squarespace, WooCommerce, Webflow, Square Online, Ecwid]
+    use_cases: [small business, beginners, dropshipping, creators, high-volume stores, B2B]
+
+  kinsta:
+    category: managed WordPress hosting
+    competitors: [WP Engine, Cloudways, SiteGround, Flywheel, Hostinger, Bluehost, Nexcess]
+    use_cases: [agencies, high-traffic sites, WooCommerce stores, small business, startups, developers]
