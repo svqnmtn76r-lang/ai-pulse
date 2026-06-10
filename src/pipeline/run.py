@@ -1,5 +1,7 @@
 """End-to-end article generation pipeline."""
 
+import math
+import os
 import re
 import sys
 from datetime import datetime
@@ -39,37 +41,40 @@ def existing_article_slugs() -> set:
     return slugs
 
 
-def generate_product_article(verbose: bool = True) -> Optional[Path]:
-    """Cadence: generate ONE commercial article from the rotating topic list.
+def product_cadence_count(news_count: int) -> int:
+    """How many product articles to generate this run.
 
-    Dedup-guarded: picks the first topic whose output file does not already exist
-    (any date); if every topic is already generated, logs a reminder and returns
-    None (no error, no repeat). Reuses the normal path: the topic's product is
-    seeded as the match, so the article routes to the comparison/deep_dive
-    template, is centered on (and names) the product, gets the product-page
-    affiliate_url from config, one in-body block, and the FTC disclosure. The
-    pipeline's reconciler step then re-validates the match on the real body
-    (brand>=1).
+    Forward match-rate is driven by the commercial:news ratio. With only ONE
+    product article per run (the old behaviour) against ~10-26 news articles,
+    forward rate was capped at ~4-7%. This targets a commercial *share* instead.
+
+    K is the smallest count making product/(news+product) >= PRODUCT_TARGET_RATIO
+    (default 0.25 -> ~20-25% on typical days), clamped to
+    [PRODUCT_MIN_PER_RUN (default 1), PRODUCT_MAX_PER_RUN (default 6)] to bound
+    API cost and avoid draining the rotation. All three are env-tunable so Hiro
+    can dial the rate without code changes.
     """
-    if not PRODUCT_TOPICS.exists():
-        if verbose:
-            print(f"  (no {PRODUCT_TOPICS} — skipping cadence)")
-        return None
+    target = float(os.environ.get("PRODUCT_TARGET_RATIO", "0.25"))
+    target = min(max(target, 0.0), 0.9)
+    min_per = int(os.environ.get("PRODUCT_MIN_PER_RUN", "1"))
+    max_per = int(os.environ.get("PRODUCT_MAX_PER_RUN", "6"))
+    if target <= 0:
+        k = min_per
+    else:
+        # solve k/(news+k) >= target  ->  k >= target*news/(1-target)
+        k = math.ceil(target * news_count / (1 - target))
+    return max(min_per, min(k, max_per))
 
-    topics = yaml.safe_load(PRODUCT_TOPICS.read_text(encoding="utf-8")) or []
-    programs = load_affiliate_catalog().get("programs", {})
-    existing = existing_article_slugs()
 
-    topic = next(
-        (t for t in topics
-         if (t.get("title") or "").strip()
-         and create_slug(t["title"].strip()) not in existing),
-        None,
-    )
-    if topic is None:
-        print("  rotation exhausted — add topics to data/product_topics.yml")
-        return None
+def _generate_one_topic(topic: dict, programs: dict, verbose: bool) -> Optional[Path]:
+    """Generate a single product article from a topic dict. Returns path or None.
 
+    Reuses the normal path: the topic's product is seeded as the match, so the
+    article routes to the comparison/deep_dive template, is centered on (and
+    names) the product, gets the product-page affiliate_url from config, one
+    in-body block, and the FTC disclosure. The pipeline's reconciler step then
+    re-validates the match on the real body (brand>=1).
+    """
     product_id = (topic.get("product") or "").strip()
     template_type = (topic.get("type") or "comparison").strip()
     prod = programs.get(product_id, {})
@@ -105,6 +110,44 @@ def generate_product_article(verbose: bool = True) -> Optional[Path]:
         return None
 
     return write_article_file(article, body, matched, template_type)
+
+
+def generate_product_articles(news_count: int = 0, verbose: bool = True) -> list:
+    """Cadence: generate UP TO `product_cadence_count(news_count)` commercial
+    articles from the rotating topic list, top-down, skipping any whose output
+    already exists (any date). If the rotation runs dry first, logs a reminder
+    and stops (no error, no repeat).
+    """
+    if not PRODUCT_TOPICS.exists():
+        if verbose:
+            print(f"  (no {PRODUCT_TOPICS} — skipping cadence)")
+        return []
+
+    topics = yaml.safe_load(PRODUCT_TOPICS.read_text(encoding="utf-8")) or []
+    programs = load_affiliate_catalog().get("programs", {})
+    want = product_cadence_count(news_count)
+    if verbose:
+        print(f"  target {want} product article(s) (news={news_count})")
+
+    written = []
+    done_slugs = existing_article_slugs()  # refreshed via the set as we write
+    for topic in topics:
+        if len(written) >= want:
+            break
+        title = (topic.get("title") or "").strip()
+        if not title:
+            continue
+        slug = create_slug(title)
+        if slug in done_slugs:
+            continue
+        path = _generate_one_topic(topic, programs, verbose)
+        if path:
+            written.append(path)
+            done_slugs.add(slug)
+
+    if not written:
+        print("  rotation exhausted — add topics to data/product_topics.yml")
+    return written
 
 
 def run_pipeline(verbose: bool = True) -> dict:
@@ -258,13 +301,15 @@ def run_pipeline(verbose: bool = True) -> dict:
     if verbose and skipped_count > 0:
         print(f"  Skipped (duplicates): {skipped_count}")
 
-    # Step 5: Cadence — generate ONE product (commercial) article per run from
-    # the rotating topic list, so monetizable coverage grows over time.
+    # Step 5: Cadence — generate enough product (commercial) articles from the
+    # rotating topic list to reach the target commercial share (default ~25%),
+    # so forward match-rate clears the 20% goal and monetizable coverage grows.
+    news_written = summary["articles_written"]
     if verbose:
-        print("\n[cadence] Generating one product article from the rotation...")
+        print("\n[cadence] Generating product articles from the rotation...")
     try:
-        product_path = generate_product_article(verbose=verbose)
-        if product_path:
+        product_paths = generate_product_articles(news_count=news_written, verbose=verbose)
+        for product_path in product_paths:
             summary["articles_written"] += 1
             summary["files_created"].append(str(product_path))
             if verbose:

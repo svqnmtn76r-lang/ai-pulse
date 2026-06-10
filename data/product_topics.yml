@@ -5,37 +5,74 @@
 # it; the article then carries the product-page affiliate_url (from
 # data/affiliate_sources.yml) and the FTC disclosure.
 #
-# Keep topics FRESH — do not duplicate the 10 already generated. When the list
-# runs low the pipeline logs "rotation exhausted — add topics" and generates
-# nothing (no error, no repeat). Hiro tunes the rate + extends this catalogue.
+# ORDERING = PRIORITY. The cadence consumes topics top-down, skipping any whose
+# output already exists (any date). TRACKED-URL products (ElevenLabs, Shopify,
+# Kinsta — the ones with a real tracked affiliate link today) are listed FIRST so
+# forward generation prioritises monetizable, revenue-attributable articles. The
+# remaining products match relevantly and target buyer-intent SEO, but their links
+# are plain product pages until Hiro adds tracked URLs in affiliate_sources.yml.
+#
+# Keep topics FRESH — already-generated titles are intentionally NOT relisted here
+# (dedup is by slug, so relisting is harmless but noisy). When the list runs low
+# the pipeline logs "rotation exhausted — add topics" and generates nothing for
+# the cadence (no error, no repeat). Hiro tunes the rate (PRODUCT_* env vars in
+# src/pipeline/run.py) + extends this catalogue.
 #
 # Fields: type (comparison|deep_dive), product (must match a programs.<id> in
-# data/affiliate_sources.yml), title.
+# data/affiliate_sources.yml), title (buyer-intent, SEO-sound).
 
-- type: comparison
-  product: perplexity
-  title: "Perplexity vs Google AI Overviews: which answers better in 2026"
-- type: comparison
-  product: notion
-  title: "Notion vs Coda: which all-in-one workspace fits your team"
-- type: comparison
-  product: semrush
-  title: "Semrush vs Moz: which SEO suite is worth it in 2026"
-- type: comparison
-  product: shopify
-  title: "Shopify vs BigCommerce: best platform for a new store"
-- type: comparison
-  product: jasper
-  title: "Jasper vs Copy.ai: which AI writer for marketing teams"
+# ── Tracked-URL products (priority: real affiliate link today) ──────────────
+
+# ElevenLabs — AI voice / text-to-speech
 - type: comparison
   product: elevenlabs
   title: "ElevenLabs vs Murf: best AI voice generator for creators"
 - type: comparison
-  product: hubspot
-  title: "HubSpot vs Mailchimp: which for inbound and email"
+  product: elevenlabs
+  title: "ElevenLabs vs PlayHT: best AI voice for audiobooks in 2026"
+- type: comparison
+  product: elevenlabs
+  title: "ElevenLabs vs Descript: AI voiceover and dubbing compared"
+- type: deep_dive
+  product: elevenlabs
+  title: "ElevenLabs review 2026: AI voice and text-to-speech tested"
+
+# Shopify — ecommerce platform
+- type: comparison
+  product: shopify
+  title: "Shopify vs Wix: best ecommerce platform for beginners in 2026"
+- type: comparison
+  product: shopify
+  title: "Shopify vs Squarespace: best way to sell online and scale"
+- type: deep_dive
+  product: shopify
+  title: "Shopify review 2026: best ecommerce platform for dropshipping"
+
+# Kinsta — managed WordPress hosting
 - type: comparison
   product: kinsta
   title: "Kinsta vs WP Engine: managed WordPress hosting compared"
+- type: comparison
+  product: kinsta
+  title: "Kinsta vs Cloudways: best managed WordPress hosting for speed"
+- type: comparison
+  product: kinsta
+  title: "Kinsta vs SiteGround: managed hosting for WooCommerce stores"
+- type: deep_dive
+  product: kinsta
+  title: "Kinsta review 2026: managed WordPress hosting for agencies"
+
+# ── Secondary products (match + SEO; product-page link until tracked URL added) ─
+
+- type: comparison
+  product: hubspot
+  title: "HubSpot vs Mailchimp: which for inbound and email"
+- type: comparison
+  product: hubspot
+  title: "HubSpot vs Salesforce: best CRM for small business in 2026"
+- type: comparison
+  product: jasper
+  title: "Jasper vs Writesonic: best AI writer for SEO content"
 - type: comparison
   product: liquidweb
   title: "Liquid Web vs Cloudways: managed hosting for growing sites"
