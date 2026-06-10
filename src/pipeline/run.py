@@ -25,6 +25,7 @@ from src.processors.claude_writer import (
 )
 from src.utils.state_store import SeenArticleStore
 from src.analytics.cost_report import init_db
+from src.pipeline.topic_pool import replenish_topic_pool
 
 OUTPUT_DIR = Path("output/articles")
 PRODUCT_TOPICS = Path("data/product_topics.yml")
@@ -170,6 +171,12 @@ def run_pipeline(verbose: bool = True) -> dict:
         "errors": 0,
         "files_created": [],
     }
+
+    # Step 0: keep the commercial topic pool fed BEFORE the cadence selects topics,
+    # so the run never hits "rotation exhausted". Idempotent + never blocks the run.
+    if verbose:
+        print("\n[0/4] Replenishing commercial topic pool...")
+    summary["topic_pool"] = replenish_topic_pool(verbose=verbose)
 
     seen_store = SeenArticleStore()
 

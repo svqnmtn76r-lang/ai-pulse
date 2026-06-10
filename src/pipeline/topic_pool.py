@@ -242,11 +242,15 @@ def iter_candidate_topics(topic_map: dict = None, catalog: dict = None) -> list:
     return out
 
 
-def generate_new_topics(limit: int, pool: list = None,
-                        topic_map: dict = None, catalog: dict = None):
+def generate_new_topics(limit: int, pool: list = None, pub_slugs: set = None,
+                        pub_titles: list = None, topic_map: dict = None,
+                        catalog: dict = None):
     """Up to `limit` NEW topics that duplicate neither a published article nor a
     pool entry — by SLUG and by SEMANTIC key (so re-worded duplicates like
     "X vs Y: which is better" vs an existing "X vs Y: best ..." are caught).
+
+    `pub_slugs`/`pub_titles` default to a disk scan; pass them explicitly to
+    simulate against an injected published set (no disk).
 
     Returns (new_topics, remaining_candidates): remaining_candidates is how many
     additional unused, non-duplicate candidates still exist (low-supply signal).
@@ -255,9 +259,11 @@ def generate_new_topics(limit: int, pool: list = None,
     pool = load_pool() if pool is None else pool
     catalog = load_affiliate_catalog().get("programs", {}) if catalog is None else catalog
     name2pid = _name_to_pid(catalog)
+    pub_slugs = published_slugs() if pub_slugs is None else pub_slugs
+    pub_titles = published_titles() if pub_titles is None else pub_titles
 
-    slug_taken = set(published_slugs()) | pool_slugs(pool)
-    key_taken = taken_keys(pool, published_titles(), name2pid)
+    slug_taken = set(pub_slugs) | pool_slugs(pool)
+    key_taken = taken_keys(pool, pub_titles, name2pid)
 
     chosen, chosen_keys, chosen_slugs = [], set(), set()
     remaining = 0
@@ -274,3 +280,97 @@ def generate_new_topics(limit: int, pool: list = None,
         else:
             remaining += 1
     return chosen, remaining
+
+
+# --------------------------------------------------------------------------- #
+# Phase 2/3: top-up + low-supply warning
+# --------------------------------------------------------------------------- #
+def _fresh_count(pool: list, pub_slugs: set) -> int:
+    return sum(1 for t in pool
+               if (t.get("title") or "").strip()
+               and create_slug(t["title"].strip()) not in pub_slugs)
+
+
+def plan_replenishment(pool: list, pub_slugs: set, pub_titles: list,
+                       catalog: dict = None):
+    """Decide the top-up WITHOUT touching disk (pure -> testable/simulatable).
+
+    Returns (to_add, fresh_before, reserve_after, warn_msg|None). If the FRESH
+    (unpublished) pool is already >= LOW threshold, returns ([], fresh, ...) — a
+    no-op (idempotent). Otherwise picks enough NEW deduped topics to reach the
+    TARGET buffer (bounded by what the curated map can supply).
+    """
+    low = _low_threshold()
+    target = _target_buffer()
+    fresh = _fresh_count(pool, pub_slugs)
+    if fresh >= low:
+        return [], fresh, None, None  # healthy — nothing to do
+
+    need = max(0, target - fresh)
+    to_add, reserve = generate_new_topics(
+        need, pool=pool, pub_slugs=pub_slugs, pub_titles=pub_titles, catalog=catalog
+    )
+    post_fresh = fresh + len(to_add)
+    warn = None
+    if post_fresh < low:
+        warn = (f"only {post_fresh} fresh commercial topics after top-up "
+                f"(< low threshold {low}); extend data/topic_map.yml with more "
+                f"competitors / use_cases.")
+    elif reserve < _warn_reserve():
+        warn = (f"topic reserve low ({reserve} unused candidates left after "
+                f"top-up); extend data/topic_map.yml soon to stay ahead of drain.")
+    return to_add, fresh, reserve, warn
+
+
+def _emit_low_supply_warning(msg: str, verbose: bool = True):
+    """Surface a low-supply alert. Uses a GitHub Actions ::warning:: annotation
+    (shows in the workflow run UI / summary) plus a plain log line. Never raises."""
+    if verbose:
+        print(f"[topic-pool] LOW SUPPLY: {msg}")
+    # idiomatic CI notification; harmless when run locally
+    print(f"::warning title=AI-Pulse commercial topic pool low::{msg}")
+
+
+def _append_topics_to_file(topics: list):
+    """Append topics to data/product_topics.yml as text (preserves the file's
+    header comments + existing entries; never rewrites/reorders)."""
+    if not topics:
+        return
+    stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    lines = [f"\n# --- auto-replenished {stamp} ---"]
+    for t in topics:
+        title = str(t["title"]).replace('\\', '\\\\').replace('"', '\\"')
+        lines.append(f"- type: {t['type']}")
+        lines.append(f"  product: {t['product']}")
+        lines.append(f'  title: "{title}"')
+    text = PRODUCT_TOPICS.read_text(encoding="utf-8")
+    if not text.endswith("\n"):
+        text += "\n"
+    PRODUCT_TOPICS.write_text(text + "\n".join(lines) + "\n", encoding="utf-8")
+
+
+def replenish_topic_pool(verbose: bool = True) -> dict:
+    """Top-up entry point — call at the start of each pipeline run, before the
+    commercial cadence selects topics. Idempotent: a no-op when the pool is
+    healthy. Never blocks the run.
+    """
+    try:
+        pool = load_pool()
+        pub_s = published_slugs()
+        pub_t = published_titles()
+        to_add, fresh, reserve, warn = plan_replenishment(pool, pub_s, pub_t)
+        if to_add:
+            _append_topics_to_file(to_add)
+            if verbose:
+                print(f"[topic-pool] topped up: fresh {fresh} -> {fresh + len(to_add)} "
+                      f"(+{len(to_add)}), reserve {reserve}")
+        elif verbose:
+            print(f"[topic-pool] healthy: fresh={fresh} (>= low threshold), no top-up")
+        if warn:
+            _emit_low_supply_warning(warn, verbose)
+        return {"fresh_before": fresh, "added": len(to_add),
+                "fresh_after": fresh + len(to_add), "reserve": reserve,
+                "warned": bool(warn)}
+    except Exception as e:  # never block the pipeline on a top-up failure
+        print(f"[topic-pool] top-up skipped (non-fatal): {e}")
+        return {"error": str(e)}
