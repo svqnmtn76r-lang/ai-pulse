@@ -16,6 +16,11 @@ export function isMoneyPage(data: ArticleData): boolean {
   return Array.isArray(data.products) && data.products.length > 0;
 }
 
+/** Date-stripped slug, so date-variants of the same article collapse to one key. */
+export function baseSlug(slug: string): string {
+  return slug.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+}
+
 /** Collapse whitespace and clamp to `max` chars on a word boundary. */
 export function clamp(input: string, max = 160): string {
   const s = (input || '').replace(/\s+/g, ' ').trim();
@@ -99,6 +104,40 @@ export function articleDescription(data: ArticleData, markdown: string): string 
     if (d) return d;
   }
   return excerpt(markdown) || clamp(String(data.title || ''), 160);
+}
+
+/** Extract GENUINE Q&A pairs from the body: markdown headings that are questions
+ *  (end with "?") followed by real answer text. Used to emit FAQPage schema ONLY
+ *  when the article actually contains visible Q&A (Google policy). Returns [] when
+ *  there is no real Q&A — callers should require >= 2 pairs before emitting. */
+export function extractFaq(markdown: string): { q: string; a: string }[] {
+  const md = markdown || '';
+  const lines = md.split('\n');
+  const out: { q: string; a: string }[] = [];
+  for (let i = 0; i < lines.length; i++) {
+    const h = lines[i].match(/^#{2,4}\s+(.*\?)\s*$/);
+    if (!h) continue;
+    const q = h[1].replace(/[*_`]+/g, '').trim();
+    const ans: string[] = [];
+    for (let j = i + 1; j < lines.length; j++) {
+      if (/^#{1,6}\s+/.test(lines[j])) break;
+      ans.push(lines[j]);
+    }
+    const a = ans.join(' ')
+      .replace(/<div class="affiliate-cta"[\s\S]*?<\/div>/gi, ' ')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+      .replace(/[*_`~>|#]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (a.length >= 40) out.push({ q, a: clamp(a, 320) });
+  }
+  // Only treat as a GENUINE FAQ when the article has an explicit FAQ section, or
+  // a real Q&A list (>= 3 Q&A pairs). One or two rhetorical question-headings in a
+  // comparison are NOT an FAQ — don't mark those up.
+  const hasFaqHeading = /^#{1,6}\s+.*\b(faq|frequently asked questions)\b/im.test(md);
+  if (!hasFaqHeading && out.length < 3) return [];
+  return out;
 }
 
 /** Page <title>: append the brand only when it keeps the title reasonably short
