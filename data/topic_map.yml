@@ -2,7 +2,9 @@
 # pool (see src/pipeline/topic_pool.py).
 #
 # HUMAN-ONLY (Hiro): verify/extend the competitors + use_cases — you know the real
-# rivals. Accuracy here = relevance of every auto-generated topic.
+# rivals. Accuracy here = relevance of every auto-generated topic. The richer this
+# map, the longer the auto-buffer lasts before a low-supply warning asks you to
+# extend it (≈ each competitor +1 topic, each use_case +1 topic, per product).
 #
 # RULE: list ONLY products that have a REAL tracked affiliate_url in
 # data/affiliate_sources.yml (currently ElevenLabs, Shopify, Kinsta). The
@@ -18,15 +20,75 @@
 products:
   elevenlabs:
     category: AI voice generator
-    competitors: [Murf, Play.ht, Descript, Resemble AI, WellSaid Labs, Speechify, LOVO]
-    use_cases: [creators, audiobooks, YouTube videos, podcasts, e-learning, game developers]
+    competitors:
+      - Murf
+      - Play.ht
+      - Descript
+      - Resemble AI
+      - WellSaid Labs
+      - Speechify
+      - LOVO
+      - Amazon Polly
+      - Microsoft Azure TTS
+      - Google Cloud Text-to-Speech
+      - Fliki
+      - Camb.AI
+    use_cases:
+      - creators
+      - audiobooks
+      - YouTube videos
+      - podcasts
+      - e-learning
+      - game developers
+      - video dubbing
+      - IVR phone systems
 
   shopify:
     category: ecommerce platform
-    competitors: [Wix, BigCommerce, Squarespace, WooCommerce, Webflow, Square Online, Ecwid]
-    use_cases: [small business, beginners, dropshipping, creators, high-volume stores, B2B]
+    competitors:
+      - Wix
+      - BigCommerce
+      - Squarespace
+      - WooCommerce
+      - Webflow
+      - Square Online
+      - Ecwid
+      - Shift4Shop
+      - Volusion
+      - Big Cartel
+      - Adobe Commerce
+      - PrestaShop
+    use_cases:
+      - small business
+      - beginners
+      - dropshipping
+      - creators
+      - high-volume stores
+      - B2B
+      - print on demand
+      - subscription products
 
   kinsta:
     category: managed WordPress hosting
-    competitors: [WP Engine, Cloudways, SiteGround, Flywheel, Hostinger, Bluehost, Nexcess]
-    use_cases: [agencies, high-traffic sites, WooCommerce stores, small business, startups, developers]
+    competitors:
+      - WP Engine
+      - Cloudways
+      - SiteGround
+      - Flywheel
+      - Hostinger
+      - Bluehost
+      - Nexcess
+      - Pagely
+      - Pressable
+      - Rocket.net
+      - GridPane
+      - Namecheap
+    use_cases:
+      - agencies
+      - high-traffic sites
+      - WooCommerce stores
+      - small business
+      - startups
+      - developers
+      - enterprise
+      - bloggers
