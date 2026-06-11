@@ -1,0 +1,6 @@
+# Cloudflare Pages redirects.
+# Astro's @astrojs/sitemap emits sitemap-index.xml (+ sitemap-0.xml), NOT the
+# conventional sitemap.xml. Cloudflare serves unknown paths as the HTML 404 page
+# with HTTP 200, so a GSC submission of /sitemap.xml fetches HTML and fails with
+# "Sitemap could not be read". Alias the conventional path to the real index.
+/sitemap.xml  /sitemap-index.xml  301
