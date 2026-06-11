@@ -1,4 +1,5 @@
 ---
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <html lang="en">
@@ -8,6 +9,8 @@
     <meta name="impact-site-verification" value="65ec253d-55b2-4dde-82a4-5e965a7276be" />
     <meta name="google-site-verification" content="JdgTXgV9uOPI6eepV_tUrNpivaKgTEs8fEOTfOMWjdo" />
     <title>About - AI-Pulse</title>
+    <meta name="description" content="About AI-Pulse: real-time AI industry news plus hands-on tool comparisons and reviews. Our editorial approach and FTC affiliate disclosure." />
+    <link rel="canonical" href={canonicalURL} />
     <style is:global>
       * {
         margin: 0;
