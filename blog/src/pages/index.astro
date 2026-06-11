@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
 
 const articles = await getCollection('articles');
 const byDateDesc = (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
@@ -17,13 +18,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="impact-site-verification" value="65ec253d-55b2-4dde-82a4-5e965a7276be" />
-    <meta name="google-site-verification" content="JdgTXgV9uOPI6eepV_tUrNpivaKgTEs8fEOTfOMWjdo" />
-    <title>AI-Pulse: AI Industry News & Analysis</title>
-    <meta name="description" content="Real-time AI industry updates, tool comparisons, and affiliate recommendations." />
-    <link rel="canonical" href={canonicalURL} />
+    <BaseHead
+      title="AI-Pulse: AI Industry News & Analysis"
+      description="Real-time AI industry news plus hands-on, independent comparisons and reviews of the AI tools and SaaS worth paying for in 2026."
+      canonical={canonicalURL}
+    />
     <style is:global>
       * {
         margin: 0;

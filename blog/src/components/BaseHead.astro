@@ -1,0 +1,37 @@
+---
+// Shared <head> for every page: charset/viewport, site-verification tags
+// (Impact + Google Search Console), title, meta description, canonical, and
+// Open Graph / Twitter card tags. Per-page JSON-LD is passed via the default
+// <slot/> (rendered after these tags).
+interface Props {
+  title: string;        // full <title> text (already brand-managed)
+  description: string;
+  canonical: string | URL;
+  ogType?: 'website' | 'article';
+}
+const { title, description, canonical, ogType = 'website' } = Astro.props;
+const href = canonical.toString();
+const SITE = 'AI-Pulse';
+---
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width" />
+<meta name="impact-site-verification" value="65ec253d-55b2-4dde-82a4-5e965a7276be" />
+<meta name="google-site-verification" content="JdgTXgV9uOPI6eepV_tUrNpivaKgTEs8fEOTfOMWjdo" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={href} />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<!-- Open Graph -->
+<meta property="og:type" content={ogType} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={href} />
+<meta property="og:site_name" content={SITE} />
+
+<!-- Twitter (summary card; no per-article image asset, so no large-image card) -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+
+<slot />

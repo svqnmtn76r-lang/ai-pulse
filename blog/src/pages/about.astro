@@ -1,16 +1,15 @@
 ---
+import BaseHead from '../components/BaseHead.astro';
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="impact-site-verification" value="65ec253d-55b2-4dde-82a4-5e965a7276be" />
-    <meta name="google-site-verification" content="JdgTXgV9uOPI6eepV_tUrNpivaKgTEs8fEOTfOMWjdo" />
-    <title>About - AI-Pulse</title>
-    <meta name="description" content="About AI-Pulse: real-time AI industry news plus hands-on tool comparisons and reviews. Our editorial approach and FTC affiliate disclosure." />
-    <link rel="canonical" href={canonicalURL} />
+    <BaseHead
+      title="About | AI-Pulse"
+      description="About AI-Pulse: real-time AI industry news plus hands-on tool comparisons and reviews. Our editorial approach and FTC affiliate disclosure."
+      canonical={canonicalURL}
+    />
     <style is:global>
       * {
         margin: 0;

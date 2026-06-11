@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
 
 // All commercial articles (frontmatter `products` non-empty), newest first.
 const articles = await getCollection('articles');
@@ -12,13 +13,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="impact-site-verification" value="65ec253d-55b2-4dde-82a4-5e965a7276be" />
-    <meta name="google-site-verification" content="JdgTXgV9uOPI6eepV_tUrNpivaKgTEs8fEOTfOMWjdo" />
-    <title>Reviews & Comparisons - AI-Pulse</title>
-    <meta name="description" content="Hands-on reviews and head-to-head comparisons of AI tools and SaaS products." />
-    <link rel="canonical" href={canonicalURL} />
+    <BaseHead
+      title="Reviews & Comparisons | AI-Pulse"
+      description="Hands-on reviews and head-to-head comparisons of AI tools and SaaS — pricing, features, and which one wins for your use case. Updated for 2026."
+      canonical={canonicalURL}
+    />
     <style is:global>
       * {
         margin: 0;
