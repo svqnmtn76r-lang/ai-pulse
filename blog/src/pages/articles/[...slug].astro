@@ -65,7 +65,12 @@ interface Props {
 }
 
 const { data, markdown, related } = Astro.props;
-const html = await marked.parse(markdown);
+// The page's only <h1> is the article title (below). Any h1 inside the markdown
+// body (some news bodies start with a top-level "# heading") is demoted to <h2>
+// so every page has exactly one <h1>.
+const html = (await marked.parse(markdown))
+  .replace(/<h1(\s[^>]*)?>/gi, '<h2>')
+  .replace(/<\/h1>/gi, '</h2>');
 
 // Absolute canonical URL (Astro.site is set in astro.config.mjs).
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
