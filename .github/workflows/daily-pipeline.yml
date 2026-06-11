@@ -51,12 +51,33 @@ jobs:
 
       - name: Commit new articles
         run: |
+          set -euo pipefail
           git config user.name "AI-Pulse Bot"
           git config user.email "bot@aipulse.pages.dev"
+
+          # Stage generated content + data (gitignored DBs are skipped automatically).
           git add output/articles/ blog/src/content/articles/ data/
+
+          # Skip cleanly when there is nothing to commit (success, not failure).
           if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "chore: auto-generated articles $(date -u +%Y-%m-%d)"
-            git push
+            echo "No changes to commit — skipping."
+            exit 0
           fi
+
+          git commit -m "chore: auto-generated articles $(date -u +%Y-%m-%d)"
+
+          # The remote may have advanced while this job ran (manual pushes or an
+          # overlapping run), which previously caused a non-fast-forward 'rejected'
+          # push. Rebase onto the latest origin/main, then push — retry to absorb a
+          # race with a concurrent pusher.
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase --autostash origin main || { echo "rebase failed"; exit 1; }
+            if git push origin HEAD:main; then
+              echo "Pushed on attempt $attempt."
+              exit 0
+            fi
+            echo "Push attempt $attempt rejected (remote advanced); retrying..."
+            sleep 5
+          done
+          echo "Failed to push after retries." >&2
+          exit 1
