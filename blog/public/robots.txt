@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ai-pulse-b35.pages.dev/sitemap-index.xml
+Sitemap: https://aitickerhq.com/sitemap-index.xml

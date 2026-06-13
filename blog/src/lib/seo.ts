@@ -144,5 +144,5 @@ export function extractFaq(markdown: string): { q: string; a: string }[] {
  *  (the buyer-intent article titles are already long + descriptive). */
 export function pageTitle(rawTitle: string): string {
   const t = String(rawTitle || '').trim();
-  return t.length <= 50 ? `${t} | AI-Pulse` : t;
+  return t.length <= 50 ? `${t} | AI Ticker HQ` : t;
 }

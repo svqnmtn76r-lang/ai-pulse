@@ -4,3 +4,9 @@
 # with HTTP 200, so a GSC submission of /sitemap.xml fetches HTML and fails with
 # "Sitemap could not be read". Alias the conventional path to the real index.
 /sitemap.xml  /sitemap-index.xml  301
+
+# Domain migration: 301 the old Cloudflare Pages subdomain to the custom domain.
+# Same Cloudflare account, so the old *.pages.dev project still serves this file
+# and forwards every path (:splat) to aitickerhq.com. The `!` forces the redirect
+# even if a matching asset exists.
+https://ai-pulse-b35.pages.dev/* https://aitickerhq.com/:splat 301!

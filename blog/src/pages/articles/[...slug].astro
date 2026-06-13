@@ -87,7 +87,7 @@ const commercial = isMoneyPage(data);
 // has no rating system, so emitting star ratings would be fabrication). ---
 const publisher = {
   '@type': 'Organization',
-  name: 'AI-Pulse',
+  name: 'AI Ticker HQ',
   logo: { '@type': 'ImageObject', url: new URL('/favicon.svg', Astro.site).toString() },
 };
 const jsonLd: any[] = [
@@ -98,7 +98,7 @@ const jsonLd: any[] = [
     description: metaDescription,
     datePublished: data.date,
     dateModified: data.generated_at || data.date,
-    author: { '@type': 'Organization', name: 'AI-Pulse', url: origin },
+    author: { '@type': 'Organization', name: 'AI Ticker HQ', url: origin },
     publisher,
     mainEntityOfPage: canonical,
     url: canonical,
@@ -291,7 +291,7 @@ const ldJson = jsonLd.map((o) => JSON.stringify(o).replace(/</g, '\\u003c'));
   </head>
   <body>
     <header>
-      <a href="/" class="site-brand">AI-Pulse</a>
+      <a href="/" class="site-brand">AI Ticker HQ</a>
       <nav>
         <a href="/">← Back to Home</a>
         <a href="/about">About</a>
@@ -323,7 +323,7 @@ const ldJson = jsonLd.map((o) => JSON.stringify(o).replace(/</g, '\\u003c'));
       )}
     </main>
     <footer>
-      <p>&copy; 2026 AI-Pulse. <a href="/about">About & Disclosure</a></p>
+      <p>&copy; 2026 AI Ticker HQ. <a href="/about">About & Disclosure</a></p>
     </footer>
   </body>
 </html>

@@ -6,6 +6,6 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   // Deployed on Cloudflare Pages. `site` makes canonical + sitemap emit
   // absolute URLs (required for SEO / search-engine indexing).
-  site: 'https://ai-pulse-b35.pages.dev',
+  site: 'https://aitickerhq.com',
   integrations: [sitemap()],
 });
