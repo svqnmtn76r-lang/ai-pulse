@@ -12,8 +12,15 @@ export interface ArticleData {
   date?: string;
 }
 
+// Genuine commercial templates. A keyword-matched product is NOT sufficient on
+// its own: news / SDK release notes can match a product name by coincidence
+// (e.g. a "langchain-perplexity==1.4.0" release note keyword-matches "perplexity"),
+// which previously leaked release notes into /reviews and the related-links graph.
+const COMMERCIAL_CATEGORIES = new Set(['comparison', 'tool_launch', 'deep_dive']);
+
 export function isMoneyPage(data: ArticleData): boolean {
-  return Array.isArray(data.products) && data.products.length > 0;
+  if (!Array.isArray(data.products) || data.products.length === 0) return false;
+  return COMMERCIAL_CATEGORIES.has(String(data.category || '').toLowerCase());
 }
 
 /** Date-stripped slug, so date-variants of the same article collapse to one key. */
