@@ -13,8 +13,8 @@ CLAUDE.md §0.3.1 ハードルールに基づく一次情報の取得記録。
 | 2026-06-19 | WP Engine | https://wpengine.com/plans/ | 🟢 |
 | 2026-06-19 | Jasper | https://www.jasper.ai/pricing | 🟢 |
 | 2026-06-19 | Copy.ai | https://www.copy.ai/prices | 🟢 |
-| 2026-06-19 | Shopify | https://www.shopify.com/pricing | 🟡 構造/手数料は🟢、USD金額は地域がJPY表示で未取得 |
-| 2026-06-19 | WooCommerce | （コア無料・未fetch） | 🟡 公式fetch証跡なし、要確認 |
+| 2026-06-19 | Shopify | https://www.shopify.com/pricing | 🟡 構造/手数料は🟢。自社ページがJPY地域固定でUSD直接取得不可→WooCommerce公式比較表でUSDを裏取り |
+| 2026-06-19 | WooCommerce | https://woocommerce.com/pricing/ | 🟢 |
 
 ---
 
@@ -83,6 +83,15 @@ CLAUDE.md §0.3.1 ハードルールに基づく一次情報の取得記録。
 - 月額（JPY表示・参考）: Basic ¥4,850(月)/¥4,365(年), Grow ¥13,500/¥12,150, Advanced ¥58,500/¥52,650, Plus from ¥368,000
 - ⚠️差分: ①中位プラン名「Shopify」→「Grow」。②Advanced取引手数料「0.5%」→公式「0.6%」。③**USD金額は未取得**（ページがJPY地域表示）。USDは要再取得（地域切替 or Hiro確認）。
 
-## WooCommerce 🟡（未fetch）
-- コアプラグインは無料（オープンソース）という記述は一般に正しいが、**今回公式fetchの証跡なし**。
-- 要対応: woocommerce.com を公式fetchし、コア無料＋有料拡張/ホスティング前提を証跡化。現状🟡。
+## WooCommerce 🟢（2026-06-19, woocommerce.com/pricing/）
+- コアプラットフォーム: **無料・月額サブスクなし・no platform fee・no revenue share**
+- ホスティング: **$25–$350/mo**（most stores、トラフィック/性能で変動）
+- 拡張: **$29–$299/year per extension**（à la carte）
+- 決済: WooPayments **~2.5–2.9% + 30¢**、任意ゲートウェイ可（追加手数料なし）
+- ⚠️差分（修正済）: 記事「ホスティング $10–120/mo・拡張 $500–2,000/yr」→公式「$25–350/mo・$29–299/yr each」。最低TCO「~$800/yr」→「~$400/yr」。
+
+### 付記: WooCommerce公式比較表によるShopify USDの裏取り（2026-06-19）
+WooCommerce公式pricingの比較表に掲載のShopify値（競合掲載＝🟡だが手数料は自社ページと一致）:
+- Shopify Basic $29/mo（年払い表記）, Advanced **$399/month**, Plus **$2,300+/month**
+- 第三者決済追加手数料: Advanced **0.6%** / Plus **0.2%**（Shopify自社ページと一致）
+→ 記事のShopify USDは「Basic ~$39/mo・Grow ~$105/mo・Advanced ~$399/mo・Plus from ~$2,300/mo（USD; verify on shopify.com）」とし、🟡（自社USDページ未取得・要最終確認）で掲載。

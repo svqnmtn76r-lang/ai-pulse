@@ -29,11 +29,11 @@ The headline price is never the real cost — read the total-cost-of-ownership r
 
 | | Shopify | WooCommerce |
 |---|---|---|
-| Software | Basic · Grow · Advanced · Plus (4 tiers; confirm current USD on shopify.com) | Core plugin free (open source) |
-| Required extras | Included (hosting, SSL, CDN) | Hosting $10–120/mo + domain $12–20/yr + premium extensions $500–2,000/yr |
+| Software | Basic ~$39/mo · Grow ~$105/mo · Advanced ~$399/mo · Plus from ~$2,300/mo (USD; verify on shopify.com) | Core plugin free (open source), no platform fee or revenue share |
+| Required extras | Included (hosting, SSL, CDN) | Hosting $25–350/mo + domain $12–20/yr + extensions $29–299/yr each |
 | Platform transaction fee | 2% Basic / 1% Grow / 0.6% Advanced / 0.2% Plus if not using Shopify Payments | None |
-| Native payments | Shopify Payments 2.9% + 30¢ (US) | WooPayments 2.9% + 30¢ (US) |
-| Realistic annual cost | Basic store ~$800/yr+; scales with plan/apps | ~$800/yr basic → $5,000–15,000/yr feature-rich |
+| Native payments | Shopify Payments 2.9% + 30¢ (US) | WooPayments ~2.5–2.9% + 30¢ (US) |
+| Realistic annual cost | Basic store ~$800/yr+; scales with plan/apps | ~$500/yr basic → $5,000–15,000/yr feature-rich |
 | Hosting and updates | Fully managed | You manage (or pay a host) |
 
 At low volume the costs are close. As you scale, WooCommerce's lack of a platform transaction fee saves real money — but WooCommerce shifts cost to time and maintenance: hosting, plugin conflicts, security, and developer hours. On either platform, the advertised price and the true cost can diverge significantly once you add apps and labor.
@@ -64,7 +64,7 @@ Shopify handles scaling for you — infrastructure, uptime, and checkout load ar
 
 ## FAQ
 
-**Is WooCommerce really free?** The plugin is free, but a working store needs paid hosting, a domain, and usually premium extensions — realistically around $800/yr minimum.
+**Is WooCommerce really free?** The plugin itself is free with no platform fee or revenue share, but a working store needs paid hosting ($25–350/mo) and a domain, plus any à la carte extensions ($29–299/yr each) — realistically ~$400/yr minimum.
 
 **Which is cheaper overall?** At low volume they're comparable. At higher revenue WooCommerce is usually cheaper on platform fees, but Shopify can be cheaper once you value your time and avoided maintenance.
 
