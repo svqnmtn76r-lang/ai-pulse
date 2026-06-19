@@ -136,8 +136,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       <p class="subtitle">AI News &amp; Tools Intelligence — real-time updates on AI tools, research, and industry news</p>
       <nav>
         <a href="/">Home</a>
-        <a href="/reviews">Reviews</a>
-        <a href="/about">About</a>
+        <a href="/reviews/">Reviews</a>
+        <a href="/about/">About</a>
       </nav>
     </header>
     <main>
@@ -146,13 +146,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           <h2 class="section-title">
             Reviews &amp; Comparisons
             {commercialArticles.length > featuredReviews.length && (
-              <a class="see-all" href="/reviews">See all {commercialArticles.length} →</a>
+              <a class="see-all" href="/reviews/">See all {commercialArticles.length} →</a>
             )}
           </h2>
           {featuredReviews.map((article) => (
             <article key={article.id}>
               <h2>
-                <a href={`/articles/${article.id}`}>
+                <a href={`/articles/${article.id}/`}>
                   {article.data.title}
                 </a>
               </h2>
@@ -163,7 +163,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
                 ))}
               </div>
               <p>
-                <a href={`/articles/${article.id}`}>Read review →</a>
+                <a href={`/articles/${article.id}/`}>Read review →</a>
               </p>
             </article>
           ))}
@@ -178,7 +178,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           sortedArticles.map((article) => (
             <article key={article.id}>
               <h2>
-                <a href={`/articles/${article.id}`}>
+                <a href={`/articles/${article.id}/`}>
                   {article.data.title}
                 </a>
               </h2>
@@ -189,7 +189,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
                 )}
               </div>
               <p>
-                <a href={`/articles/${article.id}`}>Read more →</a>
+                <a href={`/articles/${article.id}/`}>Read more →</a>
               </p>
             </article>
           ))
@@ -197,7 +197,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       </section>
     </main>
     <footer>
-      <p>&copy; 2026 AI Ticker HQ. <a href="/about">About & Disclosure</a></p>
+      <p>&copy; 2026 AI Ticker HQ. <a href="/about/">About & Disclosure</a></p>
     </footer>
   </body>
 </html>

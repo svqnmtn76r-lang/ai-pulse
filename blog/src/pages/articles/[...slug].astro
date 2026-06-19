@@ -294,7 +294,7 @@ const ldJson = jsonLd.map((o) => JSON.stringify(o).replace(/</g, '\\u003c'));
       <a href="/" class="site-brand">AI Ticker HQ</a>
       <nav>
         <a href="/">← Back to Home</a>
-        <a href="/about">About</a>
+        <a href="/about/">About</a>
       </nav>
     </header>
     <main>
@@ -316,14 +316,14 @@ const ldJson = jsonLd.map((o) => JSON.stringify(o).replace(/</g, '\\u003c'));
           <h2>Related comparisons &amp; reviews</h2>
           <ul>
             {related.map((r) => (
-              <li><a href={`/articles/${r.slug}`}>{r.title}</a></li>
+              <li><a href={`/articles/${r.slug}/`}>{r.title}</a></li>
             ))}
           </ul>
         </aside>
       )}
     </main>
     <footer>
-      <p>&copy; 2026 AI Ticker HQ. <a href="/about">About & Disclosure</a></p>
+      <p>&copy; 2026 AI Ticker HQ. <a href="/about/">About & Disclosure</a></p>
     </footer>
   </body>
 </html>

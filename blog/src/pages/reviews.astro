@@ -113,14 +113,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       <p class="subtitle">Hands-on reviews and head-to-head comparisons of AI tools and SaaS products</p>
       <nav>
         <a href="/">Home</a>
-        <a href="/reviews">Reviews</a>
-        <a href="/about">About</a>
+        <a href="/reviews/">Reviews</a>
+        <a href="/about/">About</a>
       </nav>
     </header>
     <main>
       <p class="intro">
         Articles that include an affiliate recommendation are clearly marked with an
-        FTC disclosure. See our <a href="/about">disclosure policy</a>.
+        FTC disclosure. See our <a href="/about/">disclosure policy</a>.
       </p>
       {commercialArticles.length === 0 ? (
         <p>No reviews yet. Check back soon!</p>
@@ -128,7 +128,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         commercialArticles.map((article) => (
           <article key={article.id}>
             <h2>
-              <a href={`/articles/${article.id}`}>
+              <a href={`/articles/${article.id}/`}>
                 {article.data.title}
               </a>
             </h2>
@@ -139,14 +139,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
               ))}
             </div>
             <p>
-              <a href={`/articles/${article.id}`}>Read review →</a>
+              <a href={`/articles/${article.id}/`}>Read review →</a>
             </p>
           </article>
         ))
       )}
     </main>
     <footer>
-      <p>&copy; 2026 AI Ticker HQ. <a href="/about">About &amp; Disclosure</a></p>
+      <p>&copy; 2026 AI Ticker HQ. <a href="/about/">About &amp; Disclosure</a></p>
     </footer>
   </body>
 </html>
