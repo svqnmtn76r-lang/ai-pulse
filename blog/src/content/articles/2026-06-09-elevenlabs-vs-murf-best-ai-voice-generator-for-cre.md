@@ -36,7 +36,8 @@ Prices change frequently — confirm on each tool's official pricing page before
 | Mid tier | Creator ~$22/mo (adds Pro Voice Cloning) | Business ~$99/mo ($66/mo annual) |
 | Higher | Pro $99 · Scale $299 · Business $990 | Enterprise (custom) |
 | Voice cloning | Instant clone from ~1 min audio (paid) | Pro recording session, Enterprise only |
-| Languages | 70+ (TTS/dubbing) | 20+ |
+| Voices | 1,200+ | 200+ |
+| Languages | 70+ (TTS/dubbing) | 30+ |
 | Billing model | Credit-based (≈1 char = 1 credit) | Time-based (hours/year) |
 
 ElevenLabs bills by credits (roughly characters of audio), so cost scales with how much you generate. Murf bills by hours of generation with per-seat plans, which is easier to predict for steady business use but less flexible for bursty workloads. Annual billing on Murf saves roughly a third.
@@ -51,7 +52,7 @@ This is one of the clearest dividing lines. ElevenLabs' instant voice cloning ca
 
 ## Languages, dubbing, and reach
 
-ElevenLabs supports 70+ languages with auto-dubbing that aims to preserve the original speaker's emotional delivery — useful for translating a podcast or video into multiple markets. Murf covers 20+ languages, enough for most business localization but narrower for global creator workflows.
+ElevenLabs supports 70+ languages with auto-dubbing that aims to preserve the original speaker's emotional delivery — useful for translating a podcast or video into multiple markets. Murf covers 30+ languages and accents with 200+ voices, enough for most business localization but narrower for global creator workflows.
 
 ## Developer and API
 

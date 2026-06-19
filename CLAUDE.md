@@ -165,6 +165,16 @@ Claude Code が完了レポートを作成する時、以下を必ず含める�
 
 🔴 のプログラムは**運用に組み込まない**。
 
+#### 0.3.1 記事内の価格データ取扱いルール（2026-06-19 追加・ハードルール）
+
+**現在のステータス（2026-06-19 時点）**: 比較記事（ElevenLabs/Murf/Semrush/Ahrefs/Kinsta/WP Engine/Jasper/Copy.ai 等）に掲載中の価格は **🟡 二次情報**。BIGVU・Style Factory・webhostingcat 等の集約系から取得しており、**公式 pricing ページの fetch 証跡なし**。一次情報（音声/速度実測・スクショ）は未実装（記事冒頭の HTML コメント指示のみ）。**公開前に🟢へ格上げ必須**。
+
+**ハードルール**:
+- 記事で価格・プラン・割引・手数料などの数値を扱う際は、**該当製品の公式 pricing ページを直接 fetch** し、**製品名 / 公式URL / 取得日 / 該当数値** を証跡として記録する（記録先: `data/price_verification_log.md`）。
+- **二次ソース単独での価格掲載は禁止**。二次情報しか取れない場合は数値に🟡を付し、記事側にも「要公式確認」を明記する。
+- 公式が JS レンダリングで `web_fetch` 不可の場合は Claude in Chrome（JS実行）で取得。それも不可なら🔴のまま残し、Hiro の手動確認（HUMAN-ONLY）に切り出す。
+- 公式値と二次値が食い違う場合は**公式を採用**し、差分をレポートに列挙する。
+
 ### 0.4 過去フェーズの採点履歴（旧採点 vs 新採点 0.1.2.b）
 
 #### 0.4.1 Day 2 自己採点 99 → 実態 63（旧採点規則時、2026-05-23判明）
@@ -820,6 +830,8 @@ Hiroまたは別のClaude/Claude Code が本リポで作業する際、以下を
 | 2026-05-25 | **0.1.2 採点軸を3分割**: 軸A 実装プロセス30 + 軸B 実装品質40 + 軸C データ品質30。データ依存項目を軸C へ分離し、実装の質を軸B で正当評価可能に。合格ライン 80→70 に調整（項目分離で実質厳格化）| Day 2.6 を新採点で**合格（78/100）**として再評価、Day 3 進行可能 |
 | 2026-06-13 | **独自ドメイン移行 + リブランド**: `ai-pulse-b35.pages.dev` → `https://aitickerhq.com`、サイト名 AI-Pulse → **AI Ticker HQ**（タグライン「AI News & Tools Intelligence」）。旧サブドメインは 301 リダイレクト。`astro.config.mjs`/canonical/OG/JSON-LD/robots.txt を新ドメインへ更新。§2.5 を移行後の状態に改訂 | - |
 | 2026-06-13 | **GSC verification 追加**: `aitickerhq.com` 用 google-site-verification meta を BaseHead.astro に追加（旧 pages.dev 用トークンと併記） | - |
+| 2026-06-19 | **比較記事5本を深掘り版へ差し替え**（ElevenLabs vs Murf / Shopify vs WooCommerce / Semrush vs Ahrefs / Kinsta vs WP Engine / Jasper vs Copy.ai）。旧テンプレ約550語→約850語、価格表・ユースケース別結論・FAQ追加。URL不変、CTA1本・実URL・sponsored nofollow維持。ブランチ `seo-deepdive-5` にコミット（公開は未） | - |
+| 2026-06-19 | **§0.3.1 価格データ取扱いハードルール追加**: 掲載中価格は🟡（公式fetch証跡なし）と明記。価格は公式pricingを直接fetchし証跡記録（`data/price_verification_log.md`）、二次ソース単独使用を禁止 | 確実性ルール強化 |
 
 ---
 

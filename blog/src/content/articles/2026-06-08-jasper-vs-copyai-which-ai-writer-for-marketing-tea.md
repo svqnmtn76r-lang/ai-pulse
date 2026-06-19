@@ -29,15 +29,15 @@ Confirm current plans on the official sites before buying — Copy.ai's product 
 
 | | Jasper | Copy.ai |
 |---|---|---|
-| Free | Trial only | Free plan available |
-| Entry | Creator ~$39/mo (1 seat) | From ~$36/mo (individual) |
-| Mid / team | Pro / Teams up to ~$99/mo | Advanced ~$49/mo (5 seats) |
+| Free | Free trial | Free tier not listed on current pricing page |
+| Entry | Pro $59/mo annual ($69 monthly, 1 user) | Chat $29/mo (5 seats) |
+| Higher | Business (custom pricing) | Enterprise (custom) |
 | Core focus | Long-form content, brand, campaigns | GTM automation + short-form copy |
 | Brand voice | Yes (strong) | Tone/style controls |
 | SEO integration | SurferSEO integration, SEO mode | Limited |
 | 2025–26 shift | Enterprise brand management | Pivoted to sales/GTM (Fullcast, Oct 2025) |
 
-Copy.ai is cheaper at comparable tiers and offers a free plan plus a 5-seat plan, so for teams doing short-form copy it can be markedly cheaper. But the platforms now solve different problems — compare on fit, not just price.
+Copy.ai's self-serve Chat plan ($29/mo for 5 seats) undercuts Jasper's Pro ($59/mo annual, 1 user), so for teams doing short-form copy it can be markedly cheaper. Both reserve advanced and brand features for custom-priced tiers (Jasper Business, Copy.ai Enterprise). But the platforms now solve different problems — compare on fit, not just price.
 
 ## Long-form content
 
@@ -45,7 +45,7 @@ Jasper is built for long-form: structured blog and article generation, an SEO mo
 
 ## Short-form copy
 
-Copy.ai excels at persuasive short-form: ad copy, product descriptions, email campaigns, and social posts, with customizable tone. If your need is high-volume short copy at low cost, Copy.ai's pricing and free tier are attractive.
+Copy.ai excels at persuasive short-form: ad copy, product descriptions, email campaigns, and social posts, with customizable tone. If your need is high-volume short copy at low cost, Copy.ai's $29 five-seat Chat plan is attractive.
 
 ## Brand voice and consistency
 
@@ -67,7 +67,7 @@ This is the most important thing most comparisons miss. In October 2025 Copy.ai 
 
 **Is Copy.ai still an AI writing tool in 2026?** Yes, but after its October 2025 acquisition by Fullcast it repositioned as a GTM automation platform. It still writes short-form copy well, but writing is no longer its primary focus.
 
-**Which is cheaper, Jasper or Copy.ai?** Copy.ai — it has a free plan and is cheaper at comparable tiers.
+**Which is cheaper, Jasper or Copy.ai?** Copy.ai — its self-serve Chat plan is $29/mo for 5 seats, cheaper than Jasper's Pro at $59/mo (annual, 1 user).
 
 **Which is better for long-form blog content?** Jasper — purpose-built for long-form with an SEO mode and SurferSEO integration.
 

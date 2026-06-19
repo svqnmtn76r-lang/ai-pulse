@@ -29,9 +29,9 @@ The headline price is never the real cost — read the total-cost-of-ownership r
 
 | | Shopify | WooCommerce |
 |---|---|---|
-| Software | Basic ~$39/mo · Shopify ~$105/mo · Advanced ~$399/mo · Plus from ~$2,300/mo | Core plugin free (open source) |
+| Software | Basic · Grow · Advanced · Plus (4 tiers; confirm current USD on shopify.com) | Core plugin free (open source) |
 | Required extras | Included (hosting, SSL, CDN) | Hosting $10–120/mo + domain $12–20/yr + premium extensions $500–2,000/yr |
-| Platform transaction fee | +2% Basic / 1% Grow / 0.5% Advanced if not using Shopify Payments | None |
+| Platform transaction fee | 2% Basic / 1% Grow / 0.6% Advanced / 0.2% Plus if not using Shopify Payments | None |
 | Native payments | Shopify Payments 2.9% + 30¢ (US) | WooPayments 2.9% + 30¢ (US) |
 | Realistic annual cost | Basic store ~$800/yr+; scales with plan/apps | ~$800/yr basic → $5,000–15,000/yr feature-rich |
 | Hosting and updates | Fully managed | You manage (or pay a host) |
@@ -48,7 +48,7 @@ WooCommerce is open source: you own the data and the site, can edit any code, an
 
 ## Payments and transaction fees
 
-Both native processors carry the same headline 2.9% + 30¢ US card rate. The difference: Shopify adds an extra platform fee (0.5–2%) if you use any other gateway, while WooCommerce never adds a platform surcharge. High-volume sellers using a third-party processor feel this most.
+Both native processors carry the same headline 2.9% + 30¢ US card rate. The difference: Shopify adds an extra platform fee (0.2–2%) if you use any other gateway, while WooCommerce never adds a platform surcharge. High-volume sellers using a third-party processor feel this most.
 
 ## Scaling and performance
 
@@ -68,7 +68,7 @@ Shopify handles scaling for you — infrastructure, uptime, and checkout load ar
 
 **Which is cheaper overall?** At low volume they're comparable. At higher revenue WooCommerce is usually cheaper on platform fees, but Shopify can be cheaper once you value your time and avoided maintenance.
 
-**Does Shopify charge extra transaction fees?** Only if you use a gateway other than Shopify Payments (0.5–2% depending on plan). Shopify Payments itself has no extra platform fee.
+**Does Shopify charge extra transaction fees?** Only if you use a gateway other than Shopify Payments (0.2–2% depending on plan). Shopify Payments itself has no extra platform fee.
 
 **Can I move from one to the other later?** Yes, but migration takes effort — products, URLs, and redirects. Choosing well up front saves a painful move.
 

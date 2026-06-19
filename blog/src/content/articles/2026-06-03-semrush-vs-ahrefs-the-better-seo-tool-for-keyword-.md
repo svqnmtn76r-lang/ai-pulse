@@ -29,8 +29,9 @@ Both tools changed pricing in 2026 — Ahrefs added a Starter tier early in the 
 
 | | Semrush | Ahrefs |
 |---|---|---|
-| Entry | Pro ~$139.95/mo | Starter ~$29/mo · Lite ~$129/mo |
-| Top | Business ~$499.95/mo | Advanced ~$449/mo |
+| Entry | Pro $139/mo | Starter $29/mo · Lite $129/mo |
+| Mid | Guru $249/mo | Standard $249/mo |
+| Top | Business $499/mo | Advanced $449/mo · Enterprise $1,499/mo |
 | Keyword database | ~27.9B keywords, 142 locations (3.8B US) | ~28.7B keywords, 217 locations (2.5B US) |
 | Backlink data | Strong | Deepest / freshest |
 | AI-search tracking | Yes (ChatGPT, Gemini, Perplexity, AI Overviews) | Brand Radar (add-on) |

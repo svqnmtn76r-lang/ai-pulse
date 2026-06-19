@@ -30,10 +30,10 @@ Confirm current plans on the official sites before buying.
 | | Kinsta | WP Engine |
 |---|---|---|
 | Entry plan | ~$35/mo (single site) | Essential Startup ~$30/mo annual ($40 monthly) |
-| Entry limits | ~35,000 visits, 20GB bandwidth | 25,000 visits, 10GB storage, 50GB bandwidth, 1 site |
-| Plan range | 21 tiers (from ~$35/mo) | 10 tiers (from ~$20/mo) |
-| Bandwidth | Unlimited | Capped |
-| Backups retention | 14–30 days | 60 days |
+| Entry limits | 20GB server bandwidth, 10GB storage, 125GB CDN | 25,000 visits, 10GB storage, 75GB bandwidth, 1 site |
+| Plan range | Single + WP 2–40 tiers (from ~$35/mo) | Startup and up (from ~$30/mo annual) |
+| Bandwidth | Metered (20GB on entry) | Capped (75GB on entry) |
+| Backups retention | 14 days | 60 days |
 | Support | 24/7 chat | 24/7 phone + chat |
 | Included performance | Cloudflare Enterprise + built-in APM | CDN included |
 
@@ -53,11 +53,11 @@ Kinsta's custom MyKinsta dashboard is widely considered best-in-class: clean, fa
 
 ## Backups and data
 
-WP Engine retains 60 days of backups versus Kinsta's 14–30 days — a point in WP Engine's favor for recovery headroom. Both offer automatic daily backups and one-click restore.
+WP Engine retains 60 days of backups versus Kinsta's 14 days (standard) — a point in WP Engine's favor for recovery headroom. Both offer automatic daily backups and one-click restore.
 
 ## Bandwidth and scaling
 
-Kinsta includes unlimited bandwidth; WP Engine caps bandwidth by plan. For traffic-spiky or growing sites, Kinsta's unlimited bandwidth removes an overage worry.
+Both providers meter bandwidth by plan — Kinsta's entry plan includes 20GB of server bandwidth (plus 125GB CDN bandwidth), and WP Engine's Startup plan includes 75GB. For traffic-spiky or growing sites, check the bandwidth allowance and overage terms on the plan you're considering.
 
 ## Which should you choose? By use case
 
@@ -75,7 +75,7 @@ Kinsta includes unlimited bandwidth; WP Engine caps bandwidth by plan. For traff
 
 **Which has better support?** WP Engine offers 24/7 phone and chat; Kinsta is chat-only but highly rated for expertise.
 
-**Which keeps backups longer?** WP Engine — 60 days versus Kinsta's 14–30 days.
+**Which keeps backups longer?** WP Engine — 60 days versus Kinsta's 14 days (standard).
 
 **Does either include a CDN?** Yes. Kinsta includes Cloudflare Enterprise; WP Engine includes its own CDN.
 
