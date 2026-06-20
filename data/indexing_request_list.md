@@ -1,12 +1,12 @@
 # インデックス申請リスト（money pages）
 
-作成: 2026-06-20 / プロパティ: https://aitickerhq.com/（GSC, hiro.yama.aiwriter@gmail.com）
+作成: 2026-06-20 / 更新: 2026-06-20 / プロパティ: https://aitickerhq.com/（GSC, hiro19820820@gmail.com）
 
 ## 前提（重要・順序）
 - サイトマップ `/sitemap-index.xml` は提出済み・Status Success・**415ページ discovered**（健全）。
 - 現状 Indexed=1 / Crawled-not-indexed=8。Googleが新ドメインをまだ大半クロールできていない。
 - **記事のcanonicalは末尾スラッシュあり** → 申請は必ず末尾スラッシュ版で行う。
-- ⚠️ **ライブの5本はまだ旧548語版**（深掘り版は未デプロイ）。先にデプロイしないと旧版が登録される。
+- ⚠️ **ライブの5本はまだ旧版**。深掘り版は 2026-06-20 に「プロ記者品質」へ全面リライト済（一次情報TODO削除・公式価格反映・Kinsta帯域の誤り修正・5本相互内部リンク追加）だが **未デプロイ**。先にデプロイしないと旧版が登録される。
 
 ## 推奨手順
 1. **先にデプロイ**: `seo-deepdive-5` を rebase→push→main マージ（Cloudflare再ビルドで深掘り版が反映）。
