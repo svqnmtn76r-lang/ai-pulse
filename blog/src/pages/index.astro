@@ -10,9 +10,18 @@ const byDateDesc = (a, b) => new Date(b.data.date).getTime() - new Date(a.data.d
 // `products` non-empty). These are the reviews/comparisons the site monetizes.
 const isCommercial = (a) => isMoneyPage(a.data);
 
+// Hand-written editorial deep-dives (frontmatter `generated_by: editorial`) are
+// our highest-quality money pages. Pin them ahead of the auto-generated
+// comparisons in the featured section so the most-crawled page (home) links to
+// them first, regardless of publish date.
+const isEditorial = (a) => a.data.generated_by === 'editorial';
+
 const sortedArticles = [...articles].sort(byDateDesc).slice(0, 10);
 const commercialArticles = articles.filter(isCommercial).sort(byDateDesc);
-const featuredReviews = commercialArticles.slice(0, 6);
+const featuredReviews = [
+  ...commercialArticles.filter(isEditorial),
+  ...commercialArticles.filter((a) => !isEditorial(a)),
+].slice(0, 6);
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
