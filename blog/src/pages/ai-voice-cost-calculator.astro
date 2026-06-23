@@ -1,0 +1,126 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const title = 'AI Voice Cost Calculator (2026): ElevenLabs vs Murf vs PlayHT';
+const description = 'Free AI voice cost calculator. Enter your monthly minutes and compare the real monthly price of ElevenLabs, Murf and PlayHT — see which is cheapest for your volume.';
+---
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} canonical={canonicalURL} />
+    <style is:global>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #333; background: #f9f9f9; }
+      header { background: #fff; border-bottom: 1px solid #eee; padding: 2rem; }
+      header .brand { font-size: 1.5rem; font-weight: 700; color: #111; text-decoration: none; }
+      nav { margin-top: .75rem; }
+      nav a { margin-right: 1.5rem; color: #0066cc; text-decoration: none; }
+      main { max-width: 820px; margin: 2rem auto; padding: 0 1rem; }
+      .card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1); padding: 1.75rem; margin-bottom: 1.5rem; }
+      h1 { font-size: 2rem; margin-bottom: .5rem; }
+      h2 { font-size: 1.3rem; margin: 1.25rem 0 .75rem; }
+      p { margin-bottom: 1rem; }
+      label { font-weight: 600; display: block; margin-bottom: .4rem; }
+      .controls { display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap; }
+      input[type=number] { font-size: 1.1rem; padding: .55rem .7rem; border: 1px solid #ccc; border-radius: 6px; width: 160px; }
+      .hint { color: #666; font-size: .9rem; }
+      table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+      th, td { text-align: left; padding: .65rem .5rem; border-bottom: 1px solid #eee; }
+      th { font-size: .85rem; color: #555; text-transform: uppercase; letter-spacing: .03em; }
+      tr.best td { background: #e9f9f1; font-weight: 600; }
+      .badge { display: inline-block; background: #22a06b; color: #fff; font-size: .72rem; padding: .1rem .45rem; border-radius: 4px; margin-left: .4rem; vertical-align: middle; }
+      .cta { display: inline-block; background: #111; color: #fff; padding: .7rem 1.1rem; border-radius: 6px; text-decoration: none; font-weight: 600; margin-top: .5rem; }
+      .disclosure { color: #666; font-size: .85rem; margin-top: 1rem; }
+      .related a, main a.inline { color: #0066cc; text-decoration: none; }
+      footer { text-align: center; color: #999; padding: 2rem; border-top: 1px solid #eee; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/" class="brand">AI Ticker HQ</a>
+      <nav><a href="/">Home</a><a href="/reviews">Reviews</a><a href="/about">About</a></nav>
+    </header>
+    <main>
+      <div class="card">
+        <h1>AI Voice Cost Calculator (2026)</h1>
+        <p>Enter how much narration you generate per month and compare the real monthly cost of the major AI voice tools. We pick the cheapest plan on each service that covers your volume.</p>
+        <div class="controls">
+          <div>
+            <label for="mins">Minutes of audio per month</label>
+            <input id="mins" type="number" min="0" step="1" value="60" />
+          </div>
+          <div class="hint">Rough guide: 1 minute of speech &asymp; 1,000 characters.</div>
+        </div>
+        <table id="results" aria-live="polite">
+          <thead><tr><th>Tool</th><th>Recommended plan</th><th>Monthly cost</th><th>Cost / min</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <p style="margin-top:1rem"><a class="cta" id="cta" href="https://try.elevenlabs.io/lls9tf5hbp3e" rel="sponsored nofollow" target="_blank">Try ElevenLabs &rarr;</a></p>
+        <p class="disclosure">Prices and plan limits change often and vary by billing cycle/region. These figures are representative public pricing as of June 2026 — confirm current pricing on each vendor&apos;s site before you buy. <em>Disclosure: this page contains affiliate links; we may earn a commission at no extra cost to you.</em></p>
+      </div>
+
+      <div class="card related">
+        <h2>Go deeper</h2>
+        <p>Cost is only half the decision — quality and workflow matter too:</p>
+        <p>
+          &bull; <a href="/articles/2026-06-09-elevenlabs-vs-murf-best-ai-voice-generator-for-cre">ElevenLabs vs Murf (2026)</a><br/>
+          &bull; <a href="/articles/2026-06-10-elevenlabs-vs-playht-best-ai-voice-for-audiobooks-">ElevenLabs vs PlayHT</a><br/>
+          &bull; <a href="/articles/2026-06-17-best-ai-voice-generator-for-podcasts-in-2026">Best AI voice generator for podcasts</a><br/>
+          &bull; <a href="/reviews">All reviews &amp; comparisons</a>
+        </p>
+      </div>
+    </main>
+    <footer>&copy; 2026 AI Ticker HQ. <a href="/about" style="color:#0066cc;text-decoration:none">About &amp; Disclosure</a></footer>
+
+    <script is:inline>
+      // Representative public pricing (June 2026). Edit here when prices change.
+      // chars = monthly character allowance; price = USD/month (monthly billing).
+      var PRICING = {
+        ElevenLabs: [
+          { name: 'Free', price: 0, chars: 10000 },
+          { name: 'Starter', price: 5, chars: 30000 },
+          { name: 'Creator', price: 22, chars: 100000 },
+          { name: 'Pro', price: 99, chars: 500000 }
+        ],
+        Murf: [
+          { name: 'Free', price: 0, chars: 10000 },
+          { name: 'Creator', price: 29, chars: 480000 },
+          { name: 'Business', price: 99, chars: 1000000 }
+        ],
+        PlayHT: [
+          { name: 'Creator', price: 39, chars: 500000 },
+          { name: 'Unlimited', price: 99, chars: 5000000 }
+        ]
+      };
+      var CHARS_PER_MIN = 1000;
+      function pickPlan(plans, chars) {
+        var covering = plans.filter(function (p) { return p.chars >= chars; });
+        if (covering.length) return covering.sort(function (a, b) { return a.price - b.price; })[0];
+        return null; // exceeds largest plan
+      }
+      function render() {
+        var mins = Math.max(0, parseFloat(document.getElementById('mins').value) || 0);
+        var chars = mins * CHARS_PER_MIN;
+        var rows = [];
+        Object.keys(PRICING).forEach(function (tool) {
+          var plan = pickPlan(PRICING[tool], chars);
+          if (plan) {
+            rows.push({ tool: tool, plan: plan.name, price: plan.price, perMin: mins > 0 ? plan.price / mins : 0, over: false });
+          } else {
+            rows.push({ tool: tool, plan: 'Exceeds listed plans', price: Infinity, perMin: Infinity, over: true });
+          }
+        });
+        var cheapest = Math.min.apply(null, rows.map(function (r) { return r.price; }));
+        var tbody = document.querySelector('#results tbody');
+        tbody.innerHTML = rows.map(function (r) {
+          var best = r.price === cheapest && isFinite(cheapest);
+          var price = r.over ? 'Custom / higher tier' : (r.price === 0 ? 'Free' : '$' + r.price.toFixed(0) + '/mo');
+          var perMin = (r.over || mins === 0) ? '—' : '$' + r.perMin.toFixed(3);
+          return '<tr class="' + (best ? 'best' : '') + '"><td>' + r.tool + (best ? '<span class="badge">cheapest</span>' : '') +
+            '</td><td>' + r.plan + '</td><td>' + price + '</td><td>' + perMin + '</td></tr>';
+        }).join('');
+      }
+      document.getElementById('mins').addEventListener('input', render);
+      render();
+    </script>
+  </body>
+</html>
