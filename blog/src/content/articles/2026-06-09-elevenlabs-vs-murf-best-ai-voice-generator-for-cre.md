@@ -59,13 +59,21 @@ If you are assembling a wider content stack, it is worth pairing your voice tool
 
 ## FAQ
 
-**Is ElevenLabs or Murf better for voice cloning?** ElevenLabs, decisively — accessible instant cloning from about a minute of audio on paid tiers, while Murf limits cloning to its Enterprise plan.
+### Is ElevenLabs or Murf better for voice cloning?
 
-**Which is cheaper?** For light commercial use, ElevenLabs' $6 Starter tier is the lower entry. For steady, high-volume business narration, Murf's time-based annual plans are more predictable. The winner depends on your volume.
+ElevenLabs, decisively — accessible instant cloning from about a minute of audio on paid tiers, while Murf limits cloning to its Enterprise plan.
 
-**Does Murf allow commercial use on paid plans?** Yes. Murf's paid plans include commercial rights; its free tier does not. ElevenLabs requires a paid plan for commercial use, with a non-commercial free tier.
+### Which is cheaper?
 
-**Which sounds more human?** In most blind tests, ElevenLabs is rated more natural and expressive, especially on long-form and emotional content.
+For light commercial use, ElevenLabs' $6 Starter tier is the lower entry. For steady, high-volume business narration, Murf's time-based annual plans are more predictable. The winner depends on your volume.
+
+### Does Murf allow commercial use on paid plans?
+
+Yes. Murf's paid plans include commercial rights; its free tier does not. ElevenLabs requires a paid plan for commercial use, with a non-commercial free tier.
+
+### Which sounds more human?
+
+In most blind tests, ElevenLabs is rated more natural and expressive, especially on long-form and emotional content.
 
 ## The verdict
 

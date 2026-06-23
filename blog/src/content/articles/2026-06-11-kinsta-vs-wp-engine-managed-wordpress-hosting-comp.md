@@ -59,15 +59,25 @@ If you landed here while pricing out a WooCommerce build, the platform decision 
 
 ## FAQ
 
-**Is Kinsta or WP Engine faster?** Kinsta is generally measured as faster, helped by Cloudflare Enterprise and Google Cloud's premium network.
+### Is Kinsta or WP Engine faster?
 
-**Which is cheaper?** WP Engine has a slightly lower entry point; the entry-tier gap is small, so choose on features rather than a few dollars.
+Kinsta is generally measured as faster, helped by Cloudflare Enterprise and Google Cloud's premium network.
 
-**Which has better support?** WP Engine offers 24/7 phone and chat; Kinsta is chat-only but highly rated for the expertise of its team.
+### Which is cheaper?
 
-**Which keeps backups longer?** WP Engine, versus Kinsta's 14-day standard retention. Confirm WP Engine's exact window on its site.
+WP Engine has a slightly lower entry point; the entry-tier gap is small, so choose on features rather than a few dollars.
 
-**Does either include a CDN?** Yes. Kinsta includes Cloudflare Enterprise; WP Engine includes its own CDN.
+### Which has better support?
+
+WP Engine offers 24/7 phone and chat; Kinsta is chat-only but highly rated for the expertise of its team.
+
+### Which keeps backups longer?
+
+WP Engine, versus Kinsta's 14-day standard retention. Confirm WP Engine's exact window on its site.
+
+### Does either include a CDN?
+
+Yes. Kinsta includes Cloudflare Enterprise; WP Engine includes its own CDN.
 
 ## The verdict
 
