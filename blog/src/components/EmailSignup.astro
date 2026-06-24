@@ -1,0 +1,30 @@
+---
+// Provider-agnostic email signup (Kit / Buttondown / Mailchimp).
+// To ACTIVATE: set FORM_ACTION to your provider's form POST URL.
+// FIELD_NAME is the email field name your provider expects
+//   Kit: email_address | Buttondown: email | Mailchimp: EMAIL
+// Empty FORM_ACTION = renders nothing, so production never ships a broken form.
+const FORM_ACTION = 'https://app.kit.com/forms/9607442/subscriptions'; // e.g. 'https://app.kit.com/forms/XXXXXX/subscriptions'
+const FIELD_NAME = 'email_address';
+const active = FORM_ACTION.trim().length > 0;
+---
+{active && (
+  <aside class="email-signup" aria-label="Newsletter signup">
+    <h2>Get the AI Tool Cheat-Sheet</h2>
+    <p>Short, no-hype notes on the AI tools &amp; SaaS worth paying for — plus a free 2026 comparison cheat-sheet.</p>
+    <form action={FORM_ACTION} method="post">
+      <input type="email" name={FIELD_NAME} placeholder="you@email.com" required aria-label="Email address" />
+      <button type="submit">Subscribe</button>
+    </form>
+    <p class="fineprint">No spam. Unsubscribe anytime.</p>
+  </aside>
+)}
+<style>
+  .email-signup { max-width: 820px; margin: 1.5rem auto; padding: 1.5rem; background: #f3f8ff; border: 1px solid #d6e6ff; border-radius: 8px; }
+  .email-signup h2 { font-size: 1.2rem; margin-bottom: .4rem; }
+  .email-signup p { margin-bottom: .8rem; color: #444; }
+  .email-signup form { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .email-signup input { flex: 1 1 220px; padding: .6rem .7rem; border: 1px solid #bcd; border-radius: 6px; font-size: 1rem; }
+  .email-signup button { padding: .6rem 1.1rem; background: #111; color: #fff; border: 0; border-radius: 6px; font-weight: 600; cursor: pointer; }
+  .email-signup .fineprint { color: #777; font-size: .82rem; margin: .5rem 0 0; }
+</style>
