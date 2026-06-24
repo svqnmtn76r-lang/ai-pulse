@@ -4,6 +4,7 @@ import { join } from 'path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 import BaseHead from '../../components/BaseHead.astro';
+import EmailSignup from '../../components/EmailSignup.astro';
 import { pageTitle, articleDescription, extractFaq, isMoneyPage, baseSlug } from '../../lib/seo';
 
 export async function getStaticPaths() {
@@ -328,6 +329,7 @@ const ldJson = jsonLd.map((o) => JSON.stringify(o).replace(/</g, '\\u003c'));
           <ul><li><a href="/claude-code-changelog">See the full Claude Code changelog &rarr;</a></li></ul>
         </aside>
       )}
+      <EmailSignup />
     </main>
     <footer>
       <p>&copy; 2026 AI Ticker HQ. <a href="/about/">About & Disclosure</a></p>
