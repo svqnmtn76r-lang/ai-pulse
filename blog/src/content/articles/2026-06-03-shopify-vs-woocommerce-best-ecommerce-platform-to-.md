@@ -54,25 +54,15 @@ Shopify makes scaling someone else's problem — infrastructure, uptime, and che
 
 ## FAQ
 
-### Is WooCommerce really free?
+**Is WooCommerce really free?** The plugin is free with no platform fee or revenue share, but a working store needs paid hosting ($25–$350/mo), a domain, and any à la carte extensions ($29–$299/yr each) — realistically about $400/yr at minimum.
 
-The plugin is free with no platform fee or revenue share, but a working store needs paid hosting ($25–$350/mo), a domain, and any à la carte extensions ($29–$299/yr each) — realistically about $400/yr at minimum.
+**Which is cheaper overall?** At low volume they're comparable. At higher revenue WooCommerce usually wins on platform fees, while Shopify can come out ahead once you price your own time and the maintenance you avoid.
 
-### Which is cheaper overall?
+**Does Shopify charge extra transaction fees?** Only if you use a gateway other than Shopify Payments (0.2–2% by plan). Shopify Payments itself carries no extra platform fee.
 
-At low volume they're comparable. At higher revenue WooCommerce usually wins on platform fees, while Shopify can come out ahead once you price your own time and the maintenance you avoid.
+**Can I switch platforms later?** Yes, but migration is real work — products, URLs, and redirects all have to move. Choosing well up front avoids a painful change.
 
-### Does Shopify charge extra transaction fees?
-
-Only if you use a gateway other than Shopify Payments (0.2–2% by plan). Shopify Payments itself carries no extra platform fee.
-
-### Can I switch platforms later?
-
-Yes, but migration is real work — products, URLs, and redirects all have to move. Choosing well up front avoids a painful change.
-
-### Which is better for SEO?
-
-Both can rank. WooCommerce offers more granular control through WordPress; Shopify is solid out of the box but more constrained.
+**Which is better for SEO?** Both can rank. WooCommerce offers more granular control through WordPress; Shopify is solid out of the box but more constrained.
 
 ## The verdict
 
