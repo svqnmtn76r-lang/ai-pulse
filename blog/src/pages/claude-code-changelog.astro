@@ -1,0 +1,80 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const title = 'Claude Code Changelog — All Release Notes & Versions (2026)';
+const description = 'The full Claude Code changelog: every release and version with dates, newest first. Track what changed in each anthropics/claude-code update.';
+
+const articles = await getCollection('articles');
+const verRe = /v(\d+)\.(\d+)\.(\d+)/i;
+const isCC = (a) => String(a.data.source_name || '') === 'github:anthropics/claude-code'
+  || /claude-code\s+v\d/i.test(String(a.data.title || ''));
+
+// Dedupe by version (keep the newest-dated variant), newest release first.
+const byVersion = new Map();
+for (const a of articles.filter(isCC)) {
+  const m = String(a.data.title || '').match(verRe);
+  if (!m) continue;
+  const version = `${m[1]}.${m[2]}.${m[3]}`;
+  const prev = byVersion.get(version);
+  if (!prev || new Date(a.data.date) > new Date(prev.data.date)) byVersion.set(version, a);
+}
+const releases = [...byVersion.values()].sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+const latest = releases[0];
+const fmt = (d) => new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+---
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} canonical={canonicalURL} />
+    <style is:global>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #333; background: #f9f9f9; }
+      header { background: #fff; border-bottom: 1px solid #eee; padding: 2rem; }
+      header .brand { font-size: 1.5rem; font-weight: 700; color: #111; text-decoration: none; }
+      nav { margin-top: .75rem; } nav a { margin-right: 1.5rem; color: #0066cc; text-decoration: none; }
+      main { max-width: 820px; margin: 2rem auto; padding: 0 1rem; }
+      .card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1); padding: 1.75rem; margin-bottom: 1.5rem; }
+      h1 { font-size: 2rem; margin-bottom: .5rem; }
+      p { margin-bottom: 1rem; }
+      .latest { background: #eef6ff; border: 1px solid #cfe3ff; border-radius: 6px; padding: .75rem 1rem; }
+      ul.releases { list-style: none; margin-top: .5rem; }
+      ul.releases li { display: flex; justify-content: space-between; gap: 1rem; padding: .6rem .2rem; border-bottom: 1px solid #eee; }
+      ul.releases a { color: #0066cc; text-decoration: none; font-weight: 600; }
+      .date { color: #666; font-size: .9rem; white-space: nowrap; }
+      footer { text-align: center; color: #999; padding: 2rem; border-top: 1px solid #eee; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/" class="brand">AI Ticker HQ</a>
+      <nav><a href="/">Home</a><a href="/reviews">Reviews</a><a href="/about">About</a></nav>
+    </header>
+    <main>
+      <div class="card">
+        <h1>Claude Code Changelog</h1>
+        <p>Every <code>anthropics/claude-code</code> release we track, newest first. Each entry links to a short summary of what changed in that version.</p>
+        {latest && (
+          <p class="latest"><strong>Latest version:</strong> <a href={`/articles/${latest.id}`}>Claude Code v{String(latest.data.title).match(/v(\d+\.\d+\.\d+)/i)?.[1]}</a> — {fmt(latest.data.date)}</p>
+        )}
+        <ul class="releases">
+          {releases.map((a) => {
+            const v = String(a.data.title).match(/v(\d+\.\d+\.\d+)/i)?.[1];
+            return (
+              <li>
+                <a href={`/articles/${a.id}`}>Claude Code v{v}</a>
+                <span class="date">{fmt(a.data.date)}</span>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div class="card">
+        <p>Looking for tools that work with Claude Code and other AI dev workflows? See our <a href="/reviews" style="color:#0066cc;text-decoration:none">reviews &amp; comparisons</a>.</p>
+      </div>
+    </main>
+    <footer>&copy; 2026 AI Ticker HQ. <a href="/about" style="color:#0066cc;text-decoration:none">About &amp; Disclosure</a></footer>
+  </body>
+</html>
