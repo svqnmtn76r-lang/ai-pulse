@@ -82,6 +82,7 @@ const origin = new URL('/', Astro.site).toString();
 const metaTitle = pageTitle(String(data.title || ''));
 const metaDescription = articleDescription(data, markdown);
 const commercial = isMoneyPage(data);
+const isClaudeCodeRelease = String(data.source_name || '') === 'github:anthropics/claude-code' || /claude-code\s+v\d/i.test(String(data.title || ''));
 
 // --- Structured data (real fields only; NO Review/AggregateRating — the site
 // has no rating system, so emitting star ratings would be fabrication). ---
@@ -319,6 +320,12 @@ const ldJson = jsonLd.map((o) => JSON.stringify(o).replace(/</g, '\\u003c'));
               <li><a href={`/articles/${r.slug}/`}>{r.title}</a></li>
             ))}
           </ul>
+        </aside>
+      )}
+      {isClaudeCodeRelease && (
+        <aside class="related" aria-label="Claude Code changelog">
+          <h2>Claude Code releases</h2>
+          <ul><li><a href="/claude-code-changelog">See the full Claude Code changelog &rarr;</a></li></ul>
         </aside>
       )}
     </main>
