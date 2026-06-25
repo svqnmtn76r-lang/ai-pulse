@@ -1,0 +1,88 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const title = 'Best AI Coding Assistants 2026: Claude Code vs Cursor vs Copilot';
+const description = 'An independent comparison of the top AI coding assistants in 2026 — Claude Code, Cursor and GitHub Copilot. What each is best for, how they work, and how to choose.';
+---
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} canonical={canonicalURL} />
+    <style is:global>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #333; background: #f9f9f9; }
+      header { background: #fff; border-bottom: 1px solid #eee; padding: 2rem; }
+      header .brand { font-size: 1.5rem; font-weight: 700; color: #111; text-decoration: none; }
+      nav { margin-top: .75rem; } nav a { margin-right: 1.5rem; color: #0066cc; text-decoration: none; }
+      main { max-width: 840px; margin: 2rem auto; padding: 0 1rem; }
+      .card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1); padding: 1.75rem; margin-bottom: 1.5rem; }
+      h1 { font-size: 2rem; margin-bottom: .6rem; }
+      h2 { font-size: 1.35rem; margin: 1.4rem 0 .7rem; }
+      h3 { font-size: 1.1rem; margin: 1.1rem 0 .5rem; }
+      p { margin-bottom: 1rem; }
+      ul { margin: 0 0 1rem 1.3rem; } li { margin-bottom: .4rem; }
+      table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+      th, td { text-align: left; padding: .6rem .5rem; border-bottom: 1px solid #eee; vertical-align: top; font-size: .96rem; }
+      th { font-size: .8rem; text-transform: uppercase; letter-spacing: .03em; color: #555; }
+      a.inline { color: #0066cc; text-decoration: none; }
+      .note { background: #f6f7f9; border: 1px solid #e6e8ec; border-radius: 6px; padding: .9rem 1rem; color: #444; font-size: .95rem; }
+      footer { text-align: center; color: #999; padding: 2rem; border-top: 1px solid #eee; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/" class="brand">AI Ticker HQ</a>
+      <nav><a href="/">Home</a><a href="/reviews">Reviews</a><a href="/claude-code-changelog">Claude Code changelog</a><a href="/about">About</a></nav>
+    </header>
+    <main>
+      <div class="card">
+        <h1>Best AI Coding Assistants in 2026</h1>
+        <p>Claude Code, Cursor and GitHub Copilot are the three names that dominate AI-assisted development right now — but they optimize for different workflows, so the "best" one depends on how you already write code. Here's an independent breakdown.</p>
+
+        <h2>Quick verdict</h2>
+        <ul>
+          <li><strong>Claude Code</strong> — best as a <em>terminal-native agent</em> for multi-step changes across a codebase.</li>
+          <li><strong>Cursor</strong> — best for <em>in-editor flow</em>: an AI-first editor for fast, inline edits and refactors.</li>
+          <li><strong>GitHub Copilot</strong> — best <em>safe default</em>: autocomplete + chat already wired into most IDEs and stacks.</li>
+        </ul>
+
+        <h2>How they compare</h2>
+        <table>
+          <thead><tr><th>Tool</th><th>How it works</th><th>Best for</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Claude Code</strong></td><td>Command-line agent that plans and edits across files, runs commands, and iterates.</td><td>Larger, multi-file changes; devs who live in the terminal.</td></tr>
+            <tr><td><strong>Cursor</strong></td><td>A VS Code–style editor with AI built into the core editing loop (inline edits, chat, codebase context).</td><td>Fast in-editor edits and refactors; solo devs and small teams.</td></tr>
+            <tr><td><strong>GitHub Copilot</strong></td><td>IDE plugin: autocomplete suggestions plus a chat panel, deeply integrated with GitHub.</td><td>Teams that want a low-friction default across many IDEs.</td></tr>
+          </tbody>
+        </table>
+        <p class="note">Pricing for all three is subscription-based and changes often; confirm current plans on each vendor's site before you commit. Claude Code is tied to Anthropic's Claude plans/API.</p>
+
+        <h2>When to choose each</h2>
+        <h3>Choose Claude Code if…</h3>
+        <p>You want an agent that can take a goal ("refactor this module", "add tests") and work through the steps in your repo from the terminal. It shines on multi-file, multi-step work where you'd otherwise babysit an editor.</p>
+        <h3>Choose Cursor if…</h3>
+        <p>You want the AI inside your editing flow — quick inline edits, "explain/refactor this", and codebase-aware chat without leaving the editor. Great for iterative, hands-on coding.</p>
+        <h3>Choose GitHub Copilot if…</h3>
+        <p>You want the least-friction option that just works across your existing IDEs and integrates with GitHub. For many teams it's the safe, already-approved default.</p>
+
+        <h2>How to pick (the honest version)</h2>
+        <p>For an existing team, the switching cost usually matters more than raw capability — pick the tool that fits how your devs already work. Try the one that matches your default environment first (terminal → Claude Code, editor-centric → Cursor, "already on GitHub" → Copilot), and only switch if it's clearly worth the friction.</p>
+        <p>Other tools worth a look: Windsurf, Sourcegraph Cody, and Continue (open-source).</p>
+
+        <h2>FAQ</h2>
+        <h3>Which AI coding assistant is best for beginners?</h3>
+        <p>GitHub Copilot — it's the lowest-friction and works inside the IDE you probably already use, with plenty of tutorials.</p>
+        <h3>Is Claude Code better than Cursor?</h3>
+        <p>For multi-step, multi-file agent work from the terminal, yes; for fast in-editor edits, Cursor's flow is hard to beat. They suit different workflows.</p>
+        <h3>Can I use more than one?</h3>
+        <p>Yes — many developers pair an in-editor tool (Cursor or Copilot) with a terminal agent (Claude Code) for bigger tasks.</p>
+
+        <p class="note">Building apps that call multiple AI models? Multi-model aggregator APIs (for example AI/ML API) let you reach many models behind one key — useful for prototyping, though you should confirm current pricing and billing before relying on one.</p>
+      </div>
+
+      <div class="card">
+        <p>Track every Claude Code release on our <a class="inline" href="/claude-code-changelog">Claude Code changelog</a>, and see all our <a class="inline" href="/reviews">reviews &amp; comparisons</a>.</p>
+      </div>
+    </main>
+    <footer>&copy; 2026 AI Ticker HQ. <a href="/about" style="color:#0066cc;text-decoration:none">About &amp; Disclosure</a></footer>
+  </body>
+</html>
