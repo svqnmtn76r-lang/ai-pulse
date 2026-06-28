@@ -80,9 +80,12 @@ const origin = new URL('/', Astro.site).toString();
 
 // Query-aligned <title> + meta description (money pages get a templated,
 // buyer-intent description from real fields; news pages get a body excerpt).
-const metaTitle = pageTitle(String(data.title || ''));
+const cleanTitle = String(data.title || '').replace(/@(?=\d)/g, ' ').replace(/\s{2,}/g, ' ').trim();
+const metaTitle = pageTitle(cleanTitle);
 const metaDescription = articleDescription(data, markdown);
 const commercial = isMoneyPage(data);
+const _cat = String(data.category || '').toLowerCase();
+const isStub = !commercial && (['sdk_release','feature_update'].includes(_cat) || /\S+@\d[\d.]/.test(String(data.title || '')));
 const isClaudeCodeRelease = String(data.source_name || '') === 'github:anthropics/claude-code' || /claude-code\s+v\d/i.test(String(data.title || ''));
 
 // --- Structured data (real fields only; NO Review/AggregateRating — the site
@@ -142,6 +145,7 @@ const ldJson = jsonLd.map((o) => JSON.stringify(o).replace(/</g, '\\u003c'));
   <head>
     <BaseHead title={metaTitle} description={metaDescription} canonical={canonicalURL} ogType="article">
       {ldJson.map((j) => <script type="application/ld+json" set:html={j} />)}
+      {isStub && <meta name="robots" content="noindex,follow" />}
     </BaseHead>
     <style is:global>
       * {
@@ -301,7 +305,7 @@ const ldJson = jsonLd.map((o) => JSON.stringify(o).replace(/</g, '\\u003c'));
     </header>
     <main>
       <article>
-        <h1>{data.title}</h1>
+        <h1>{cleanTitle}</h1>
         <div class="meta">
           <time>{new Date(data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
           {data.category && (
