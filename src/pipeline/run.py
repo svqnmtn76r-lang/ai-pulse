@@ -234,10 +234,25 @@ def run_pipeline(verbose: bool = True) -> dict:
     # Apply score threshold filter (minimum 40 to exclude off-topic and low quality)
     SCORE_THRESHOLD = 40
     adopted = [a for a in scored if a.get("importance_score", 0) >= SCORE_THRESHOLD]
+
+    # Category gate: package-bump / minor-feature items are thin, no-demand stubs.
+    # They are already covered by the auto-populating /claude-code-changelog/ hub,
+    # so generating a standalone page per release only dilutes site quality and
+    # burns crawl budget. Skip them here (override with STUB_CATEGORIES="" if ever needed).
+    STUB_CATEGORIES = {
+        c.strip()
+        for c in os.environ.get("STUB_CATEGORIES", "sdk_release,feature_update").split(",")
+        if c.strip()
+    }
+    before_gate = len(adopted)
+    adopted = [a for a in adopted if a.get("category", "") not in STUB_CATEGORIES]
+    stub_skipped = before_gate - len(adopted)
+    summary["stub_skipped"] = stub_skipped
     summary["after_scoring"] = len(adopted)
 
     if verbose:
-        print(f"  Total scored: {len(scored)}, Adopted (score >= {SCORE_THRESHOLD}): {summary['after_scoring']}")
+        print(f"  Total scored: {len(scored)}, Adopted (score >= {SCORE_THRESHOLD}): {before_gate}")
+        print(f"  Stub categories skipped ({', '.join(sorted(STUB_CATEGORIES))}): {stub_skipped} -> remaining {summary['after_scoring']}")
 
     # Step 3: Match to products and enrich
     if verbose:
