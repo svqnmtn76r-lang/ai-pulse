@@ -18,6 +18,20 @@ export interface ArticleData {
 // which previously leaked release notes into /reviews and the related-links graph.
 const COMMERCIAL_CATEGORIES = new Set(['comparison', 'tool_launch', 'deep_dive']);
 
+/**
+ * Thin package-bump / minor-feature stubs. These are noindex'd in the article
+ * layout AND excluded from the sitemap so we never tell Google "index this"
+ * and "do not index this" about the same URL.
+ */
+const STUB_CATEGORIES = new Set(['sdk_release', 'feature_update']);
+
+export function isStubPage(data: ArticleData): boolean {
+  if (isMoneyPage(data)) return false;
+  const cat = String((data as any).category || '').toLowerCase();
+  if (STUB_CATEGORIES.has(cat)) return true;
+  return /\S+@\d[\d.]/.test(String((data as any).title || ''));
+}
+
 export function isMoneyPage(data: ArticleData): boolean {
   if (!Array.isArray(data.products) || data.products.length === 0) return false;
   return COMMERCIAL_CATEGORIES.has(String(data.category || '').toLowerCase());
