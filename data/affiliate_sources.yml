@@ -46,7 +46,7 @@ programs:
     - phind
     - kagi
     - brave search
-    aimlapi:
+  aimlapi:
     confidence: green
     display_name: AI/ML API
     affiliate_url: https://aimlapi.com/?via=hirotoshi
@@ -76,7 +76,7 @@ programs:
     - openrouter
     - together ai
     - replicate
-elevenlabs:
+  elevenlabs:
     confidence: green
     display_name: ElevenLabs
     affiliate_url: https://try.elevenlabs.io/lls9tf5hbp3e
