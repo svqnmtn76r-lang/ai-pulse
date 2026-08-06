@@ -46,7 +46,37 @@ programs:
     - phind
     - kagi
     - brave search
-  elevenlabs:
+    aimlapi:
+    confidence: green
+    display_name: AI/ML API
+    affiliate_url: https://aimlapi.com/?via=hirotoshi
+    tier: 1
+    status: approved
+    official_pages:
+    - https://aimlapi.com/affiliate
+    - https://aimlapi.com/ai-ml-api-pricing
+    network: direct
+    last_verified: 2026-08-06
+    terms_summary:
+      commission: 30% (approved via direct program)
+      notes: Multi-model gateway. Audience fit is high for the developer readership.
+        Reputation is mixed on billing transparency and support responsiveness -
+        cover with honest pros/cons, never as a hero recommendation.
+    category:
+    - ai_api
+    - developer_tools
+    trigger_keywords:
+    - ai api
+    - llm api
+    - model gateway
+    - token cost
+    - api pricing
+    - model routing
+    competes_with:
+    - openrouter
+    - together ai
+    - replicate
+elevenlabs:
     confidence: green
     display_name: ElevenLabs
     affiliate_url: https://try.elevenlabs.io/lls9tf5hbp3e
